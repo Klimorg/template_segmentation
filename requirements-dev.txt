@@ -8,7 +8,7 @@ mypy==0.812
 # requirements writing
 pipreqs==0.4.10
 # precommit action
-pre-commit==2.12.0
+pre-commit==2.14.1
 # unit tests
 pytest==6.2.3
 pytest-cov==2.11.1
