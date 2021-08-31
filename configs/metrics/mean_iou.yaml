@@ -1,0 +1,2 @@
+_target_: metrics.mean_iou.UpdatedMeanIoU
+num_classes: ${datasets.metadatas.n_classes}

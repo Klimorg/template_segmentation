@@ -1,0 +1,4 @@
+_target_: pipelines.classic.Tensorize
+n_classes:  ${datasets.metadatas.n_classes}
+img_shape:  ${datasets.params.img_shape}
+random_seed: ${prepare.seed}

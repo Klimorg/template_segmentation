@@ -1,0 +1,5 @@
+_target_: model.unet.get_segmentation_model
+filters: 64  # filters = 64 in article
+sampling_method: maxpool # can be "conv" otherwise
+n_classes: ${datas.n_classes}
+img_shape: ${datas.img_shape}

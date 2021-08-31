@@ -1,0 +1,6 @@
+_target_: optimizers.cg_rmsprop.GCRMSprop
+centered: False
+decay: 0.98
+epsilon: 1e-07
+momentum: 0.9
+rho: 0.9

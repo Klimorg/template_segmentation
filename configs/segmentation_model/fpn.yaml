@@ -1,0 +1,2 @@
+_target_: model.fpn.get_segmentation_fpn
+n_classes: ${datasets.metadatas.n_classes}

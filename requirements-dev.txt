@@ -1,0 +1,20 @@
+bandit==1.7.0
+# linting, formating, typing
+black==20.8b1
+darglint==1.8.0
+flake8==3.9.0
+isort==5.8.0
+mypy==0.812
+# requirements writing
+pipreqs==0.4.10
+# precommit action
+pre-commit==2.12.0
+# unit tests
+pytest==6.2.3
+pytest-cov==2.11.1
+pytest-xdist==2.2.1
+# code quality infos
+radon==4.5.0
+# refactoring
+rope==0.18.0
+wemake-python-styleguide==0.15.2

@@ -1,2 +1,3 @@
 # template_segmentation
-Template for segmentation projects.
+
+Boucle d'entraînement pour les problématiques de segmentation (moisissure-levure)

@@ -1,0 +1,4 @@
+_target_: tensorflow.keras.losses.SparseCategoricalCrossentropy
+from_logits: False
+# We use the "sparse" version of categorical_crossentropy
+# because our target data is integers.

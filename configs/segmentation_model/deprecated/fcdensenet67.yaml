@@ -1,0 +1,9 @@
+_target_: model.tiramisu.get_segmentation_model
+filters: 16
+nb_blocks: 5
+nb_layers: [5, 5, 5, 5, 5 ,5, 5, 5, 5, 5, 5]
+nb_filters: 48
+n_classes: ${datas.n_classes}
+img_shape: ${datas.img_shape}
+
+# 67 layers (FC-DenseNet67) with 5 layers per dense block and a growth rate of 16.

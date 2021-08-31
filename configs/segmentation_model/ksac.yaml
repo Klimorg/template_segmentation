@@ -1,0 +1,2 @@
+_target_: model.ksac.get_ksac_model
+n_classes: ${datasets.metadatas.n_classes}

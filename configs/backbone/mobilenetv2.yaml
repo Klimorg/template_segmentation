@@ -1,0 +1,2 @@
+_target_: model.backbone.mobilenetv2.get_backbone
+img_shape: ${datasets.params.img_shape}

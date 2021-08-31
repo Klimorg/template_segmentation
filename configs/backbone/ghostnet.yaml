@@ -1,0 +1,2 @@
+_target_: model.backbone.ghostnet.get_backbone
+img_shape: ${datasets.params.img_shape}

@@ -1,0 +1,3 @@
+_target_: model.unet_xception.get_segmentation_model
+n_classes: ${datas.n_classes}
+img_shape: ${datas.img_shape}

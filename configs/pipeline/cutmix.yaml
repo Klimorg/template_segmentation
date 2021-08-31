@@ -1,0 +1,6 @@
+_target_: pipelines.cutmix.CutMix
+n_classes:  ${datasets.metadatas.n_classes}
+img_shape:  ${datasets.params.img_shape}
+random_seed: ${prepare.seed}
+random_seed1: 42
+random_seed2: 43

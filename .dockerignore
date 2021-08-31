@@ -1,0 +1,17 @@
+#misc
+*.md
+*.tar
+#*.dvc
+*.sh
+
+#folders
+datas/*
+outputs/*
+mlruns/*
+core*
+
+#git dvc versioning control system
+.dvc
+.git
+.vscode
+.ipynb_checkpoints

@@ -1,0 +1,39 @@
+defaults:
+  - backbone: ghostnet
+  - segmentation_model: fpn
+  - losses: focal_loss
+  - optimizer: cg_adam
+  - lr_decay: cosine_decay_restart
+  - metrics: mean_iou
+  - datasets: datasets
+  - pipeline: cutmix
+  - training: custom_training
+# - weight_sampling: None
+
+lrd:
+  activate: true
+
+mixed_precision:
+  activate: false
+
+prepare:
+  split: 0.10
+  seed: 42
+
+mlflow:
+  experiment_name: ecco_ML_${now:%Y-%m-%d}
+  run_name: ${datasets.metadatas.n_classes}_${datasets.params.img_shape}_${datasets.params.batch_size}_${training.lr}_${now:%Y-%m-%d_%H-%M-%S}
+
+log:
+  timestamp: ${now:%Y-%m-%d_%H-%M-%S}
+hydra:
+  run:
+    dir: hydra/${now:%Y-%m-%d_%H-%M-%S} #_${hydra.job.override_dirname}
+#   sweep:
+#     dir: outputs/${now:%Y-%m-%d_%H-%M-%S}
+#     subdir: ${hydra.job.override_dirname}
+
+# mlflow se charge déjà de faire le tracking des hyperparamètres, inutile de l'avoir en double.
+# décommenter la section au dessus pour avoir un tracking de chaque run par hydra.
+hydra:
+  output_subdir: null

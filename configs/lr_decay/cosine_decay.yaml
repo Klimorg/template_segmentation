@@ -1,0 +1,4 @@
+# _target_: tensorflow.keras.experimental.CosineDecay
+_target_: tensorflow.keras.optimizers.schedules.CosineDecay
+initial_learning_rate: ${training.lr}
+decay_steps: 5400
