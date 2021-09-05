@@ -228,9 +228,7 @@ def get_mobilenetv2(
     return Model(img_input, img)
 
 
-def get_backbone(
-    img_shape: List[int],
-) -> tf.keras.Model:
+def get_backbone(img_shape: List[int], backbone_name: str) -> tf.keras.Model:
 
     backbone = get_mobilenetv2(
         img_shape=img_shape,
@@ -256,7 +254,7 @@ def get_backbone(
     return Model(
         inputs=[backbone.input],
         outputs=[os4_output, os8_output, os16_output, os32_output],
-        name="MobileNetv2",
+        name=backbone_name,
     )
 
 

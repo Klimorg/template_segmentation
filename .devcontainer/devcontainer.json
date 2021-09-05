@@ -30,7 +30,7 @@
 		"zhuangtongfa.material-theme",
 		"coenraads.bracket-pair-colorizer-2",
 		"emmanuelbeziat.vscode-great-icons",
-		"zainchen.json"
+		"zainchen.json",
 	],
 	//Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [5000,8001,6006],

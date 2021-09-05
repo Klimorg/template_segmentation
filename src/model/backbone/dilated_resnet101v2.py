@@ -4,33 +4,26 @@ from loguru import logger
 from tensorflow import keras
 
 
-def get_backbone(img_shape: List[int], backbone_name: str):
+def get_backbone(img_shape: List[int], backbone_name: str = "rest"):
 
-    backbone = keras.applications.ResNet50V2(include_top=False, input_shape=img_shape)
+    backbone = keras.applications.ResNet101V2(include_top=False, input_shape=img_shape)
 
     endpoint_layers = [
         "conv2_block3_preact_relu",
         "conv3_block4_preact_relu",
-        "conv4_block6_preact_relu",
-        "conv5_block3_out",
+        "conv4_block23_preact_relu",
+        "post_relu",
     ]
 
     c2_output, c3_output, c4_output, c5_output = [
         backbone.get_layer(layer_name).output for layer_name in endpoint_layers
     ]
-
     height = img_shape[1]
 
-    logger.info(
-        f"conv2_block3_preact_relu OS : {int(height/c2_output.shape.as_list()[1])}"
-    )
-    logger.info(
-        f"conv3_block4_preact_relu OS : {int(height/c3_output.shape.as_list()[1])}"
-    )
-    logger.info(
-        f"conv4_block6_preact_relu OS : {int(height/c4_output.shape.as_list()[1])}"
-    )
-    logger.info(f"conv5_block3_out OS : {int(height/c5_output.shape.as_list()[1])}")
+    logger.info(f"c2_output OS : {int(height/c2_output.shape.as_list()[1])}")
+    logger.info(f"c3_output OS : {int(height/c3_output.shape.as_list()[1])}")
+    logger.info(f"c4_output OS : {int(height/c4_output.shape.as_list()[1])}")
+    logger.info(f"c5_output OS : {int(height/c5_output.shape.as_list()[1])}")
 
     return keras.Model(
         inputs=[backbone.inputs],

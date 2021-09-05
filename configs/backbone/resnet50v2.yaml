@@ -1,2 +1,3 @@
 _target_: model.backbone.resnet50v2.get_backbone
 img_shape: ${datasets.params.img_shape}
+backbone_name: ResNet50v2

@@ -3,4 +3,4 @@ img_shape: ${datasets.params.img_shape}
 filters_conv3x3: [128, 256, 192, 224]
 filters_conv1x1: [256, 512, 768, 1024]
 block_repetitions: [1, 1, 4, 3]
-
+backbone_name: VoVNet57

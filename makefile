@@ -87,7 +87,7 @@ mlflow:
 	mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri $(PWD)/outputs/mlflow/
 
 tensorboard:
-	tensorboard --logdir $(PWD)/outputs/mlflow/
+	tensorboard --logdir $(PWD)/mlruns/
 
 # Documentation
 .PHONY: docs

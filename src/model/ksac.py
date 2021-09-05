@@ -5,87 +5,119 @@ from tensorflow.keras.layers import (
     BatchNormalization,
     Concatenate,
     Conv2D,
-    ReLU,
     UpSampling2D,
 )
 
-
-def conv_bn_relu(
-    tensor: tf.Tensor,
-    num_filters: int,
-    kernel_size: int,
-    padding: str = "same",
-    strides: int = 1,
-    dilation_rate: int = 1,
-    w_init: str = "he_normal",
-) -> tf.Tensor:
-
-    fmap = Conv2D(
-        filters=num_filters,
-        kernel_size=kernel_size,
-        padding=padding,
-        strides=strides,
-        dilation_rate=dilation_rate,
-        kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
-        kernel_initializer=w_init,
-        use_bias=False,
-    )(tensor)
-
-    # fmap = tfa.layers.GroupNormalization()(fmap)
-
-    fmap = BatchNormalization()(fmap)
-
-    return ReLU()(fmap)
+from src.model.layers.common_layers import conv_bn_relu
 
 
 class SharedDilatedConv(tf.keras.layers.Layer):
+    """
+    Description of SharedDilatedConv
+
+    Attributes:
+        filters (type):
+        kernel_size (type):
+        kernel_initializer (type):
+        bias_initializer (type):
+        strides (type):
+        use_bias (type):
+        w (type):
+        b (type):
+        dilation_rates (type):
+        relu (type):
+
+    Inheritance:
+        tf.keras.layers.Layer:
+
+    Args:
+        filters (undefined):
+        kernel_size (undefined):
+        strides (undefined):
+        kernel_initializer (undefined):
+        use_bias (undefined):
+        bias_initializer=None (undefined):
+        *args (undefined):
+        **kwargs (undefined):
+
+    """
+
     def __init__(
         self,
         filters,
         kernel_size,
         strides,
         kernel_initializer,
-        bias_initializer,
         use_bias,
+        bias_initializer=None,
         *args,
-        **kwargs
+        **kwargs,
     ):
-        super(SharedDilatedConv, self).__init__()
+        """[summary]
+
+        Args:
+            filters ([type]): [description]
+            kernel_size ([type]): [description]
+            strides ([type]): [description]
+            kernel_initializer ([type]): [description]
+            use_bias ([type]): [description]
+            bias_initializer ([type], optional): [description]. Defaults to None.
+        """
+        super().__init__(*args, **kwargs)
         self.filters = filters
         self.kernel_size = kernel_size
         self.kernel_initializer = kernel_initializer
         self.bias_initializer = bias_initializer
         self.strides = strides
         self.use_bias = use_bias
-        self.w = None
+        self.kernel = None
         self.b = None
         self.dilation_rates = [6, 12, 18]
 
         self.relu = tf.keras.layers.ReLU()
+
+    def build(self, input_shape):
+        """[summary]
+
+        Args:
+            input_shape ([type]): [description]
+        """
+        *_, n_channels = input_shape
+        self.kernel = self.add_weight(
+            name="kernel",
+            shape=(*self.kernel_size, n_channels, self.filters),
+            initializer=self.kernel_initializer,
+            trainable=True,
+            dtype="float32",
+        )
+        if self.use_bias:
+            self.b = self.add_weight(
+                name="bias",
+                shape=(self.filters,),
+                initializer=self.bias_initializer,
+                trainable=True,
+                dtype="float32",
+            )
+        else:
+            self.b = None
+
         self.bn1 = tf.keras.layers.BatchNormalization()
         self.bn2 = tf.keras.layers.BatchNormalization()
         self.bn3 = tf.keras.layers.BatchNormalization()
 
-    def build(self, input_shape):
-        *_, n_channels = input_shape
-        self.w = tf.Variable(
-            initial_value=self.kernel_initializer(
-                shape=(*self.kernel_size, n_channels, self.filters), dtype="float32"
-            ),
-            trainable=True,
-        )
-        if self.use_bias:
-            self.b = tf.Variable(
-                initial_value=self.bias_initializer(
-                    shape=(self.filters,), dtype="float32"
-                ),
-                trainable=True,
-            )
-
     def call(self, inputs, training=None):
+        """[summary]
+
+        Args:
+            inputs ([type]): [description]
+            training ([type], optional): [description]. Defaults to None.
+
+        Returns:
+            [type]: [description]
+        """
         x1 = tf.nn.conv2d(
             inputs,
-            self.w,
+            self.kernel,
             padding="SAME",
             strides=self.strides,
             dilations=self.dilation_rates[0],
@@ -96,7 +128,7 @@ class SharedDilatedConv(tf.keras.layers.Layer):
 
         x2 = tf.nn.conv2d(
             inputs,
-            self.w,
+            self.kernel,
             padding="SAME",
             strides=self.strides,
             dilations=self.dilation_rates[1],
@@ -107,7 +139,7 @@ class SharedDilatedConv(tf.keras.layers.Layer):
 
         x3 = tf.nn.conv2d(
             inputs,
-            self.w,
+            self.kernel,
             padding="SAME",
             strides=self.strides,
             dilations=self.dilation_rates[2],
@@ -132,6 +164,15 @@ class SharedDilatedConv(tf.keras.layers.Layer):
 
 
 def ksac_module(fmap, filters):
+    """[summary]
+
+    Args:
+        fmap ([type]): [description]
+        filters ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
 
     height, width = fmap.shape.as_list()[1:3]
 
@@ -149,8 +190,7 @@ def ksac_module(fmap, filters):
         filters=filters,
         kernel_size=(3, 3),
         strides=(1, 1),
-        kernel_initializer=tf.initializers.HeUniform(seed=42),
-        bias_initializer=tf.initializers.Zeros(),
+        kernel_initializer="he_uniform",
         use_bias=False,
     )(fmap)
 
@@ -167,21 +207,43 @@ def ksac_module(fmap, filters):
 
     fmap = Concatenate(axis=-1)([fmap1, fmap2, fmap3])
 
-    return conv_bn_relu(tensor=fmap, num_filters=filters, kernel_size=1)
+    return conv_bn_relu(tensor=fmap, filters=filters, kernel_size=1, name="ksac_module")
 
 
 def decoder(fmap1, fmap2, filters):
+    """[summary]
+
+    Args:
+        fmap1 ([type]): [description]
+        fmap2 ([type]): [description]
+        filters ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
 
     fmap1 = UpSampling2D(size=(4, 4), interpolation="bilinear")(fmap1)
 
-    fmap2 = conv_bn_relu(tensor=fmap2, num_filters=filters, kernel_size=1)
+    fmap2 = conv_bn_relu(tensor=fmap2, filters=filters, kernel_size=1, name="decoder1")
 
     fmap = Concatenate(axis=-1)([fmap1, fmap2])
 
-    return conv_bn_relu(tensor=fmap, num_filters=filters, kernel_size=3)
+    return conv_bn_relu(tensor=fmap, filters=filters, kernel_size=3, name="decoder2")
 
 
-def get_ksac_model(n_classes: int, backbone: tf.keras.Model) -> tf.keras.Model:
+def get_ksac_model(
+    n_classes: int, backbone: tf.keras.Model, name: str
+) -> tf.keras.Model:
+    """[summary]
+
+    Args:
+        n_classes (int): [description]
+        backbone (tf.keras.Model): [description]
+        name (str): [description]
+
+    Returns:
+        tf.keras.Model: [description]
+    """
 
     c2_output, _, c4_output, _ = backbone.outputs
 
@@ -201,4 +263,4 @@ def get_ksac_model(n_classes: int, backbone: tf.keras.Model) -> tf.keras.Model:
 
     out = Activation("softmax")(fmap)
 
-    return tf.keras.Model(inputs=[backbone.inputs], outputs=[out])
+    return tf.keras.Model(inputs=[backbone.inputs], outputs=[out], name=name)

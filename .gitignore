@@ -130,8 +130,8 @@ dmypy.json
 
 datas*
 
-mlruns*
+hydra*
 
-outputs*
+mlruns*
 
 *.tar.xz

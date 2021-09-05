@@ -108,7 +108,9 @@ def semantic_head_fpn(
     return Concatenate(axis=-1)([fmap5, fmap4, fmap3, fmap2])
 
 
-def get_segmentation_fpn(n_classes: int, backbone: tf.keras.Model) -> tf.keras.Model:
+def get_segmentation_fpn(
+    n_classes: int, backbone: tf.keras.Model, name: str
+) -> tf.keras.Model:
 
     c_outputs = backbone.outputs
 
@@ -127,4 +129,4 @@ def get_segmentation_fpn(n_classes: int, backbone: tf.keras.Model) -> tf.keras.M
     fmap = UpSampling2D(size=(4, 4), interpolation="bilinear")(fmap)
     out = Activation("softmax")(fmap)
 
-    return keras.Model(inputs=[backbone.inputs], outputs=[out])
+    return keras.Model(inputs=[backbone.inputs], outputs=[out], name=name)

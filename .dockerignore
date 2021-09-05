@@ -5,9 +5,9 @@
 *.sh
 
 #folders
-datas/*
-outputs/*
-mlruns/*
+datas*
+mlruns*
+hydra*
 core*
 
 #git dvc versioning control system

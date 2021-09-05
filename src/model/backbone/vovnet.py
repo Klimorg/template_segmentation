@@ -167,6 +167,7 @@ def get_backbone(
     filters_conv3x3: List[int],
     filters_conv1x1: List[int],
     block_repetitions: List[int],
+    backbone_name: str,
 ) -> tf.keras.Model:
 
     backbone = get_vovnet(
@@ -196,24 +197,5 @@ def get_backbone(
     return Model(
         inputs=[backbone.input],
         outputs=[os4_output, os8_output, os16_output, os32_output],
-    )
-
-
-if __name__ == "__main__":
-
-    import numpy as np
-
-    img_shape = [400, 400, 3]
-    tensor = np.random.rand(1, img_shape[0], img_shape[1], img_shape[2])
-
-    # 57
-    filters_conv3x3 = [128, 256, 192, 224]
-    filters_conv1x1 = [256, 512, 768, 1024]
-    block_repetitions = [1, 1, 4, 3]
-
-    model = get_backbone(
-        img_shape,
-        filters_conv3x3,
-        filters_conv1x1,
-        block_repetitions,
+        name=backbone_name,
     )

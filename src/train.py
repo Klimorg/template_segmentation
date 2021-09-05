@@ -1,6 +1,5 @@
 from pathlib import Path
 
-import hydra
 import mlflow
 import tensorflow as tf
 from hydra.utils import instantiate
@@ -8,6 +7,7 @@ from loguru import logger
 from mlflow import tensorflow as mltensorflow
 from omegaconf import DictConfig
 
+import hydra
 from utils.utils import flatten_omegaconf, set_log_infos, set_seed
 
 
@@ -52,10 +52,10 @@ def train(config: DictConfig):
 
     if config.mixed_precision.activate:
         logger.info("Setting training policy.")
-        policy = tf.keras.mixed_precision.experimental.Policy("mixed_float16")
-        tf.keras.mixed_precision.experimental.set_policy(policy)
-        logger.info(f"Compute dtype : {policy.compute_dtype}")
-        logger.info(f"Variable dtype : {policy.variable_dtype}")
+        policy = tf.keras.mixed_precision.Policy("mixed_float16")
+        tf.keras.mixed_precision.set_global_policy(policy)
+        logger.info(f"Layers computations dtype : {policy.compute_dtype}")
+        logger.info(f"Layers variables dtype : {policy.variable_dtype}")
 
     mlflow.set_tracking_uri(f"file://{repo_path}/mlruns")
     mlflow.set_experiment(config.mlflow.experiment_name)
@@ -124,23 +124,13 @@ def train(config: DictConfig):
         )
         callbacks = [
             tf.keras.callbacks.ModelCheckpoint(
-                f"callback_segmentation_{config.mlflow.run_name}.h5",
+                f"callback_{config.mlflow.run_name}",
                 monitor="val_mean_iou",
                 mode="max",
                 save_best_only=True,
                 save_weights_only=False,
             ),
-            # tf.keras.callbacks.EarlyStopping(
-            #     monitor="val_loss",
-            #     min_delta=0,
-            #     patience=5,
-            #     verbose=0,
-            #     mode="auto",
-            #     baseline=None,
-            #     restore_best_weights=False,
-            # ),
         ]
-        # model.save(f"model_{config.mlflow.run_name}")
 
         logger.info("Start training")
         model.summary()
@@ -151,7 +141,7 @@ def train(config: DictConfig):
             callbacks=callbacks,
         )
 
-        # model.save(f"model_{config.mlflow.run_name}.h5")
+        model.save(f"{config.mlflow.run_name}")
 
 
 if __name__ == "__main__":

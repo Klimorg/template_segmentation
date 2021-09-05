@@ -4,7 +4,7 @@ from loguru import logger
 from tensorflow import keras
 
 
-def get_backbone(img_shape: List[int]):
+def get_backbone(img_shape: List[int], backbone_name: str):
 
     backbone = keras.applications.ResNet50(include_top=False, input_shape=img_shape)
 
@@ -27,7 +27,9 @@ def get_backbone(img_shape: List[int]):
     logger.info(f"c5_output OS : {int(height/c5_output.shape.as_list()[1])}")
 
     return keras.Model(
-        inputs=[backbone.inputs], outputs=[c2_output, c3_output, c4_output, c5_output]
+        inputs=[backbone.inputs],
+        outputs=[c2_output, c3_output, c4_output, c5_output],
+        name=backbone_name,
     )
 
 

@@ -15,22 +15,24 @@ PolygonVertices = List[float]
 
 
 class Segmentation(object):
-    def __init__(self):
+    def __init__(self, raw_masks_path):
 
-        # Get the address of the vgg json segmentation datas file.
+        self.raw_masks_json = raw_masks_path
+
+        # Get the address of the dataset info
         with open("configs/datasets/datasets.yaml") as datasets:
             config_dataset = yaml.safe_load(datasets)
 
         metadatas = config_dataset["metadatas"]
 
-        logger.info("Loading the address of the vgg json segmentation datas file.")
-        raw_masks_json = metadatas["masks"]
+        # logger.info("Loading the address of the vgg json segmentation datas file.")
+        # raw_masks_json = metadatas["masks"]
 
         logger.info(
             "Loading the vgg json file and gathering the keys, i.e. the image names."
         )
         # Load the vgg json file and get the keys, i.e. the image names.
-        with open(raw_masks_json) as vgg_json:
+        with open(self.raw_masks_json) as vgg_json:
             self.all_coordinates_and_labels = json.load(vgg_json)
             self.image_names = sorted(self.all_coordinates_and_labels.keys())
 

@@ -1,8 +1,10 @@
+from typing import List
+
 from loguru import logger
 from tensorflow import keras
 
 
-def get_backbone(img_shape):
+def get_backbone(img_shape: List[int], backbone_name: str):
 
     backbone = keras.applications.ResNet101V2(include_top=False, input_shape=img_shape)
 
@@ -10,7 +12,7 @@ def get_backbone(img_shape):
         "conv2_block3_preact_relu",
         "conv3_block4_preact_relu",
         "conv4_block23_preact_relu",
-        "conv5_block3_out",
+        "post_relu",
     ]
 
     c2_output, c3_output, c4_output, c5_output = [
@@ -24,7 +26,9 @@ def get_backbone(img_shape):
     logger.info(f"c5_output OS : {int(height/c5_output.shape.as_list()[1])}")
 
     return keras.Model(
-        inputs=[backbone.inputs], outputs=[c2_output, c3_output, c4_output, c5_output]
+        inputs=[backbone.inputs],
+        outputs=[c2_output, c3_output, c4_output, c5_output],
+        name=backbone_name,
     )
 
 
