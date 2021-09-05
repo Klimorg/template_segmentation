@@ -2,7 +2,7 @@ albumentations==1.0
 hydra_core==1.1.0
 loguru==0.5.3
 mlflow==1.18.0
-omegaconf==2.1.0
+omegaconf==2.1.1
 pandas==1.2.4
 PyYAML==5.4.1
 scikit_learn==0.24.2
