@@ -1,4 +1,4 @@
-albumentations==1.0
+albumentations==1.0.3
 hydra_core==1.1.0
 loguru==0.5.3
 mlflow==1.18.0
