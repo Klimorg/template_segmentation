@@ -8,7 +8,7 @@ import yaml
 from loguru import logger
 from PIL import Image, ImageDraw
 
-from utils import get_items_list
+from .utils import get_items_list
 
 JsonDict = Dict[str, Any]
 PolygonVertices = List[float]

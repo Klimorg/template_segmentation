@@ -11,6 +11,8 @@ from tensorflow.keras.layers import (
 )
 from tensorflow.keras.models import Sequential
 
+from src.model.layers.common_layers import conv_bn_relu
+
 
 class SelfAttention2D(tf.keras.layers.Layer):
     """
@@ -245,46 +247,6 @@ class Base_OC_Module(tf.keras.layers.Layer):
         return config
 
 
-def conv_bn_relu(
-    tensor: tf.Tensor,
-    num_filters: int,
-    kernel_size: int,
-    padding: str = "same",
-    strides: int = 1,
-    dilation_rate: int = 1,
-    w_init: str = "he_normal",
-) -> tf.Tensor:
-    """[summary]
-
-    Args:
-        tensor (tf.Tensor): [description]
-        num_filters (int): [description]
-        kernel_size (int): [description]
-        padding (str, optional): [description]. Defaults to "same".
-        strides (int, optional): [description]. Defaults to 1.
-        dilation_rate (int, optional): [description]. Defaults to 1.
-        w_init (str, optional): [description]. Defaults to "he_normal".
-
-    Returns:
-        tf.Tensor: [description]
-    """
-
-    fmap = Conv2D(
-        filters=num_filters,
-        kernel_size=kernel_size,
-        padding=padding,
-        strides=strides,
-        dilation_rate=dilation_rate,
-        kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
-        kernel_initializer=w_init,
-        use_bias=False,
-    )(tensor)
-
-    fmap = BatchNormalization()(fmap)
-
-    return ReLU()(fmap)
-
-
 def get_segmentation_module(
     n_classes: int, backbone: tf.keras.Model, name: str
 ) -> tf.keras.Model:
@@ -301,7 +263,7 @@ def get_segmentation_module(
 
     _, c3_output, _, _ = backbone.outputs
 
-    fmap = conv_bn_relu(c3_output, num_filters=1024, kernel_size=3)
+    fmap = conv_bn_relu(c3_output, filters=1024, kernel_size=3, name="pre_OCP_conv")
     fmap = Base_OC_Module(filters=512)(fmap)
 
     fmap = Conv2D(

@@ -1,70 +1,9 @@
 from typing import List, Union
 
 import tensorflow as tf
-import tensorflow_addons as tfa
-from tensorflow.keras.layers import (
-    AveragePooling2D,
-    BatchNormalization,
-    Concatenate,
-    Conv2D,
-    ReLU,
-    SeparableConv2D,
-    UpSampling2D,
-)
+from tensorflow.keras.layers import AveragePooling2D, Concatenate, Conv2D, UpSampling2D
 
 from src.model.layers.common_layers import conv_gn_relu, sepconv_bn_relu
-
-# def conv_gn_relu(
-#     tensor: tf.Tensor,
-#     num_filters: int,
-#     kernel_size: int,
-#     padding: str = "same",
-#     strides: int = 1,
-#     dilation_rate: int = 1,
-#     w_init: str = "he_normal",
-# ) -> tf.Tensor:
-
-#     fmap = Conv2D(
-#         filters=num_filters,
-#         kernel_size=kernel_size,
-#         padding=padding,
-#         strides=strides,
-#         dilation_rate=dilation_rate,
-#         kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
-#         kernel_initializer=w_init,
-#         use_bias=False,
-#     )(tensor)
-
-#     fmap = tfa.layers.GroupNormalization()(fmap)
-
-#     return ReLU()(fmap)
-
-
-# def sepconv_bn_relu(
-#     tensor: tf.Tensor,
-#     filters: int,
-#     kernel_size: int,
-#     padding: str = "same",
-#     strides: int = 1,
-#     dilation_rate: int = 1,
-#     w_init: str = "he_normal",
-# ) -> tf.Tensor:
-
-#     fmap = SeparableConv2D(
-#         filters=filters,
-#         depth_multiplier=1,
-#         kernel_size=kernel_size,
-#         padding=padding,
-#         strides=strides,
-#         dilation_rate=dilation_rate,
-#         depthwise_initializer=w_init,
-#         kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
-#         use_bias=False,
-#     )(tensor)
-
-#     fmap = BatchNormalization()(fmap)
-
-#     return ReLU()(fmap)
 
 
 def upsampling(

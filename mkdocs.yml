@@ -1,77 +1,35 @@
-# site_name: Documentation
-# site_author: Mathieu Klimczak
-# dev_addr: "127.0.0.1:8001"
-# theme:
-#   name: material
-#   logo: images/logo_blanc.svg
-#   language: fr
-#   features:
-#     - navigation.instant
-#     - navigation.tabs
-
-# plugins:
-#   - search:
-#       lang: fr
-#   - mkdocstrings:
-#       watch:
-#         - src
-#         - tests
-#       default_handler: python
-#       handlers:
-#         python:
-#           setup_commands:
-#             - import sys
-#             - sys.path.append("src")
-#             - sys.path.append("tests")
-#           rendering:
-#             show_source: true
-
-# nav:
-#   - Acceuil: index.md
-#   - Création des datasets:
-#     - Création des masques: utils_segmentation.md
-#     - Initialisation: make_dataset.md
-#     - Transformation des données: tensorize.md
-#   - Modèles de segmentation sémantique:
-#     - Architecture Unet: unet.md
-#     - Architecture FC DenseNet: tiramisu.md
-#   - Boucle d'entraînement: train.md
-#   - Tests unitaires:
-#     - tensorize: test_tensorize.md
-#     - prepare_dataset: test_make_dataset.md
-#     - utils: test_utils.md
-
-
-# markdown_extensions:
-#   - admonition
-#   - codehilite
-#   - pymdownx.highlight:
-#       linenums: true
-#   - pymdownx.inlinehilite
-#   - pymdownx.details
-#   - pymdownx.superfences
-#   - def_list
-#   - attr_list
-
-#   # config pour latex
-#   - pymdownx.arithmatex:
-#       generic: true
-
-# # config pour latex
-# extra_javascript:
-#   - javascripts/config.js
-#   - https://polyfill.io/v3/polyfill.min.js?features=es6
-#   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
-site_name: Documentation
+site_name: Documentation segmentation semantique
 site_author: Mathieu Klimczak
 dev_addr: "127.0.0.1:8001"
 theme:
   name: material
   logo: images/logo_blanc.svg
+  icon:
+    repo: fontawesome/brands/gitlab
   language: fr
   features:
     - navigation.instant
     - navigation.tabs
+    - navigation.top
+    - search.highlight
+    - search.share
+    - search.suggest
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Basculer en mode sombre
+    - scheme: slate
+      primary: teal
+      accent: deep orange
+      toggle:
+        icon: material/toggle-switch
+        name: Basculer en mode clair
+
+# extra_css:
+#   - stylesheets/extra.css
 
 plugins:
   - search:
@@ -108,17 +66,19 @@ nav:
     - utils: test_utils.md
 
 
+
 markdown_extensions:
   - admonition
   - codehilite
-  - pymdownx.highlight:
-      linenums: true
   - pymdownx.inlinehilite
   - pymdownx.details
   - pymdownx.superfences
   - def_list
   - attr_list
-
+  - pymdownx.highlight:
+      linenums: true
+  - pymdownx.betterem:
+      smart_enable: all
   # config pour latex
   - pymdownx.arithmatex:
       generic: true

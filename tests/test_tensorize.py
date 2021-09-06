@@ -5,7 +5,7 @@ import pandas as pd
 import pytest
 import tensorflow as tf
 
-from src.tensorize import Tensorize
+from src.pipelines.classic import Tensorize
 
 
 @pytest.fixture

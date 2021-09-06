@@ -3,23 +3,7 @@ import tensorflow_addons as tfa
 from tensorflow import keras
 from tensorflow.keras.layers import Activation, Concatenate, Conv2D, ReLU, UpSampling2D
 
-
-def conv_gn_relu(
-    images: tf.Tensor, filters: int = 128, l2_regul: float = 1e-4
-) -> tf.Tensor:
-
-    fmap = Conv2D(
-        filters=filters,
-        kernel_size=(3, 3),
-        strides=(1, 1),
-        padding="same",
-        kernel_initializer="he_uniform",
-        kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
-    )(images)
-
-    fmap = tfa.layers.GroupNormalization()(fmap)
-
-    return ReLU()(fmap)
+from src.model.layers.common_layers import conv_gn_relu
 
 
 def FPN(
@@ -117,21 +101,27 @@ def semantic_head_fpn(
     """
 
     p5_output = UpSampling2D(size=(2, 2), interpolation="bilinear")(
-        conv_gn_relu(p5_output)
+        conv_gn_relu(p5_output, filters=128, kernel_size=3)
     )
     p5_output = UpSampling2D(size=(2, 2), interpolation="bilinear")(
-        conv_gn_relu(p5_output)
+        conv_gn_relu(p5_output, filters=128, kernel_size=3)
     )
-    fmap5 = UpSampling2D(size=(2, 2), interpolation="bilinear")(conv_gn_relu(p5_output))
+    fmap5 = UpSampling2D(size=(2, 2), interpolation="bilinear")(
+        conv_gn_relu(p5_output, filters=128, kernel_size=3)
+    )
 
     p4_output = UpSampling2D(size=(2, 2), interpolation="bilinear")(
-        conv_gn_relu(p4_output)
+        conv_gn_relu(p4_output, filters=128, kernel_size=3)
     )
-    fmap4 = UpSampling2D(size=(2, 2), interpolation="bilinear")(conv_gn_relu(p4_output))
+    fmap4 = UpSampling2D(size=(2, 2), interpolation="bilinear")(
+        conv_gn_relu(p4_output, filters=128, kernel_size=3)
+    )
 
-    fmap3 = UpSampling2D(size=(2, 2), interpolation="bilinear")(conv_gn_relu(p3_output))
+    fmap3 = UpSampling2D(size=(2, 2), interpolation="bilinear")(
+        conv_gn_relu(p3_output, filters=128, kernel_size=3)
+    )
 
-    fmap2 = conv_gn_relu(p2_output)
+    fmap2 = conv_gn_relu(p2_output, filters=128, kernel_size=3)
 
     return Concatenate(axis=-1)([fmap5, fmap4, fmap3, fmap2])
 
