@@ -3,7 +3,7 @@ bandit==1.7.0
 black==21.8b0
 darglint==1.8.0
 flake8==3.9.0
-isort==5.8.0
+isort==5.9.3
 mypy==0.812
 # requirements writing
 pipreqs==0.4.10
@@ -14,7 +14,7 @@ pytest==6.2.3
 pytest-cov==2.11.1
 pytest-xdist==2.2.1
 # code quality infos
-radon==4.5.0
+radon==5.1.0
 # refactoring
-rope==0.18.0
-wemake-python-styleguide==0.15.2
+rope==0.19.0
+wemake-python-styleguide==0.15.3
