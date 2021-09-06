@@ -1,6 +1,5 @@
 from pathlib import Path
 
-import hydra
 import mlflow
 import tensorflow as tf
 from hydra.utils import instantiate
@@ -8,6 +7,7 @@ from loguru import logger
 from mlflow import tensorflow as mltensorflow
 from omegaconf import DictConfig
 
+import hydra
 from utils.utils import flatten_omegaconf, set_log_infos, set_seed
 
 
