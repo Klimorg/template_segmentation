@@ -5,6 +5,15 @@ from tensorflow import keras
 
 
 def get_backbone(img_shape: List[int], backbone_name: str):
+    """[summary]
+
+    Args:
+        img_shape (List[int]): [description]
+        backbone_name (str): [description]
+
+    Returns:
+        [type]: [description]
+    """
 
     backbone = keras.applications.ResNet101V2(include_top=False, input_shape=img_shape)
 

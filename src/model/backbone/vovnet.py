@@ -12,35 +12,47 @@ from tensorflow.keras.layers import (
     ReLU,
 )
 
+from src.model.layers.common_layers import conv_bn_relu
 
-def conv_bn_relu(
-    tensor: tf.Tensor,
-    filters: int,
-    kernel_size: Tuple[int, int],
-    strides: Tuple[int, int],
-    name: str,
-    l2_regul: float = 1e-4,
-) -> tf.Tensor:
+# def conv_bn_relu(
+#     tensor: tf.Tensor,
+#     filters: int,
+#     kernel_size: Tuple[int, int],
+#     strides: Tuple[int, int],
+#     name: str,
+#     l2_regul: float = 1e-4,
+# ) -> tf.Tensor:
 
-    fmap = Conv2D(
-        filters=filters,
-        kernel_size=kernel_size,
-        strides=strides,
-        padding="same",
-        use_bias=False,
-        kernel_initializer="he_uniform",
-        kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
-        name=f"{name}",
-    )(tensor)
+#     fmap = Conv2D(
+#         filters=filters,
+#         kernel_size=kernel_size,
+#         strides=strides,
+#         padding="same",
+#         use_bias=False,
+#         kernel_initializer="he_uniform",
+#         kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
+#         name=f"{name}",
+#     )(tensor)
 
-    fmap = BatchNormalization(name=f"bn_{name}")(fmap)
+#     fmap = BatchNormalization(name=f"bn_{name}")(fmap)
 
-    return ReLU(name=f"relu_{name}")(fmap)
+#     return ReLU(name=f"relu_{name}")(fmap)
 
 
 def osa_module(
     tensor: tf.Tensor, filters_conv3x3: int, filters_conv1x1: int, block_name: str
 ) -> tf.Tensor:
+    """[summary]
+
+    Args:
+        tensor (tf.Tensor): [description]
+        filters_conv3x3 (int): [description]
+        filters_conv1x1 (int): [description]
+        block_name (str): [description]
+
+    Returns:
+        tf.Tensor: [description]
+    """
 
     fmap1 = conv_bn_relu(
         tensor=tensor,
@@ -97,6 +109,17 @@ def get_vovnet(
     filters_conv1x1: List[int],
     block_repetitions: List[int],
 ) -> tf.keras.Model:
+    """[summary]
+
+    Args:
+        img_shape (List[int]): [description]
+        filters_conv3x3 (List[int]): [description]
+        filters_conv1x1 (List[int]): [description]
+        block_repetitions (List[int]): [description]
+
+    Returns:
+        tf.keras.Model: [description]
+    """
 
     # input block
     img_input = Input(img_shape)
@@ -169,6 +192,18 @@ def get_backbone(
     block_repetitions: List[int],
     backbone_name: str,
 ) -> tf.keras.Model:
+    """[summary]
+
+    Args:
+        img_shape (List[int]): [description]
+        filters_conv3x3 (List[int]): [description]
+        filters_conv1x1 (List[int]): [description]
+        block_repetitions (List[int]): [description]
+        backbone_name (str): [description]
+
+    Returns:
+        tf.keras.Model: [description]
+    """
 
     backbone = get_vovnet(
         img_shape=img_shape,

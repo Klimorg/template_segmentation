@@ -285,7 +285,9 @@ def conv_bn_relu(
     return ReLU()(fmap)
 
 
-def get_OCNet(n_classes: int, backbone: tf.keras.Model, name: str) -> tf.keras.Model:
+def get_segmentation_module(
+    n_classes: int, backbone: tf.keras.Model, name: str
+) -> tf.keras.Model:
     """[summary]
 
     Args:
@@ -300,7 +302,7 @@ def get_OCNet(n_classes: int, backbone: tf.keras.Model, name: str) -> tf.keras.M
     _, c3_output, _, _ = backbone.outputs
 
     fmap = conv_bn_relu(c3_output, num_filters=1024, kernel_size=3)
-    fmap = Base_OC_Module(512)(fmap)
+    fmap = Base_OC_Module(filters=512)(fmap)
 
     fmap = Conv2D(
         filters=n_classes,

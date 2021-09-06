@@ -231,8 +231,12 @@ def decoder(fmap1, fmap2, filters):
     return conv_bn_relu(tensor=fmap, filters=filters, kernel_size=3, name="decoder2")
 
 
-def get_ksac_model(
-    n_classes: int, backbone: tf.keras.Model, name: str
+def get_segmentation_module(
+    n_classes: int,
+    backbone: tf.keras.Model,
+    name: str,
+    ksac_filters: int,
+    decoder_filters: int,
 ) -> tf.keras.Model:
     """[summary]
 
@@ -247,9 +251,9 @@ def get_ksac_model(
 
     c2_output, _, c4_output, _ = backbone.outputs
 
-    fm = ksac_module(c4_output, filters=256)
+    fm = ksac_module(c4_output, filters=ksac_filters)
 
-    fmap = decoder(fm, c2_output, filters=128)
+    fmap = decoder(fm, c2_output, filters=decoder_filters)
 
     fmap = UpSampling2D(size=(4, 4), interpolation="bilinear")(fmap)
 

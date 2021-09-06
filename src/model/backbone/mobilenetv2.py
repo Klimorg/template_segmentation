@@ -21,6 +21,19 @@ def inverted_residual_bottleneck(
     skip_connection: bool,
     name: str,
 ) -> tf.Tensor:
+    """[summary]
+
+    Args:
+        tensor (tf.Tensor): [description]
+        filters (int): [description]
+        expansion_factor (int): [description]
+        strides (Tuple[int, int]): [description]
+        skip_connection (bool): [description]
+        name (str): [description]
+
+    Returns:
+        tf.Tensor: [description]
+    """
 
     in_channels = backend.int_shape(tensor)[-1]
 
@@ -229,6 +242,15 @@ def get_mobilenetv2(
 
 
 def get_backbone(img_shape: List[int], backbone_name: str) -> tf.keras.Model:
+    """[summary]
+
+    Args:
+        img_shape (List[int]): [description]
+        backbone_name (str): [description]
+
+    Returns:
+        tf.keras.Model: [description]
+    """
 
     backbone = get_mobilenetv2(
         img_shape=img_shape,

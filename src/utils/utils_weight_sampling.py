@@ -102,55 +102,55 @@ class WeightBalancing(object):
 
         return balancing
 
-    def get_dataset_infos(self):
+    # def get_dataset_infos(self):
 
-        masks_paths = get_items_list(self.directory, self.extension)
-        logger.info(f"Found {len(masks_paths)} masks")
+    #     masks_paths = get_items_list(self.directory, self.extension)
+    #     logger.info(f"Found {len(masks_paths)} masks")
 
-        subtotal = []
+    #     subtotal = []
 
-        for label, _ in self.class_dict.items():
+    #     for label, _ in self.class_dict.items():
 
-            sub25 = 0
-            from25to50 = 0
-            from50to75 = 0
-            sup75 = 0
+    #         sub25 = 0
+    #         from25to50 = 0
+    #         from50to75 = 0
+    #         sup75 = 0
 
-            for mask_path in masks_paths:
-                mask = Image.open(mask_path)
-                mask = np.asarray(mask).astype("uint8")
+    #         for mask_path in masks_paths:
+    #             mask = Image.open(mask_path)
+    #             mask = np.asarray(mask).astype("uint8")
 
-                number_of_pixels_in_class = len(mask[mask == self.class_dict[label]])
+    #             number_of_pixels_in_class = len(mask[mask == self.class_dict[label]])
 
-                sub_frequency = number_of_pixels_in_class / self.crop_size ** 2
+    #             sub_frequency = number_of_pixels_in_class / self.crop_size ** 2
 
-                if number_of_pixels_in_class > 0:
+    #             if number_of_pixels_in_class > 0:
 
-                    if sub_frequency < 0.25:
-                        sub25 += 1
-                    elif sub_frequency < 0.5:
-                        from25to50 += 1
-                    elif sub_frequency < 0.75:
-                        from50to75 += 1
-                    else:
-                        sup75 += 1
+    #                 if sub_frequency < 0.25:
+    #                     sub25 += 1
+    #                 elif sub_frequency < 0.5:
+    #                     from25to50 += 1
+    #                 elif sub_frequency < 0.75:
+    #                     from50to75 += 1
+    #                 else:
+    #                     sup75 += 1
 
-            subtotal.append(
-                {
-                    "sub_25": sub25,
-                    "from_25_to_50": from25to50,
-                    "from_50_to_75": from50to75,
-                    "sup_75": sup75,
-                }
-            )
+    #         subtotal.append(
+    #             {
+    #                 "sub_25": sub25,
+    #                 "from_25_to_50": from25to50,
+    #                 "from_50_to_75": from50to75,
+    #                 "sup_75": sup75,
+    #             }
+    #         )
 
-        descriptif = pd.DataFrame(
-            subtotal,
-            columns=["sub_25", "from_25_to_50", "from_50_to_75", "sup_75"],
-            index=["Background", "Petri_box", "Moisissure", "Levure"],
-        )
+    #     descriptif = pd.DataFrame(
+    #         subtotal,
+    #         columns=["sub_25", "from_25_to_50", "from_50_to_75", "sup_75"],
+    #         index=["Background", "Petri_box", "Moisissure", "Levure"],
+    #     )
 
-        print(f"{descriptif}")
+    #     print(f"{descriptif}")
 
 
 def add_sample_weights(image, label):

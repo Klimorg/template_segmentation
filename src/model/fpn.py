@@ -34,6 +34,23 @@ def FPN(
     kernel_initializer="he_uniform",
     l2_regul: float = 1e-4,
 ) -> tf.Tensor:
+    """[summary]
+
+    Args:
+        c2_output (tf.Tensor): [description]
+        c3_output (tf.Tensor): [description]
+        c4_output (tf.Tensor): [description]
+        c5_output (tf.Tensor): [description]
+        filters (int, optional): [description]. Defaults to 256.
+        kernel_size (tuple, optional): [description]. Defaults to (1, 1).
+        strides (tuple, optional): [description]. Defaults to (1, 1).
+        padding (str, optional): [description]. Defaults to "same".
+        kernel_initializer (str, optional): [description]. Defaults to "he_uniform".
+        l2_regul (float, optional): [description]. Defaults to 1e-4.
+
+    Returns:
+        tf.Tensor: [description]
+    """
 
     # rescale filters and go down through pyramid network
     p5_output = Conv2D(
@@ -87,6 +104,17 @@ def semantic_head_fpn(
     p4_output: tf.Tensor,
     p5_output: tf.Tensor,
 ) -> tf.Tensor:
+    """[summary]
+
+    Args:
+        p2_output (tf.Tensor): [description]
+        p3_output (tf.Tensor): [description]
+        p4_output (tf.Tensor): [description]
+        p5_output (tf.Tensor): [description]
+
+    Returns:
+        tf.Tensor: [description]
+    """
 
     p5_output = UpSampling2D(size=(2, 2), interpolation="bilinear")(
         conv_gn_relu(p5_output)
@@ -108,9 +136,19 @@ def semantic_head_fpn(
     return Concatenate(axis=-1)([fmap5, fmap4, fmap3, fmap2])
 
 
-def get_segmentation_fpn(
+def get_segmentation_module(
     n_classes: int, backbone: tf.keras.Model, name: str
 ) -> tf.keras.Model:
+    """[summary]
+
+    Args:
+        n_classes (int): [description]
+        backbone (tf.keras.Model): [description]
+        name (str): [description]
+
+    Returns:
+        tf.keras.Model: [description]
+    """
 
     c_outputs = backbone.outputs
 

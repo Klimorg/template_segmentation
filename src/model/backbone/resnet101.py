@@ -1,8 +1,19 @@
+from typing import List
+
 from loguru import logger
 from tensorflow import keras
 
 
 def get_resnet101(img_shape: List[int], backbone_name: str):
+    """[summary]
+
+    Args:
+        img_shape (List[int]): [description]
+        backbone_name (str): [description]
+
+    Returns:
+        [type]: [description]
+    """
 
     backbone = keras.applications.ResNet101(include_top=False, input_shape=img_shape)
     c2_output, c3_output, c4_output, c5_output = [

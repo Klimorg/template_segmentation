@@ -1,4 +1,4 @@
-_target_: model.jpu.get_jpu
+_target_: model.jpu.get_segmentation_module
 n_classes: ${datasets.metadatas.n_classes}
 img_shape: ${datasets.params.img_shape}
 name: JPU

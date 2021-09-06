@@ -27,6 +27,20 @@ def ghost_module(
     name: str,
     l2_regul: float = 1e-4,
 ) -> tf.Tensor:
+    """[summary]
+
+    Args:
+        fmap (tf.Tensor): [description]
+        out (int): [description]
+        ratio (int): [description]
+        convkernel (Tuple[int, int]): [description]
+        dwkernel (Tuple[int, int]): [description]
+        name (str): [description]
+        l2_regul (float, optional): [description]. Defaults to 1e-4.
+
+    Returns:
+        tf.Tensor: [description]
+    """
 
     filters = int(np.ceil(out / ratio))
     channels = int(out - filters)
@@ -65,6 +79,18 @@ def se_module(
     name: str,
     l2_regul: float = 1e-4,
 ) -> tf.Tensor:
+    """[summary]
+
+    Args:
+        fmap_in (tf.Tensor): [description]
+        filters (int): [description]
+        ratio (int): [description]
+        name (str): [description]
+        l2_regul (float, optional): [description]. Defaults to 1e-4.
+
+    Returns:
+        tf.Tensor: [description]
+    """
 
     channels = int(fmap_in.shape[-1])
 
@@ -109,6 +135,22 @@ def ghost_bottleneck_module(
     name: str,
     l2_regul: float = 1e-4,
 ) -> tf.Tensor:
+    """[summary]
+
+    Args:
+        fmap_in (tf.Tensor): [description]
+        dwkernel (int): [description]
+        strides (int): [description]
+        exp (int): [description]
+        out (int): [description]
+        ratio (int): [description]
+        use_se (bool): [description]
+        name (str): [description]
+        l2_regul (float, optional): [description]. Defaults to 1e-4.
+
+    Returns:
+        tf.Tensor: [description]
+    """
 
     fmap_shortcut = DepthwiseConv2D(
         kernel_size=dwkernel,
@@ -182,6 +224,14 @@ def ghost_bottleneck_module(
 def get_ghostnet(
     img_shape: List[int],
 ) -> tf.keras.Model:
+    """[summary]
+
+    Args:
+        img_shape (List[int]): [description]
+
+    Returns:
+        tf.keras.Model: [description]
+    """
 
     dwkernels = [3, 3, 3, 5, 5, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5]
     strides = [1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1]
@@ -405,6 +455,15 @@ def get_ghostnet(
 
 
 def get_backbone(img_shape: List[int], backbone_name: str) -> tf.keras.Model:
+    """[summary]
+
+    Args:
+        img_shape (List[int]): [description]
+        backbone_name (str): [description]
+
+    Returns:
+        tf.keras.Model: [description]
+    """
 
     backbone = get_ghostnet(
         img_shape=img_shape,
@@ -432,8 +491,3 @@ def get_backbone(img_shape: List[int], backbone_name: str) -> tf.keras.Model:
         outputs=[os4_output, os8_output, os16_output, os32_output],
         name=backbone_name,
     )
-
-
-if __name__ == "__main__":
-
-    model = get_backbone(img_shape=[256, 256, 3])

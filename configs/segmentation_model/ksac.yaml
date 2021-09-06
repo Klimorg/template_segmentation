@@ -1,3 +1,5 @@
-_target_: model.ksac.get_ksac_model
+_target_: model.ksac.get_segmentation_module
 n_classes: ${datasets.metadatas.n_classes}
+ksac_filters: 256
+decoder_filters: 128
 name: KSAC
