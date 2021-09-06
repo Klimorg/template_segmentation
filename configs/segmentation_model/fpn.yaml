@@ -1,3 +1,3 @@
-_target_: model.fpn.get_segmentation_fpn
+_target_: model.fpn.get_segmentation_module
 n_classes: ${datasets.metadatas.n_classes}
 name: FPN
