@@ -1,0 +1,34 @@
+metadatas:
+  n_classes: 4 # n+1 for background
+  masks: "datas/raw_datas/ML/labels/labels_ml_vgg_json_4_classes_2021-06-15-01-26-15.json"
+  height: 3036
+  width: 4024
+
+raw_datas:
+  images: "datas/raw_datas/ML/images/"
+  masks: "datas/raw_datas/ML/masks/"
+
+raw_dataset:
+  crop_size: 256
+  images: "datas/raw_dataset/ML/images"
+  masks: "datas/raw_dataset/ML/masks"
+
+prepared_dataset:
+  train: "datas/prepared_dataset/train.csv"
+  val: "datas/prepared_dataset/val.csv"
+  test: "datas/prepared_dataset/test.csv"
+
+params:
+  img_shape: [256,256,3] # For unet, H,W should be divisible by 2**N where N is the number of pooling layers
+  augment: True
+  batch_size: 16
+  repetitions: 1
+  prefetch: 1
+
+class_dict:
+  Background: 0
+  Petri_box: 1
+  Moisissure: 2
+  Levure: 3
+  # Levure_superposée: 4
+  # Moisissure_superposée: 5
