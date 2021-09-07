@@ -77,11 +77,7 @@ class SharedDilatedConv(tf.keras.layers.Layer):
         self.relu = tf.keras.layers.ReLU()
 
     def build(self, input_shape):
-        """[summary]
 
-        Args:
-            input_shape ([type]): [description]
-        """
         *_, n_channels = input_shape
         self.kernel = self.add_weight(
             name="kernel",
@@ -106,15 +102,7 @@ class SharedDilatedConv(tf.keras.layers.Layer):
         self.bn3 = tf.keras.layers.BatchNormalization()
 
     def call(self, inputs, training=None):
-        """[summary]
 
-        Args:
-            inputs ([type]): [description]
-            training ([type], optional): [description]. Defaults to None.
-
-        Returns:
-            [type]: [description]
-        """
         x1 = tf.nn.conv2d(
             inputs,
             self.kernel,

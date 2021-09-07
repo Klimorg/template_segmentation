@@ -27,19 +27,23 @@ def ghost_module(
     name: str,
     l2_regul: float = 1e-4,
 ) -> tf.Tensor:
-    """[summary]
+    """Primary module of the GhostNet architecture.
 
     Args:
-        fmap (tf.Tensor): [description]
-        out (int): [description]
-        ratio (int): [description]
-        convkernel (Tuple[int, int]): [description]
-        dwkernel (Tuple[int, int]): [description]
-        name (str): [description]
-        l2_regul (float, optional): [description]. Defaults to 1e-4.
+        fmap (tf.Tensor): Input feature map of the module, size = $(H,W,C)$.
+        out (int): Number of channels of the output feature map.
+        ratio (int): Define the ratio between the number of filters of the Conv2D layer
+            and the number of filters of the `DepthwiseConv2D` in the last `Concatenate`
+            layer. `depth_multiplier` of the `DepthwiseConv2D` layer is also defined as
+            `ratio-1`.
+        convkernel (Tuple[int, int]): Number of convolution kernels in the `Conv2D` layer.
+        dwkernel (Tuple[int, int]): Number of convolution kernels in the `DepthwiseConv2D` layer.
+        name (str): Name of the module.
+        l2_regul (float, optional): Value of the constraint used for the
+            $L_2$ regularization. Defaults to 1e-4.
 
     Returns:
-        tf.Tensor: [description]
+        Output feature map, size = $(H,W,\mathrm{out})$
     """
 
     filters = int(np.ceil(out / ratio))
@@ -74,22 +78,27 @@ def ghost_module(
 
 def se_module(
     fmap_in: tf.Tensor,
-    filters: int,
     ratio: int,
+    filters: int,
     name: str,
     l2_regul: float = 1e-4,
 ) -> tf.Tensor:
-    """[summary]
+    """Squeeze-and-Excitation Module.
+
+    Architecture:
+        ![architecture](./images/se_module.svg)
+
+        Source : [ArXiv link](https://arxiv.org/abs/1709.01507)
 
     Args:
-        fmap_in (tf.Tensor): [description]
-        filters (int): [description]
-        ratio (int): [description]
-        name (str): [description]
-        l2_regul (float, optional): [description]. Defaults to 1e-4.
-
+        fmap_in (tf.Tensor): Input feature map of the module, size = $(H,W,C)$.
+        ratio (int): Define the ratio of filters used in the squeeze operation of the modle (the first Conv2D).
+        filters (int): Numbers of filters used in the excitation operation of the module (the second Conv2D).
+        name (str): Name of the module.
+        l2_regul (float, optional): Value of the constraint used for the
+            $L_2$ regularization. Defaults to 1e-4.
     Returns:
-        tf.Tensor: [description]
+        Output feature map, size = $(H,W,C)$.
     """
 
     channels = int(fmap_in.shape[-1])
@@ -135,21 +144,25 @@ def ghost_bottleneck_module(
     name: str,
     l2_regul: float = 1e-4,
 ) -> tf.Tensor:
-    """[summary]
+    """Ghost Bottleneck Module, the backbone of the GhostNet model.
 
     Args:
-        fmap_in (tf.Tensor): [description]
-        dwkernel (int): [description]
-        strides (int): [description]
-        exp (int): [description]
-        out (int): [description]
-        ratio (int): [description]
-        use_se (bool): [description]
-        name (str): [description]
-        l2_regul (float, optional): [description]. Defaults to 1e-4.
-
+        fmap_in (tf.Tensor): Input feature map of the module, size = $(H,W,C)$.
+        dwkernel (int): Number of convolution kernels in the `DepthwiseConv2D` layer.
+        strides (int): Stride used in the `DepthwiseConv2D` layers.
+        exp (int): Number of filters used as an expansion operation in the first `ghost_module`.
+        out (int): Number of filters/channels of the output feature map.
+        ratio (int): Define the ratio in the `ghost_module` between the number of filters of the Conv2D layer
+            and the number of filters of the `DepthwiseConv2D` in the last `Concatenate`
+            layer. `depth_multiplier` of the `DepthwiseConv2D` layer is also defined as
+            `ratio-1`.
+        use_se (bool): Determine whether or not use a squeeze-and-excitation module before
+            the last `ghost_module` layer.
+        name (str): Name of the module.
+        l2_regul (float, optional): Value of the constraint used for the
+            $L_2$ regularization. Defaults to 1e-4.
     Returns:
-        tf.Tensor: [description]
+        Output feature map, size = $(H,W,\mathrm{out})$.
     """
 
     fmap_shortcut = DepthwiseConv2D(
@@ -224,13 +237,13 @@ def ghost_bottleneck_module(
 def get_ghostnet(
     img_shape: List[int],
 ) -> tf.keras.Model:
-    """[summary]
+    """Instantiate a GhostNet model.
 
     Args:
-        img_shape (List[int]): [description]
+        img_shape (List[int]): Input shape of the images in the dataset.
 
     Returns:
-        tf.keras.Model: [description]
+        A `tf.keras` model.
     """
 
     dwkernels = [3, 3, 3, 5, 5, 3, 3, 3, 3, 3, 3, 5, 5, 5, 5, 5]
@@ -455,14 +468,14 @@ def get_ghostnet(
 
 
 def get_backbone(img_shape: List[int], backbone_name: str) -> tf.keras.Model:
-    """[summary]
+    """Instantiate the model and use it as a backbone (feature extractor) for a semantic segmentation task.
 
     Args:
-        img_shape (List[int]): [description]
-        backbone_name (str): [description]
+        img_shape (List[int]): Input shape of the images/masks in the dataset.
+        backbone_name (str): Name of the backbone.
 
     Returns:
-        tf.keras.Model: [description]
+        A `tf.keras` model.
     """
 
     backbone = get_ghostnet(

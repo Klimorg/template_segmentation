@@ -23,7 +23,8 @@ def conv_gn_relu(
         strides (int, optional): [description]. Defaults to 1.
         dilation_rate (int, optional): [description]. Defaults to 1.
         w_init (str, optional): [description]. Defaults to "he_normal".
-        l2_regul (float, optional): [description]. Defaults to 1e-4.
+        l2_regul (float, optional): Value of the constraint used for the
+            $L_2$ regularization. Defaults to 1e-4.
 
     Returns:
         tf.Tensor: [description]
@@ -67,7 +68,8 @@ def conv_bn_relu(
         strides (int, optional): [description]. Defaults to 1.
         dilation_rate (int, optional): [description]. Defaults to 1.
         w_init (str, optional): [description]. Defaults to "he_normal".
-        l2_regul (float, optional): [description]. Defaults to 1e-4.
+        l2_regul (float, optional): Value of the constraint used for the
+            $L_2$ regularization. Defaults to 1e-4.
 
     Returns:
         tf.Tensor: [description]
@@ -110,7 +112,8 @@ def sepconv_bn_relu(
         strides (int, optional): [description]. Defaults to 1.
         dilation_rate (int, optional): [description]. Defaults to 1.
         w_init (str, optional): [description]. Defaults to "he_normal".
-        l2_regul (float, optional): [description]. Defaults to 1e-4.
+        l2_regul (float, optional): Value of the constraint used for the
+            $L_2$ regularization. Defaults to 1e-4.
 
     Returns:
         tf.Tensor: [description]

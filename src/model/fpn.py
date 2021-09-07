@@ -1,7 +1,6 @@
 import tensorflow as tf
-import tensorflow_addons as tfa
 from tensorflow import keras
-from tensorflow.keras.layers import Activation, Concatenate, Conv2D, ReLU, UpSampling2D
+from tensorflow.keras.layers import Activation, Concatenate, Conv2D, UpSampling2D
 
 from src.model.layers.common_layers import conv_gn_relu
 

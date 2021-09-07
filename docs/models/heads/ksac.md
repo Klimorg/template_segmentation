@@ -1,4 +1,4 @@
-# Modèle KSAC : Kernel Shared Atrous Convolutions
+# KSAC : Kernel Shared Atrous Convolutions
 
 ::: src.model.ksac
     rendering:

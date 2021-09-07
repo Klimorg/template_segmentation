@@ -1,4 +1,4 @@
-# Pipeline pour la transformation des données
+# Classic pipeline
 
 ::: src.pipelines.classic
     rendering:

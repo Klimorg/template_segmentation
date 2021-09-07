@@ -14,28 +14,33 @@ from tensorflow.keras.layers import (
 
 
 def inverted_residual_bottleneck(
-    tensor: tf.Tensor,
+    fmap: tf.Tensor,
     filters: int,
     expansion_factor: int,
     strides: Tuple[int, int],
     skip_connection: bool,
     name: str,
 ) -> tf.Tensor:
-    """[summary]
+    """Inverted Residual Bottleneck, the backbone of the GhostNet model.
+
+    Architecture:
+        ![Architecture](./images/inv_residual_bottleneck.svg)
 
     Args:
-        tensor (tf.Tensor): [description]
-        filters (int): [description]
-        expansion_factor (int): [description]
-        strides (Tuple[int, int]): [description]
-        skip_connection (bool): [description]
-        name (str): [description]
+        fmap (tf.Tensor): Input feature map of the module, size = $(H,W,C)$.
+        filters (int): Number of filters used in the second `Conv2D` layer.
+        expansion_factor (int): Integer by which multiply the number of channels $C$ of the
+            input feature map to define the number of filters in the first `Conv2D`.
+        strides (Tuple[int, int]): Stride parameter of the `DepthwiseConv2D` layers, used
+            to downsample.
+        skip_connection (bool): Determine wheter or not add a skip connection to the module.
+        name (str): Name of the module.
 
     Returns:
-        tf.Tensor: [description]
+        Output feature map.
     """
 
-    in_channels = backend.int_shape(tensor)[-1]
+    in_channels = backend.int_shape(fmap)[-1]
 
     img = Conv2D(
         filters=expansion_factor * in_channels,
@@ -45,7 +50,7 @@ def inverted_residual_bottleneck(
         kernel_initializer="he_normal",
         use_bias=False,
         name=f"conv1_{name}",
-    )(tensor)
+    )(fmap)
     img = BatchNormalization(name=f"bn1_{name}")(img)
     img = ReLU(max_value=6, name=f"relu1_{name}")(img)
 
@@ -73,7 +78,7 @@ def inverted_residual_bottleneck(
     img = BatchNormalization(name=f"bn3_{name}")(img)
 
     if skip_connection:
-        img = Add(name=f"skip_connection_{name}")([img, tensor])
+        img = Add(name=f"skip_connection_{name}")([img, fmap])
 
     return img
 
@@ -81,15 +86,13 @@ def inverted_residual_bottleneck(
 def get_mobilenetv2(
     img_shape: List[int],
 ) -> tf.keras.Model:
-    """[summary].
+    """Instantiate a Mobilenetv2 model.
 
     Args:
-        img_shape (List[int], optional): [description]. Defaults to img_shape.
-        n_classes (int, optional): [description]. Defaults to n_classes.
-        repets (int): [description]. Defaults to repetitions.
+        img_shape (List[int]): Input shape of the images in the dataset.
 
     Returns:
-        tf.keras.Model: [description]
+        A `tf.keras` model.
     """
     channels = [32, 16, 24, 32, 64, 96, 160, 320]
 
@@ -242,14 +245,14 @@ def get_mobilenetv2(
 
 
 def get_backbone(img_shape: List[int], backbone_name: str) -> tf.keras.Model:
-    """[summary]
+    """Instantiate the model and use it as a backbone (feature extractor) for a semantic segmentation task.
 
     Args:
-        img_shape (List[int]): [description]
-        backbone_name (str): [description]
+        img_shape (List[int]): Input shape of the images/masks in the dataset.
+        backbone_name (str): Name of the backbone.
 
     Returns:
-        tf.keras.Model: [description]
+        A `tf.keras` model.
     """
 
     backbone = get_mobilenetv2(
@@ -278,8 +281,3 @@ def get_backbone(img_shape: List[int], backbone_name: str) -> tf.keras.Model:
         outputs=[os4_output, os8_output, os16_output, os32_output],
         name=backbone_name,
     )
-
-
-if __name__ == "__main__":
-
-    model = get_backbone(img_shape=[256, 256, 3])

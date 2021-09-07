@@ -1,4 +1,4 @@
-# Modèle FPN : Feature Pyramid Network
+# FPN : Feature Pyramid Network
 
 ::: src.model.fpn
     rendering:
