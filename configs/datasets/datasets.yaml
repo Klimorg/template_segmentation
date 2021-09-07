@@ -19,7 +19,7 @@ prepared_dataset:
   test: "datas/prepared_dataset/test.csv"
 
 params:
-  img_shape: [256,256,3] # For unet, H,W should be divisible by 2**N where N is the number of pooling layers
+  img_shape: [256,256,3]
   augment: True
   batch_size: 16
   repetitions: 1

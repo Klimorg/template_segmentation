@@ -15,6 +15,10 @@ class SharedDilatedConv(tf.keras.layers.Layer):
     """
     Description of SharedDilatedConv
 
+
+    Architecture:
+        ![screenshot](./images/ksac_module.svg)
+
     Attributes:
         filters (type):
         kernel_size (type):

@@ -51,6 +51,7 @@ plugins:
 nav:
   - Acceuil: index.md
   - Datasets creation:
+    - Dataset configuration: datasets/config.md
     - Masks creation: datasets/utils_segmentation.md
     - Train-Test-Val datasets creation: datasets/make_dataset.md
     - Datasets pipelines:

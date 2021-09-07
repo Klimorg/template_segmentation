@@ -1,10 +1,11 @@
 from typing import List
 
+import tensorflow as tf
 from loguru import logger
 from tensorflow import keras
 
 
-def get_resnet101(img_shape: List[int], backbone_name: str):
+def get_backbone(img_shape: List[int], backbone_name: str) -> tf.keras.Model:
     """Instantiate the model and use it as a backbone (feature extractor) for a semantic segmentation task.
 
     Args:
