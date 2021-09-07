@@ -42,16 +42,19 @@ from src.model.layers.common_layers import conv_bn_relu
 def osa_module(
     tensor: tf.Tensor, filters_conv3x3: int, filters_conv1x1: int, block_name: str
 ) -> tf.Tensor:
-    """[summary]
+    """One-Shot Aggregation module, the backbone of the VoVNet model.
+
+    Architecture:
+        ![Architecture](./images/osa_module.svg)
 
     Args:
-        tensor (tf.Tensor): [description]
-        filters_conv3x3 (int): [description]
-        filters_conv1x1 (int): [description]
-        block_name (str): [description]
+        tensor (tf.Tensor): Input feature map of the module, size = $(H,W,C)$.
+        filters_conv3x3 (int): Numbers of filters used in the 3x3 `Conv2D` layers.
+        filters_conv1x1 (int): Numbers of filters used in the 1x1 `Conv2D` layer.
+        block_name (str): Name of the module.
 
     Returns:
-        tf.Tensor: [description]
+        Output feature map, size = $(H,W,\mathrm{filters\_ conv1x1})$.
     """
 
     fmap1 = conv_bn_relu(
@@ -109,16 +112,18 @@ def get_vovnet(
     filters_conv1x1: List[int],
     block_repetitions: List[int],
 ) -> tf.keras.Model:
-    """[summary]
+    """Instantiate a VoVNet model.
 
     Args:
-        img_shape (List[int]): [description]
-        filters_conv3x3 (List[int]): [description]
-        filters_conv1x1 (List[int]): [description]
-        block_repetitions (List[int]): [description]
+        img_shape (List[int]): Input shape of the images/masks in the dataset.
+        filters_conv3x3 (List[int]): List the number of filters used for the 3x3 `Conv2D`
+            in each OSA block.
+        filters_conv1x1 (List[int]): List the number of filters used for the 1x1 `Conv2D`
+            in each OSA block.
+        block_repetitions (List[int]): Determine the number of OSA modules to repeat in each block.
 
     Returns:
-        tf.keras.Model: [description]
+        A `tf.keras` model.
     """
 
     # input block
@@ -192,17 +197,19 @@ def get_backbone(
     block_repetitions: List[int],
     backbone_name: str,
 ) -> tf.keras.Model:
-    """[summary]
+    """Instantiate the model and use it as a backbone (feature extractor) for a semantic segmentation task.
 
     Args:
-        img_shape (List[int]): [description]
-        filters_conv3x3 (List[int]): [description]
-        filters_conv1x1 (List[int]): [description]
-        block_repetitions (List[int]): [description]
-        backbone_name (str): [description]
+        img_shape (List[int]): Input shape of the images/masks in the dataset.
+        filters_conv3x3 (List[int]): List the number of filters used for the 3x3 `Conv2D`
+            in each OSA block.
+        filters_conv1x1 (List[int]): List the number of filters used for the 1x1 `Conv2D`
+            in each OSA block.
+        block_repetitions (List[int]): Determine the number of OSA modules to repeat in each block.
+        backbone_name (str): Name of the backbone.
 
     Returns:
-        tf.keras.Model: [description]
+        A `tf.keras` model.
     """
 
     backbone = get_vovnet(

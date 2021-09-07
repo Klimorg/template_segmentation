@@ -250,15 +250,15 @@ class Base_OC_Module(tf.keras.layers.Layer):
 def get_segmentation_module(
     n_classes: int, backbone: tf.keras.Model, name: str
 ) -> tf.keras.Model:
-    """[summary]
+    """Instantiate the segmentation head module for the segmentation task.
 
     Args:
-        n_classes (int): [description]
-        backbone (tf.keras.Model): [description]
-        name (str): [description]
+        n_classes (int): Number of classes in the segmentation task.
+        backbone (tf.keras.Model): CNN used as backbone/feature extractor.
+        name (str): Name of the segmentation head module.
 
     Returns:
-        tf.keras.Model: [description]
+        A semantic segmentation model.
     """
 
     _, c3_output, _, _ = backbone.outputs

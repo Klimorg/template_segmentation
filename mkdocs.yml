@@ -57,6 +57,7 @@ nav:
       - Classic pipeline: datasets/classic.md
       - CutMix pipeline: datasets/cutmix.md
   - Semantic segmentation:
+    - Common layers: models/common_layers.md
     - Backbones:
       - MobileNetv2: models/backbone/mobilenetv2.md
       - GhostNet: models/backbone/ghostnet.md
@@ -86,6 +87,8 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.snippets:
+      base_path: .
   - def_list
   - attr_list
   - pymdownx.highlight:

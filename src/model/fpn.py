@@ -1,3 +1,5 @@
+from typing import List
+
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.layers import Activation, Concatenate, Conv2D, UpSampling2D
@@ -16,23 +18,29 @@ def FPN(
     padding="same",
     kernel_initializer="he_uniform",
     l2_regul: float = 1e-4,
-) -> tf.Tensor:
-    """[summary]
+) -> List[tf.Tensor]:
+    """The Feature Pyramid Networks head.
+
+    Architecture:
+        ![screen](./images/fpn_head.svg)
 
     Args:
-        c2_output (tf.Tensor): [description]
-        c3_output (tf.Tensor): [description]
-        c4_output (tf.Tensor): [description]
-        c5_output (tf.Tensor): [description]
-        filters (int, optional): [description]. Defaults to 256.
-        kernel_size (tuple, optional): [description]. Defaults to (1, 1).
-        strides (tuple, optional): [description]. Defaults to (1, 1).
-        padding (str, optional): [description]. Defaults to "same".
-        kernel_initializer (str, optional): [description]. Defaults to "he_uniform".
-        l2_regul (float, optional): [description]. Defaults to 1e-4.
+        c2_output (tf.Tensor): Feature map coming from the backbone, output stride 4.
+        c3_output (tf.Tensor): Feature map coming from the backbone, output stride 8.
+        c4_output (tf.Tensor): Feature map coming from the backbone, output stride 16.
+        c5_output (tf.Tensor): Feature map coming from the backbone, output stride 32.
+        filters (int, optional): Number of filters in each `Conv2D` layers. Defaults to 256.
+        kernel_size (tuple, optional): Size of the convolution kernels in each `Conv2D` layers.
+            Defaults to (1, 1).
+        strides (tuple, optional): Stride parameter in each `Conv2D` layers. Defaults to (1, 1).
+        padding (str, optional): Paddinf parameter in each `Conv2D` layers. Defaults to "same".
+        kernel_initializer (str, optional): Kernel initialization method used in each `Conv2D` layers.
+            Defaults to "he_uniform".
+        l2_regul (float, optional): Value of the constraint used for the
+            $L_2$ regularization. Defaults to 1e-4.
 
     Returns:
-        tf.Tensor: [description]
+        A list of feature maps, of dimensions $[(OS4, 256), (OS8, 256), (OS16, 256), (OS32, 256)]$.
     """
 
     # rescale filters and go down through pyramid network
@@ -87,16 +95,19 @@ def semantic_head_fpn(
     p4_output: tf.Tensor,
     p5_output: tf.Tensor,
 ) -> tf.Tensor:
-    """[summary]
+    """The segmentation head added to the FPN.
+
+    Architecture:
+        ![screenshot](./images/fpn_segmentation_head.svg)
 
     Args:
-        p2_output (tf.Tensor): [description]
-        p3_output (tf.Tensor): [description]
-        p4_output (tf.Tensor): [description]
-        p5_output (tf.Tensor): [description]
+        p2_output (tf.Tensor): Feature map coming from the `p2_output` FPN head, output stride 4.
+        p3_output (tf.Tensor): Feature map coming from the `p3_output` FPN head, output stride 8.
+        p4_output (tf.Tensor): Feature map coming from the `p4_output` FPN head, output stride 16.
+        p5_output (tf.Tensor): Feature map coming from the `p5_output` FPN head, output stride 32.
 
     Returns:
-        tf.Tensor: [description]
+        An output feature map of size $OS4$, with 512 filters.
     """
 
     p5_output = UpSampling2D(size=(2, 2), interpolation="bilinear")(
@@ -128,15 +139,15 @@ def semantic_head_fpn(
 def get_segmentation_module(
     n_classes: int, backbone: tf.keras.Model, name: str
 ) -> tf.keras.Model:
-    """[summary]
+    """Instantiate the segmentation head module for the segmentation task.
 
     Args:
-        n_classes (int): [description]
-        backbone (tf.keras.Model): [description]
-        name (str): [description]
+        n_classes (int): Number of classes in the segmentation task.
+        backbone (tf.keras.Model): CNN used as backbone/feature extractor.
+        name (str): Name of the segmentation head module.
 
     Returns:
-        tf.keras.Model: [description]
+        A semantic segmentation model.
     """
 
     c_outputs = backbone.outputs

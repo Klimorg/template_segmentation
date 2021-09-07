@@ -13,21 +13,21 @@ def conv_gn_relu(
     w_init: str = "he_normal",
     l2_regul: float = 1e-4,
 ) -> tf.Tensor:
-    """[summary]
+    """Conv2D - GroupNormalization - ReLU module.
 
     Args:
-        tensor (tf.Tensor): [description]
-        filters (int): [description]
-        kernel_size (int): [description]
-        padding (str, optional): [description]. Defaults to "same".
-        strides (int, optional): [description]. Defaults to 1.
-        dilation_rate (int, optional): [description]. Defaults to 1.
-        w_init (str, optional): [description]. Defaults to "he_normal".
+        tensor (tf.Tensor): Input feature map of the module, size = $(H,W,C)$.
+        filters (int): Number of filters used in the `Conv2D` layer.
+        kernel_size (int): Size of the convolution kernels used in the `Conv2D` layer.
+        padding (str, optional): Padding parameter of the `Conv2D` layer.. Defaults to "same".
+        strides (int, optional): Strides parameter of the `Conv2D` layer. Defaults to 1.
+        dilation_rate (int, optional): Dilation rate of the `Conv2D` layer. Defaults to 1.
+        w_init (str, optional): Kernel initialization method used in th `Conv2D` layer. Defaults to "he_normal".
         l2_regul (float, optional): Value of the constraint used for the
             $L_2$ regularization. Defaults to 1e-4.
 
     Returns:
-        tf.Tensor: [description]
+        Output feature map, size = $(H,W,C)$.
     """
 
     fmap = Conv2D(
@@ -57,22 +57,22 @@ def conv_bn_relu(
     w_init: str = "he_normal",
     l2_regul: float = 1e-4,
 ) -> tf.Tensor:
-    """[summary]
+    """Conv2D - BatchNormalization - ReLU module.
 
     Args:
-        tensor (tf.Tensor): [description]
-        filters (int): [description]
-        kernel_size (int): [description]
-        name (str): [description]
-        padding (str, optional): [description]. Defaults to "same".
-        strides (int, optional): [description]. Defaults to 1.
-        dilation_rate (int, optional): [description]. Defaults to 1.
-        w_init (str, optional): [description]. Defaults to "he_normal".
+        tensor (tf.Tensor): Input feature map of the module, size = $(H,W,C)$.
+        filters (int): Number of filters used in the `Conv2D` layer.
+        kernel_size (int): Size of the convolution kernels used in the `Conv2D` layer.
+        name (str): Name of the module.
+        padding (str, optional): Padding parameter of the `Conv2D` layer. Defaults to "same".
+        strides (int, optional): Strides parameter of the `Conv2D` layer. Defaults to 1.
+        dilation_rate (int, optional): Dilation rate of the `Conv2D` layer. Defaults to 1.
+        w_init (str, optional): Kernel initialization method used in th `Conv2D` layer. Defaults to "he_normal".
         l2_regul (float, optional): Value of the constraint used for the
             $L_2$ regularization. Defaults to 1e-4.
 
     Returns:
-        tf.Tensor: [description]
+        Output feature map, size = $(H,W,C)$.
     """
 
     fmap = Conv2D(
@@ -102,21 +102,21 @@ def sepconv_bn_relu(
     w_init: str = "he_normal",
     l2_regul: float = 1e-4,
 ) -> tf.Tensor:
-    """[summary]
+    """SeparableConv2D - BatchNormalization - ReLU module.
 
     Args:
-        tensor (tf.Tensor): [description]
-        filters (int): [description]
-        kernel_size (int): [description]
-        padding (str, optional): [description]. Defaults to "same".
-        strides (int, optional): [description]. Defaults to 1.
-        dilation_rate (int, optional): [description]. Defaults to 1.
-        w_init (str, optional): [description]. Defaults to "he_normal".
+        tensor (tf.Tensor): Input feature map of the module, size = $(H,W,C)$.
+        filters (int): Number of filters used in the `SeparableConv2D` layer.
+        kernel_size (int): Size of the convolution kernels used in the `SeparableConv2D` layer.
+        padding (str, optional): Padding parameter of the `SeparableConv2D` layer. Defaults to "same".
+        strides (int, optional): Strides parameter of the `SeparableConv2D` layer. Defaults to 1.
+        dilation_rate (int, optional): Dilation rate of the `SeparableConv2D` layer. Defaults to 1.
+        w_init (str, optional): Kernel initialization method used in th `SeparableConv2D` layer. Defaults to "he_normal".
         l2_regul (float, optional): Value of the constraint used for the
             $L_2$ regularization. Defaults to 1e-4.
 
     Returns:
-        tf.Tensor: [description]
+        Output feature map, size = $(H,W,C)$.
     """
 
     fmap = SeparableConv2D(

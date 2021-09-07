@@ -9,15 +9,20 @@ from src.model.layers.common_layers import conv_gn_relu, sepconv_bn_relu
 def upsampling(
     fmap: tf.Tensor, height: Union[int, float], width: Union[int, float]
 ) -> tf.Tensor:
-    """[summary]
+    """Upsampling module.
+
+    Upsample features maps to the original height, width of the images in the dataset.
+
+    Get the height, width of the input feature map, and the height width of the original
+    images in the dataset to compute the scale to upsample the feature map.
 
     Args:
-        fmap (tf.Tensor): [description]
-        height (Union[int, float]): [description]
-        width (Union[int, float]): [description]
+        fmap (tf.Tensor): Input feature map of the module.
+        height (Union[int, float]): Height of the images in the dataset.
+        width (Union[int, float]): Width of the images in the dataset.
 
     Returns:
-        tf.Tensor: [description]
+        Output feature map, size $(H,W,C)$.
     """
 
     h_fmap, w_fmap = fmap.shape.as_list()[1:3]
@@ -27,14 +32,17 @@ def upsampling(
 
 
 def JPU(endpoints: List[tf.Tensor], filters: int = 256) -> tf.Tensor:
-    """[summary]
+    """Joint Pyramid Upsampling module.
+
+    Architecture:
+        ![screenshot](./images/jpu_details.svg)
 
     Args:
-        endpoints (List[tf.Tensor]): [description]
-        filters (int, optional): [description]. Defaults to 256.
+        endpoints (List[tf.Tensor]): OS8, OS16, and OS32 endpoint feature maps of the backbone.
+        filters (int, optional): Number of filters used in each `conv_gn_relu` and `sepconv_bn_relu` layers. Defaults to 256.
 
     Returns:
-        tf.Tensor: [description]
+        Output feature map, $(H,W,C)$.
     """
 
     _, c3_output, c4_output, c5_output = endpoints
@@ -62,14 +70,14 @@ def JPU(endpoints: List[tf.Tensor], filters: int = 256) -> tf.Tensor:
 
 
 def ASPP(tensor: tf.Tensor, filters: int = 128) -> tf.Tensor:
-    """[summary]
+    """Atrous Spatial Pyramid Pooling module.
 
     Args:
-        tensor (tf.Tensor): [description]
-        filters (int, optional): [description]. Defaults to 128.
+        tensor (tf.Tensor): Input feature map.
+        filters (int, optional):  Number of filters used in each `conv_gn_relu` layers. Defaults to 128.
 
     Returns:
-        tf.Tensor: [description]
+        Output feature map.
     """
 
     height, width = tensor.shape.as_list()[1:3]
@@ -97,17 +105,17 @@ def decoder(
     img_width: int,
     filters: int,
 ) -> tf.Tensor:
-    """[summary]
+    """Decoder part of the segmentation model.
 
     Args:
-        fmap_aspp (tf.Tensor): [description]
-        endpoint (tf.Tensor): [description]
-        img_height (int): [description]
-        img_width (int): [description]
-        filters (int): [description]
+        fmap_aspp (tf.Tensor): Input feature map coming from the ASPP module.
+        endpoint (tf.Tensor): Input feature map coming from the backbone model, OS4.
+        img_height (int): Height of the images in the dataset.
+        img_width (int): Width of the images in the dataset.
+        filters (int): Number of filters used in each `conv_gn_relu` layers.
 
     Returns:
-        tf.Tensor: [description]
+        Output feature map.
     """
 
     fmap_a = upsampling(fmap_aspp, img_height / 4, img_width / 4)
@@ -122,16 +130,16 @@ def decoder(
 def get_segmentation_module(
     n_classes: int, img_shape: List[int], backbone: tf.keras.Model, name: str
 ) -> tf.keras.Model:
-    """[summary]
+    """Instantiate the segmentation head module for the segmentation task.
 
     Args:
-        n_classes (int): [description]
-        img_shape (List[int]): [description]
-        backbone (tf.keras.Model): [description]
-        name (str): [description]
+        n_classes (int): Number of classes in the segmentation task.
+        img_shape (List[int]): Input shape of the images/masks in the dataset.
+        backbone (tf.keras.Model): CNN used as backbone/feature extractor.
+        name (str): Name of the segmentation head module.
 
     Returns:
-        tf.keras.Model: [description]
+        A semantic segmentation model.
     """
 
     img_height, img_width = img_shape[:2]

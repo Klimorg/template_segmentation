@@ -5,14 +5,14 @@ from tensorflow import keras
 
 
 def get_backbone(img_shape: List[int], backbone_name: str):
-    """[summary]
+    """Instantiate the model and use it as a backbone (feature extractor) for a semantic segmentation task.
 
     Args:
-        img_shape (List[int]): [description]
-        backbone_name (str): [description]
+        img_shape (List[int]): Input shape of the images/masks in the dataset.
+        backbone_name (str): Name of the backbone.
 
     Returns:
-        [type]: [description]
+        A `tf.keras` model.
     """
 
     backbone = keras.applications.ResNet101V2(include_top=False, input_shape=img_shape)
@@ -39,13 +39,3 @@ def get_backbone(img_shape: List[int], backbone_name: str):
         outputs=[c2_output, c3_output, c4_output, c5_output],
         name=backbone_name,
     )
-
-
-if __name__ == "__main__":
-
-    import numpy as np
-
-    img_shape = [224, 224, 3]
-    tensor = np.random.rand(1, img_shape[0], img_shape[1], img_shape[2])
-
-    model = get_backbone(img_shape)

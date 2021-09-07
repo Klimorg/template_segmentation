@@ -226,15 +226,15 @@ def get_segmentation_module(
     ksac_filters: int,
     decoder_filters: int,
 ) -> tf.keras.Model:
-    """[summary]
+    """Instantiate the segmentation head module for the segmentation task.
 
     Args:
-        n_classes (int): [description]
-        backbone (tf.keras.Model): [description]
-        name (str): [description]
+        n_classes (int): Number of classes in the segmentation task.
+        backbone (tf.keras.Model): CNN used as backbone/feature extractor.
+        name (str): Name of the segmentation head module.
 
     Returns:
-        tf.keras.Model: [description]
+        A semantic segmentation model.
     """
 
     c2_output, _, c4_output, _ = backbone.outputs
