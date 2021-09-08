@@ -1,6 +1,7 @@
 metadatas:
   n_classes: 4 # n+1 for background
-  masks: "datas/raw_datas/ML/labels/labels_ml_vgg_json_4_classes_2021-06-15-01-26-15.json"
+  # masks: "datas/raw_datas/ML/labels/labels_ml_vgg_json_4_classes_2021-06-15-01-26-15.json"
+  labels: "datas/raw_datas/ML/labels/"
   height: 3036
   width: 4024
 

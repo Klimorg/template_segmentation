@@ -50,6 +50,7 @@ plugins:
 
 nav:
   - Acceuil: index.md
+  - Hydra configuration: hydra/hydra.md
   - Datasets creation:
     - Dataset configuration: datasets/config.md
     - Masks creation: datasets/utils_segmentation.md

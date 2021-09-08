@@ -8,7 +8,7 @@ import yaml
 from loguru import logger
 from sklearn.model_selection import train_test_split
 
-from utils.utils import set_seed
+from src.utils.utils import get_items_list, set_seed
 
 with open("configs/params.yaml") as reproducibility_params:
     config = yaml.safe_load(reproducibility_params)["prepare"]
@@ -29,25 +29,13 @@ split = config["split"]
 app = typer.Typer()
 
 
-def get_path(directory: Path, extension: str) -> List[Path]:
-
-    files_paths = sorted(
-        Path(image).absolute()
-        for image in Path(directory).glob(f"**/*{extension}")
-        if image.is_file()
-    )
-    logger.info(f"Found {len(files_paths)} files")
-
-    return files_paths
-
-
 def save_as_csv(filenames: List[Path], labels: List[str], destination: Path) -> None:
     """Save two lists of observations, labels as a csv files.
 
     Args:
-        filenames (List[str]): Liste des adresses des images, première colonne.
-        labels (List[str]): Liste des labels correspondants, seconde colonne.
-        destination (Path): adresse du dossier où est sauvegardé le csv.
+        filenames (List[str]): List of images addresses.
+        labels (List[str]): Liste of labels addresses.
+        destination (Path): Location of the saved csv file.
     """
     logger.info(f"Saving dataset in {destination}.")
 
@@ -101,14 +89,7 @@ def create_train_val_test_datasets(
             `train_test_split`. Defaults to split.
 
     Returns:
-        Datasets: The three "datasets" returned as lists of images, labels.
-
-    Note:
-        Datasets is the alias for the following type.
-        ```python
-        Datasets = Tuple[
-            List[Path], List[str], List[Path], List[str], List[Path], List[str]
-            ]```
+        The three datasets returned as lists of images, labels.
     """
     set_seed(random_seed)
 
@@ -122,31 +103,31 @@ def create_train_val_test_datasets(
         test_size=test_size,
         random_state=random_seed,
     )
-    # images_val, images_test, labels_val, labels_test = train_test_split(
-    #     images_val, labels_val, test_size=0.5, random_state=random_seed
-    # )
+    images_val, images_test, labels_val, labels_test = train_test_split(
+        images_val, labels_val, test_size=0.5, random_state=random_seed
+    )
 
     return (
         images_train,
         labels_train,
         images_val,
         labels_val,
-        # images_test,
-        # labels_test,
+        images_test,
+        labels_test,
     )
 
 
 @app.command()
 def main() -> None:
     """Main function."""
-    images_paths = get_path(directory=raw_dataset_images, extension=".jpg")
-    masks_paths = get_path(directory=raw_dataset_masks, extension=".png")
+    images_paths = get_items_list(directory=raw_dataset_images, extension=".jpg")
+    masks_paths = get_items_list(directory=raw_dataset_masks, extension=".png")
 
     datasets_components = create_train_val_test_datasets(images_paths, masks_paths)
 
     save_as_csv(datasets_components[0], datasets_components[1], train_dataset_address)
     save_as_csv(datasets_components[2], datasets_components[3], val_dataset_address)
-    # save_as_csv(datasets_components[4], datasets_components[5], test_dataset_address)
+    save_as_csv(datasets_components[4], datasets_components[5], test_dataset_address)
 
 
 if __name__ == "__main__":

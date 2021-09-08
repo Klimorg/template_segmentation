@@ -105,7 +105,6 @@ class Tensorize(object):
                 A.VerticalFlip(p=0.5),
                 A.RandomRotate90(p=0.5),
                 A.Transpose(p=0.5),
-                # A.MaskDropout(max_objects=[1, 200], p=0.5),
             ]
         )
 

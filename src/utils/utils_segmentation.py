@@ -4,57 +4,35 @@ from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 import numpy as np
-import yaml
 from loguru import logger
+from omegaconf import OmegaConf
 from PIL import Image, ImageDraw
 
-from .utils import get_items_list
+from src.utils.utils import get_items_list
 
 JsonDict = Dict[str, Any]
 PolygonVertices = List[float]
 
 
 class Segmentation(object):
-    def __init__(self, raw_masks_path):
+    """
+    Description of Segmentation.
 
-        self.raw_masks_json = raw_masks_path
+    Class used to generate semantic segmentation masks, and apply various operations on them.
 
-        # Get the address of the dataset info
-        with open("configs/datasets/datasets.yaml") as datasets:
-            config_dataset = yaml.safe_load(datasets)
+    Attributes:
+        segmentation_config (Dict[str, Any]): The loaded yaml file containing the configuration parameters for the datasets.
 
-        metadatas = config_dataset["metadatas"]
+    Inheritance:
+        object: The base class of the class hierarchy, used only to enforce WPS306.
+        See https://wemake-python-stylegui.de/en/latest/pages/usage/violations/consistency.html#consistency.
 
-        # logger.info("Loading the address of the vgg json segmentation datas file.")
-        # raw_masks_json = metadatas["masks"]
+    """
 
-        logger.info(
-            "Loading the vgg json file and gathering the keys, i.e. the image names."
-        )
-        # Load the vgg json file and get the keys, i.e. the image names.
-        with open(self.raw_masks_json) as vgg_json:
-            self.all_coordinates_and_labels = json.load(vgg_json)
-            self.image_names = sorted(self.all_coordinates_and_labels.keys())
+    def __init__(self):
+        """Initialization of the class."""
 
-        logger.info(f"Found {len(self.image_names)} images for segmentation task.")
-
-        logger.info("Getting height and width metadatas")
-        self.height = metadatas["height"]
-        self.width = metadatas["width"]
-
-        logger.info("Loading the class dictionnary for the segmentation.")
-        self.class_dict = config_dataset["class_dict"]
-
-        logger.info("Getting directory paths of raw images and masks.")
-        raw_datas = config_dataset["raw_datas"]
-        raw_dataset = config_dataset["raw_dataset"]
-
-        self.raw_datas_images = raw_datas["images"]
-        self.raw_datas_masks = raw_datas["masks"]
-
-        self.raw_dataset_images = raw_dataset["images"]
-        self.raw_dataset_masks = raw_dataset["masks"]
-        self.crop_size = raw_dataset["crop_size"]
+        self.segmentation_config = OmegaConf.load("configs/datasets/datasets.yaml")
 
     def get_data(
         self,
@@ -65,8 +43,9 @@ class Segmentation(object):
 
         Given an `image_name`, parse the `segmentation_datas` contained in the VGG json file `all_coordinates_and_labels`
         and return them in 3 lists :
-        - Two lists of vertices.
-        - One list of labels.
+
+        * Two lists of vertices.
+        * One list of labels.
 
         The first two lists correspond to the lists of vertices of the polygons defining the segmentation regions. For each
         of them, an element is a list containing the coordinates ($x$ or $y$) of the vertices of a polygon. I.e. if `X_coordinates`
@@ -134,8 +113,8 @@ class Segmentation(object):
     ) -> List[np.ndarray]:
         """Transforms triplets (Y_coordinates,X_coordinates,labels) into numpy arrays.
 
-        given a triplet (Y_coordinates,X_coordinates,labels) for a given image, transforms it into a (P,H,W) numpy array
-        where P is the number of segmentation polygons and H,W the height and width.
+        given a triplet (Y_coordinates,X_coordinates,labels) for a given image, transforms it into a $(P,H,W)$ numpy array
+        where $P$ is the number of segmentation polygons and $H,W$ the height and width.
 
         Args:
             X_coordinates (PolygonVertices): x-axis coordinates of the polygon vertices.
@@ -146,7 +125,7 @@ class Segmentation(object):
             class_dict (Dict[str, int]): Man-made dictionnary to convert the labels of the VGG json file (str) into integers.
 
         Returns:
-            List[np.ndarray]: (P,H,W) numpy array containing the polygons.
+            List[np.ndarray]: $(P,H,W)$ numpy array containing the polygons.
         """
 
         masks = []
@@ -181,13 +160,31 @@ class Segmentation(object):
 
         return masks
 
-    def get_segmentation_mask(
+    def get_masks_from_json(
         self,
+        json_file,
         save: bool = True,
     ):
+        """Given a json file containing segmentation masks information in VGG format, generate the masks.
+
+        Open the json file `json_file` to retreive the coordinates and labels of the segmentation masks and the
+        associated images. Then loop over each images and applys `get_data` and `get_polygon_masks` to obtain for
+        each image a $(P,H,W)$ numpy array where $P$ is the number of segmentation polygons and $H,W$ the height and width.
+
+        Apply `np.max` on each $(P,H,W)$ array to get a unique segmentation mask of size $(H,W)$, then save it in `.png`
+        format.
+
+        Args:
+            json_file ([type]): Json file containing segmentation masks information in VGG format.
+            save (bool, optional): Determine if you want to save in `.png` format the generated mask. Defaults to True.
+        """
         masks = []
-        image_names_list = self.image_names
-        coordinates_and_labels = self.all_coordinates_and_labels
+
+        self.json_file = json_file
+
+        with open(self.json_file) as vgg_json:
+            coordinates_and_labels = json.load(vgg_json)
+            image_names_list = sorted(coordinates_and_labels.keys())
 
         for image_name in image_names_list:
 
@@ -199,9 +196,9 @@ class Segmentation(object):
                 X_coordinates,
                 Y_coordinates,
                 labels,
-                self.height,
-                self.width,
-                self.class_dict,
+                self.segmentation_config.metadatas.height,
+                self.segmentation_config.metadatas.width,
+                self.segmentation_config.class_dict,
             )
 
             mask = np.array(polygon_masks)
@@ -212,7 +209,7 @@ class Segmentation(object):
 
             if save:
                 image_name_stem = Path(f"{image_name}").stem
-                address = Path(self.raw_datas_masks) / Path(
+                address = Path(self.segmentation_config.raw_datas.masks) / Path(
                     f"{image_name_stem}_mask.png"
                 )
                 segmentation_mask = Image.fromarray(segmentation_mask).convert("L")
@@ -220,16 +217,24 @@ class Segmentation(object):
 
             masks.append(segmentation_mask)
 
-        assert len(self.image_names) == len(masks)
-
-    # 1. liste les images et les masques
-    # 2. boucle sur zip(images, masques)
-    # 1. Resize (1024,1024)
-    # 2. on crop en 224 par 224
-    # 3. on sauvegarde
-    # 3. repeat
+        assert len(image_names_list) == len(masks)
 
     def crop(self, image_path: Path, mask_path: Path, stride: int, overlap: int):
+        """Given a image and a segmentation mask, generate tiles from them by cropping.
+
+        Given an image and a segmentation mask, resize them and them decompose them in tiles
+        of size $H=W=$`stride`.
+
+        The first iteration of the loop creates non overlapping tiles, then we restart the cropping processus but this time
+        at the coordinates (`overlap`, `overlap`) of the resized original images and masks, the second loop starts at
+        (2*`overlap`, 2*`overlap`), etc. Then save all the tiles in `.jpg` format for the images and `.png` format for the masks.
+
+        Args:
+            image_path (Path): The path of the image to open to start the tilling processus.
+            mask_path (Path): The path of the mask to open to start the tilling processus.
+            stride (int): Height, width of the cropped image, mask.
+            overlap (int): How much pixels you want to overlap between each iteration.
+        """
 
         image = Image.open(image_path).resize((1024, 1024))
         mask = Image.open(mask_path).resize((1024, 1024), resample=Image.NEAREST)
@@ -239,10 +244,9 @@ class Segmentation(object):
 
         width, height = image.size
 
-        overlap_y = height // overlap
-        # overlap_x = width // overlap
+        overlap = height // overlap
 
-        for mult in range(overlap_y):
+        for mult in range(overlap - 1):
 
             grid = list(
                 product(
@@ -253,8 +257,8 @@ class Segmentation(object):
             for idy, idx in grid:
                 box = (idx, idy, idx + stride, idy + stride)
 
-                dir_out_image = Path(self.raw_dataset_images)
-                dir_out_mask = Path(self.raw_dataset_masks)
+                dir_out_image = Path(self.segmentation_config.raw_dataset.images)
+                dir_out_mask = Path(self.segmentation_config.raw_dataset.masks)
 
                 image_name_cropped = f"{image_name}_{idy}_{idx}{'.jpg'}"
                 mask_name_cropped = f"{mask_name}_{idy}_{idx}{'.png'}"
@@ -269,12 +273,19 @@ class Segmentation(object):
     def tile(
         self,
     ):
-        stride = self.crop_size
+        """Apply tilling processus on a list of images, masks."""
+
+        stride = self.segmentation_config.raw_dataset.crop_size
         overlap = 128
 
         logger.info("Searching for images and corresponding masks.")
-        images_paths = get_items_list(directory=self.raw_datas_images, extension=".jpg")
-        masks_paths = get_items_list(directory=self.raw_datas_masks, extension=".png")
+        images_paths = get_items_list(
+            directory=self.segmentation_config.raw_datas.images, extension=".jpg"
+        )
+
+        masks_paths = get_items_list(
+            directory=self.segmentation_config.raw_datas.masks, extension=".png"
+        )
 
         assert len(images_paths) == len(masks_paths)
 
@@ -282,10 +293,27 @@ class Segmentation(object):
         for image_path, mask_path in zip(images_paths, masks_paths):
             self.crop(image_path, mask_path, stride, overlap)
 
+    def generate_masks(self):
+        """Main function, list all json files in VGG format containig segmentation informations and generates masks.
+
+        1. List json files.
+        2. For each of them, generate segmentation masks.
+        1. Then apply tilling processus on all the generated masks and images.
+        """
+
+        json_files = get_items_list(
+            directory=self.segmentation_config.metadatas.labels, extension=".json"
+        )
+
+        logger.info(f"Found {len(json_files)} json files.")
+
+        for json_file in json_files:
+            self.get_masks_from_json(json_file=json_file)
+
+        self.tile()
+
 
 if __name__ == "__main__":
 
     seg = Segmentation()
-
-    seg.get_segmentation_mask()
-    seg.tile()
+    seg.generate_masks()

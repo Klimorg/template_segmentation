@@ -2,17 +2,14 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import numpy as np
-import pandas as pd
 import tensorflow as tf
-import yaml
 from loguru import logger
 from omegaconf import OmegaConf
 from PIL import Image
 
+from src.utils.utils import get_items_list
+
 config = OmegaConf.load("configs/params.yaml")
-
-from .utils import get_items_list
-
 JsonDict = Dict[str, Any]
 PolygonVertices = List[float]
 
@@ -23,15 +20,10 @@ class WeightBalancing(object):
         self.repo_path = repo_path
 
         self.datasets = OmegaConf.load("configs/datasets/datasets.yaml")
-
-        logger.info("Loading the class dictionnary for the segmentation.")
-        self.class_dict = self.datasets.class_dict
-        self.directory = self.datasets.raw_dataset.masks
-        self.crop_size = self.datasets.raw_dataset.crop_size
         self.frequencies = self.get_median_frequency_balancing()
 
     def get_median_frequency_balancing(self):
-        """[summary]
+        """Compute median frequency for segmentation class balancing.
 
         alpha_c := median_freq / freq(c)
         freq(c) := number of pixels of class c divided by the total number of pixels in
@@ -53,12 +45,12 @@ class WeightBalancing(object):
         """
 
         # get all masks
-        masks_paths = get_items_list(self.directory, self.extension)
+        masks_paths = get_items_list(self.datasets.raw_dataset.masks, self.extension)
         logger.info(f"Found {len(masks_paths)} masks")
 
         frequencies = []
 
-        for label, _ in self.class_dict.items():
+        for label, _ in self.datasets.class_dict.items():
             logger.info(f"Computing pixel frequency for class {label}")
             pixels_of_class = 0  # total number of pixels of class c
             pixels_present_in_mask = (
@@ -70,12 +62,14 @@ class WeightBalancing(object):
                 mask = Image.open(mask_path)
                 mask = np.asarray(mask).astype("uint8")
 
-                number_of_pixels_in_class = len(mask[mask == self.class_dict[label]])
+                number_of_pixels_in_class = len(
+                    mask[mask == self.datasets.class_dict[label]]
+                )
 
                 pixels_of_class += number_of_pixels_in_class
 
                 if number_of_pixels_in_class > 0:
-                    pixels_present_in_mask += self.crop_size ** 2
+                    pixels_present_in_mask += self.datasets.raw_dataset.crop_size ** 2
                     masks_with_class += 1
 
             frequency = pixels_of_class / pixels_present_in_mask
@@ -102,56 +96,6 @@ class WeightBalancing(object):
 
         return balancing
 
-    # def get_dataset_infos(self):
-
-    #     masks_paths = get_items_list(self.directory, self.extension)
-    #     logger.info(f"Found {len(masks_paths)} masks")
-
-    #     subtotal = []
-
-    #     for label, _ in self.class_dict.items():
-
-    #         sub25 = 0
-    #         from25to50 = 0
-    #         from50to75 = 0
-    #         sup75 = 0
-
-    #         for mask_path in masks_paths:
-    #             mask = Image.open(mask_path)
-    #             mask = np.asarray(mask).astype("uint8")
-
-    #             number_of_pixels_in_class = len(mask[mask == self.class_dict[label]])
-
-    #             sub_frequency = number_of_pixels_in_class / self.crop_size ** 2
-
-    #             if number_of_pixels_in_class > 0:
-
-    #                 if sub_frequency < 0.25:
-    #                     sub25 += 1
-    #                 elif sub_frequency < 0.5:
-    #                     from25to50 += 1
-    #                 elif sub_frequency < 0.75:
-    #                     from50to75 += 1
-    #                 else:
-    #                     sup75 += 1
-
-    #         subtotal.append(
-    #             {
-    #                 "sub_25": sub25,
-    #                 "from_25_to_50": from25to50,
-    #                 "from_50_to_75": from50to75,
-    #                 "sup_75": sup75,
-    #             }
-    #         )
-
-    #     descriptif = pd.DataFrame(
-    #         subtotal,
-    #         columns=["sub_25", "from_25_to_50", "from_50_to_75", "sup_75"],
-    #         index=["Background", "Petri_box", "Moisissure", "Levure"],
-    #     )
-
-    #     print(f"{descriptif}")
-
 
 def add_sample_weights(image, label):
     # The weights for each class, with the constraint that:
@@ -170,4 +114,3 @@ def add_sample_weights(image, label):
 
 if __name__ == "__main__":
     wb = WeightBalancing()
-    wb.get_dataset_infos()
