@@ -8,14 +8,7 @@ from loguru import logger
 
 
 class CutMix(object):
-    """Class used to create tensor datasets for TensorFlow.
-
-    Args:
-        object (object): The base class of the class hierarchy, used only to enforce
-            WPS306. See https://wemake-python-stylegui.de/en/latest/pages/usage/
-            violations/consistency.html#consistency.
-    """
-
+    
     def __init__(
         self,
         n_classes: int,

@@ -1,4 +1,4 @@
-# Création des masques
+# Masks creation
 
 ::: src.utils.utils_segmentation
     rendering:

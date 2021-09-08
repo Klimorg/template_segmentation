@@ -182,7 +182,7 @@ class SparseCategoricalFocalLoss(tf.keras.losses.Loss):
     """Focal loss function for multiclass classification with integer labels.
 
     This loss function generalizes multiclass softmax cross-entropy by
-    introducing a hyperparameter $\gamma` (gamma), called the
+    introducing a hyperparameter $\gamma$ (gamma), called the
     *focusing parameter*, that allows hard-to-classify examples to be penalized
     more heavily relative to easy-to-classify examples.
 
@@ -234,15 +234,6 @@ class SparseCategoricalFocalLoss(tf.keras.losses.Loss):
         self.from_logits = from_logits
 
     def get_config(self):
-        """Returns the config of the layer.
-
-        A layer config is a Python dictionary containing the configuration of a
-        layer. The same layer can be re-instantiated later (without its trained
-        weights) from this configuration.
-        Returns
-
-        Dict :  This layer's config.
-        """
         config = super().get_config()
         config.update(
             gamma=self.gamma,
@@ -253,20 +244,6 @@ class SparseCategoricalFocalLoss(tf.keras.losses.Loss):
         return config
 
     def call(self, y_true: tf.Tensor, y_pred: tf.Tensor):
-        """Compute the per-example focal loss.
-
-        This method simply calls `focal_loss.sparse_categorical_focal_loss` with the appropriate
-        arguments.
-
-        Args:
-            y_true (tf.Tensor): Integer class labels.
-            y_pred (tf.Tensor): Either probabilities or logits, depending on the `from_logits`
-                parameter.
-
-        Returns:
-            (tf.Tensor): The per-example focal loss. Reduction to a scalar is handled by
-                this layer's `focal_loss.SparseCateogiricalFocalLoss.__call__` method.
-        """
 
         return sparse_categorical_focal_loss(
             y_true=y_true,

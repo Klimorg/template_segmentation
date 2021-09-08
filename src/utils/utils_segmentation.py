@@ -14,7 +14,7 @@ JsonDict = Dict[str, Any]
 PolygonVertices = List[float]
 
 
-class Segmentation(object):
+class SegmentationMasks(object):
     """
     Description of Segmentation.
 
@@ -302,7 +302,7 @@ class Segmentation(object):
         """
 
         json_files = get_items_list(
-            directory=self.segmentation_config.metadatas.labels, extension=".json"
+            directory=self.segmentation_config.raw_datas.labels, extension=".json"
         )
 
         logger.info(f"Found {len(json_files)} json files.")
@@ -315,5 +315,5 @@ class Segmentation(object):
 
 if __name__ == "__main__":
 
-    seg = Segmentation()
+    seg = SegmentationMasks()
     seg.generate_masks()

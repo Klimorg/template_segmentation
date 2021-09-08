@@ -7,27 +7,28 @@ import tensorflow as tf
 
 
 class Tensorize(object):
-    """Class used to create tensor datasets for TensorFlow.
+    """
+    Class used to create tensor datasets for TensorFlow.
+
+    Inheritance:
+        object: The base class of the class hierarchy, used only to enforce WPS306.
+        See https://wemake-python-stylegui.de/en/latest/pages/usage/violations/consistency.html#consistency.
 
     Args:
-        object (object): The base class of the class hierarchy, used only to enforce
-            WPS306. See https://wemake-python-stylegui.de/en/latest/pages/usage/
-            violations/consistency.html#consistency.
+        n_classes (int): Number of classes in the dataset.
+        img_shape (Tuple[int,int,int]): Dimension of the image, format is (H,W,C).
+        random_seed (int): Fixed random seed for reproducibility.
     """
 
     def __init__(
         self, n_classes: int, img_shape: Tuple[int, int, int], random_seed: int
     ) -> None:
-        """Initialization of the class Featurize.
+        """Initialization of the class Tensorize.
 
         Initialize the class the number of classes in the datasets, the shape of the
         images and the random seed.
-
-        Args:
-            n_classes (int): Number of classes in the dataset.
-            img_shape (Tuple[int, int, int]): Dimension of the image, format is (H,W,C).
-            random_seed (int): Fixed random seed for reproducibility.
         """
+
         self.n_classes = n_classes
         self.img_shape = img_shape
         self.random_seed = random_seed

@@ -1,4 +1,4 @@
-# Initialisation du dataset
+# Dataset initialization
 
 ::: src.make_dataset
     rendering:
