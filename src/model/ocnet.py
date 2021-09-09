@@ -1,5 +1,4 @@
 import tensorflow as tf
-from loguru import logger
 from tensorflow.keras.layers import (
     Activation,
     AveragePooling2D,
@@ -38,10 +37,11 @@ class SelfAttention2D(tf.keras.layers.Layer):
 
     """
 
-    def __init__(self, filters, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, filters: int, l2_regul: float = 1e-4, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
         self.filters = filters
+        self.l2_regul = l2_regul
         self.regul = tf.sqrt(2 / self.filters)
         self.softmax = tf.keras.layers.Activation("softmax")
 
@@ -53,7 +53,7 @@ class SelfAttention2D(tf.keras.layers.Layer):
                     padding="same",
                     use_bias=False,
                     kernel_initializer="he_uniform",
-                    kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
                 ),
                 BatchNormalization(),
                 ReLU(),
@@ -63,7 +63,7 @@ class SelfAttention2D(tf.keras.layers.Layer):
                     padding="same",
                     use_bias=False,
                     kernel_initializer="he_uniform",
-                    kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
                 ),
                 BatchNormalization(),
                 ReLU(),
@@ -78,7 +78,7 @@ class SelfAttention2D(tf.keras.layers.Layer):
                     padding="same",
                     use_bias=False,
                     kernel_initializer="he_uniform",
-                    kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
                 ),
                 BatchNormalization(),
                 ReLU(),
@@ -88,7 +88,7 @@ class SelfAttention2D(tf.keras.layers.Layer):
                     padding="same",
                     use_bias=False,
                     kernel_initializer="he_uniform",
-                    kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
                 ),
                 BatchNormalization(),
                 ReLU(),
@@ -101,7 +101,7 @@ class SelfAttention2D(tf.keras.layers.Layer):
             padding="same",
             use_bias=False,
             kernel_initializer="he_uniform",
-            kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
+            kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
         )
 
         self.rho = Conv2D(
@@ -110,7 +110,7 @@ class SelfAttention2D(tf.keras.layers.Layer):
             padding="same",
             use_bias=False,
             kernel_initializer="he_uniform",
-            kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
+            kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
         )
 
     def call(self, inputs, training=None):
@@ -130,7 +130,12 @@ class SelfAttention2D(tf.keras.layers.Layer):
     def get_config(self):
 
         config = super().get_config()
-        config.update({"filters": self.filters})
+        config.update(
+            {
+                "filters": self.filters,
+                "l2_regularization": self.l2_regul,
+            }
+        )
         return config
 
 
@@ -212,10 +217,11 @@ class Base_OC_Module(tf.keras.layers.Layer):
 
     """
 
-    def __init__(self, filters, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, filters: int, l2_regul: float = 1e-4, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
         self.filters = filters
+        self.l2_regul = l2_regul
 
         self.isa_block = ISA2D(8, 8)
         self.concat = Concatenate(axis=-1)
@@ -227,7 +233,7 @@ class Base_OC_Module(tf.keras.layers.Layer):
                     padding="same",
                     use_bias=False,
                     kernel_initializer="he_uniform",
-                    kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
                 ),
                 BatchNormalization(),
                 ReLU(),
@@ -244,15 +250,53 @@ class Base_OC_Module(tf.keras.layers.Layer):
     def get_config(self):
 
         config = super().get_config()
-        config.update({"filters": self.filters})
+        config.update({"filters": self.filters, "l2_regularization": self.l2_regul})
         return config
 
 
 class ASPP_OC(tf.keras.layers.Layer):
-    def __init__(self, filters, *args, **kwargs):
+    """
+    Description of ASPP_OC
+
+    Attributes:
+        filters (type):
+        l2_regul (type):
+        dilation_rate (type):
+        isa_block1 (type):
+        isa_block2 (type):
+        isa_block3 (type):
+        isa_block4 (type):
+        concat (type):
+        conv1 (type):
+        conv2 (type):
+        conv3 (type):
+        conv4 (type):
+        conv5 (type):
+        conv6 (type):
+
+    Inheritance:
+        tf.keras.layers.Layer:
+
+    Args:
+        filters (int):
+        l2_regul (float=1e-4):
+        *args (undefined):
+        **kwargs (undefined):
+
+    """
+
+    def __init__(
+        self,
+        filters: int,
+        l2_regul: float = 1e-4,
+        *args,
+        **kwargs,
+    ):
         super().__init__(*args, **kwargs)
 
         self.filters = filters
+        self.l2_regul = l2_regul
+        self.dilation_rate = [6, 12, 18]
 
         self.isa_block1 = ISA2D(8, 8)
         self.isa_block2 = ISA2D(8, 8)
@@ -269,7 +313,7 @@ class ASPP_OC(tf.keras.layers.Layer):
                     padding="same",
                     use_bias=False,
                     kernel_initializer="he_uniform",
-                    kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
                 ),
                 BatchNormalization(),
                 ReLU(),
@@ -283,8 +327,8 @@ class ASPP_OC(tf.keras.layers.Layer):
                     padding="same",
                     use_bias=False,
                     kernel_initializer="he_uniform",
-                    dilation_rate=6,
-                    kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
+                    dilation_rate=self.dilation_rate[0],
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
                 ),
                 BatchNormalization(),
                 ReLU(),
@@ -298,8 +342,8 @@ class ASPP_OC(tf.keras.layers.Layer):
                     padding="same",
                     use_bias=False,
                     kernel_initializer="he_uniform",
-                    dilation_rate=12,
-                    kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
+                    dilation_rate=self.dilation_rate[1],
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
                 ),
                 BatchNormalization(),
                 ReLU(),
@@ -313,8 +357,8 @@ class ASPP_OC(tf.keras.layers.Layer):
                     padding="same",
                     use_bias=False,
                     kernel_initializer="he_uniform",
-                    dilation_rate=18,
-                    kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
+                    dilation_rate=self.dilation_rate[2],
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
                 ),
                 BatchNormalization(),
                 ReLU(),
@@ -330,7 +374,7 @@ class ASPP_OC(tf.keras.layers.Layer):
                     use_bias=False,
                     kernel_initializer="he_uniform",
                     dilation_rate=1,
-                    kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
                 ),
                 BatchNormalization(),
                 ReLU(),
@@ -346,7 +390,7 @@ class ASPP_OC(tf.keras.layers.Layer):
                     use_bias=False,
                     kernel_initializer="he_uniform",
                     dilation_rate=1,
-                    kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
                 ),
                 BatchNormalization(),
                 ReLU(),
@@ -383,7 +427,13 @@ class ASPP_OC(tf.keras.layers.Layer):
     def get_config(self):
 
         config = super().get_config()
-        config.update({"filters": self.filters})
+        config.update(
+            {
+                "filters": self.filters,
+                "l2_regularization": self.l2_regul,
+                "dilation_rate": self.dilation_rate,
+            }
+        )
         return config
 
 
@@ -427,13 +477,3 @@ def get_segmentation_module(
     out = UpSampling2D(size=8, interpolation="bilinear")(fmap)
 
     return tf.keras.Model(inputs=[backbone.inputs], outputs=[out], name=name)
-
-
-if __name__ == "__main__":
-
-    import numpy as np
-
-    fmap = np.random.rand(16, 8, 8, 1024)
-    out = Base_OC_Module(512)(fmap)
-
-    logger.info(f"{out.shape.as_list()}")

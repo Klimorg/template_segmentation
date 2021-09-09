@@ -263,53 +263,6 @@ class KSAConv2D(tf.keras.layers.Layer):
         }
 
 
-# def ksac_module(fmap, filters):
-#     """[summary]
-
-#     Args:
-#         fmap ([type]): [description]
-#         filters ([type]): [description]
-
-#     Returns:
-#         [type]: [description]
-#     """
-
-#     height, width = fmap.shape.as_list()[1:3]
-
-#     fmap1 = Conv2D(
-#         filters=filters,
-#         kernel_size=(1, 1),
-#         strides=(1, 1),
-#         padding="same",
-#         kernel_initializer="he_uniform",
-#         use_bias=False,
-#     )(fmap)
-#     fmap1 = BatchNormalization()(fmap1)
-
-#     fmap2 = SharedDilatedConv(
-#         filters=filters,
-#         kernel_size=(3, 3),
-#         strides=(1, 1),
-#         kernel_initializer="he_uniform",
-#         use_bias=False,
-#     )(fmap)
-
-#     fmap3 = AveragePooling2D(pool_size=(height, width))(fmap)
-#     fmap3 = Conv2D(
-#         filters=filters,
-#         kernel_size=(1, 1),
-#         strides=(1, 1),
-#         padding="same",
-#         kernel_initializer="he_uniform",
-#         use_bias=False,
-#     )(fmap3)
-#     fmap3 = UpSampling2D(size=(height, width), interpolation="bilinear")(fmap3)
-
-#     fmap = Concatenate(axis=-1)([fmap1, fmap2, fmap3])
-
-#     return conv_bn_relu(tensor=fmap, filters=filters, kernel_size=1, name="ksac_module")
-
-
 def decoder(fmap1, fmap2, filters):
     """[summary]
 
