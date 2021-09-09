@@ -38,6 +38,7 @@ plugins:
       watch:
         - src
         - tests
+        - configs
       default_handler: python
       handlers:
         python:
@@ -50,7 +51,11 @@ plugins:
 
 nav:
   - Acceuil: index.md
-  - Hydra configuration: hydra/hydra.md
+  - Hydra configuration: hydra_config/hydra.md
+  - Various configuration:
+    - Docker config: misc_config/docker.md
+    - Makefile : misc_config/make.md
+    - Requirements: misc_config/requirements.md
   - Datasets creation:
     - Dataset configuration: datasets/config.md
     - Masks creation: datasets/utils_segmentation.md

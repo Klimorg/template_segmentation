@@ -153,7 +153,7 @@ class SegmentationMasks(object):
             m = np.flipud(np.rot90(np.array(img)))
             try:
                 mask[m == 1] = classes[label]
-            except:
+            except Exception:
                 mask[m.T == 1] = classes[label]
 
             masks.append(mask)
@@ -164,7 +164,7 @@ class SegmentationMasks(object):
         self,
         json_file,
         save: bool = True,
-    ):
+    ) -> None:
         """Given a json file containing segmentation masks information in VGG format, generate the masks.
 
         Open the json file `json_file` to retreive the coordinates and labels of the segmentation masks and the

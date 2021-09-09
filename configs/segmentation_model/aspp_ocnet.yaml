@@ -1,5 +1,5 @@
 _target_: model.ocnet.get_segmentation_module
 n_classes: ${datasets.metadatas.n_classes}
-architecture: base_ocnet
-filters: 512
+architecture: aspp_ocnet
+filters: 256
 name: OCNet

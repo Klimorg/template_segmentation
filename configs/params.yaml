@@ -1,6 +1,6 @@
 defaults:
   - backbone: resnet50v2
-  - segmentation_model: ocnet
+  - segmentation_model: ksac
   - losses: focal_loss
   - optimizer: cg_adam
   - lr_decay: cosine_decay_restart

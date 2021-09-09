@@ -1,3 +1,5 @@
+from typing import Any, Dict, List
+
 import tensorflow as tf
 from tensorflow.keras.layers import (
     Activation,
@@ -5,6 +7,7 @@ from tensorflow.keras.layers import (
     BatchNormalization,
     Concatenate,
     Conv2D,
+    ReLU,
     UpSampling2D,
 )
 
@@ -78,7 +81,7 @@ class SharedDilatedConv(tf.keras.layers.Layer):
         self.b = None
         self.dilation_rates = [6, 12, 18]
 
-        self.relu = tf.keras.layers.ReLU()
+        self.relu = ReLU()
 
     def build(self, input_shape):
 
@@ -101,9 +104,9 @@ class SharedDilatedConv(tf.keras.layers.Layer):
         else:
             self.b = None
 
-        self.bn1 = tf.keras.layers.BatchNormalization()
-        self.bn2 = tf.keras.layers.BatchNormalization()
-        self.bn3 = tf.keras.layers.BatchNormalization()
+        self.bn1 = BatchNormalization()
+        self.bn2 = BatchNormalization()
+        self.bn3 = BatchNormalization()
 
     def call(self, inputs, training=None):
 
@@ -155,51 +158,156 @@ class SharedDilatedConv(tf.keras.layers.Layer):
         }
 
 
-def ksac_module(fmap, filters):
-    """[summary]
+class KSAConv2D(tf.keras.layers.Layer):
+    """
+    Description of KSAConv2D
+
+    Attributes:
+        filters (type):
+        relu (type):
+        conv1 (type):
+        conv2 (type):
+        conv3 (type):
+        concat (type):
+
+    Inheritance:
+        tf.keras.layers.Layer:
 
     Args:
-        fmap ([type]): [description]
-        filters ([type]): [description]
+        filters (int):
+        *args (List[Any]):
+        **kwargs (Dict[Any,Any]):
 
-    Returns:
-        [type]: [description]
     """
 
-    height, width = fmap.shape.as_list()[1:3]
+    def __init__(
+        self,
+        filters: int,
+        *args: List[Any],
+        **kwargs: Dict[Any, Any],
+    ):
+        """[summary]
 
-    fmap1 = Conv2D(
-        filters=filters,
-        kernel_size=(1, 1),
-        strides=(1, 1),
-        padding="same",
-        kernel_initializer="he_uniform",
-        use_bias=False,
-    )(fmap)
-    fmap1 = BatchNormalization()(fmap1)
+        Args:
+            filters ([type]): [description]
+        """
+        super().__init__(*args, **kwargs)
+        self.filters = filters
 
-    fmap2 = SharedDilatedConv(
-        filters=filters,
-        kernel_size=(3, 3),
-        strides=(1, 1),
-        kernel_initializer="he_uniform",
-        use_bias=False,
-    )(fmap)
+        self.relu = ReLU()
+        self.conv1 = Conv2D(
+            filters=filters,
+            kernel_size=(1, 1),
+            strides=(1, 1),
+            padding="same",
+            kernel_initializer="he_uniform",
+            use_bias=False,
+        )
+        self.conv2 = Conv2D(
+            filters=filters,
+            kernel_size=(1, 1),
+            strides=(1, 1),
+            padding="same",
+            kernel_initializer="he_uniform",
+            use_bias=False,
+        )
+        self.conv3 = Conv2D(
+            filters=filters,
+            kernel_size=(1, 1),
+            strides=(1, 1),
+            padding="same",
+            kernel_initializer="he_uniform",
+            use_bias=False,
+        )
 
-    fmap3 = AveragePooling2D(pool_size=(height, width))(fmap)
-    fmap3 = Conv2D(
-        filters=filters,
-        kernel_size=(1, 1),
-        strides=(1, 1),
-        padding="same",
-        kernel_initializer="he_uniform",
-        use_bias=False,
-    )(fmap3)
-    fmap3 = UpSampling2D(size=(height, width), interpolation="bilinear")(fmap3)
+        self.concat = Concatenate(axis=-1)
 
-    fmap = Concatenate(axis=-1)([fmap1, fmap2, fmap3])
+    def build(self, input_shape):
+        _, height, width, *_ = input_shape
 
-    return conv_bn_relu(tensor=fmap, filters=filters, kernel_size=1, name="ksac_module")
+        self.shared_conv = SharedDilatedConv(
+            filters=self.filters,
+            kernel_size=(3, 3),
+            strides=(1, 1),
+            kernel_initializer="he_uniform",
+            use_bias=False,
+        )
+
+        self.bn1 = BatchNormalization()
+        self.bn2 = BatchNormalization()
+
+        self.pooling = AveragePooling2D(pool_size=(height, width))
+        self.upsample = UpSampling2D(size=(height, width), interpolation="bilinear")
+
+    def call(self, inputs, training=None):
+        fmap1 = self.conv1(inputs)
+        fmap1 = self.bn1(fmap1)
+
+        fmap2 = self.shared_conv(inputs)
+
+        fmap3 = self.pooling(inputs)
+        fmap3 = self.conv2(fmap3)
+        fmap3 = self.upsample(fmap3)
+
+        fmap = self.concat([fmap1, fmap2, fmap3])
+        fmap = self.conv3(fmap)
+        fmap = self.bn2(fmap)
+
+        return self.relu(fmap)
+
+    def get_config(self):
+        base_config = super().get_config()
+        return {
+            **base_config,
+            "filters": self.filters,
+        }
+
+
+# def ksac_module(fmap, filters):
+#     """[summary]
+
+#     Args:
+#         fmap ([type]): [description]
+#         filters ([type]): [description]
+
+#     Returns:
+#         [type]: [description]
+#     """
+
+#     height, width = fmap.shape.as_list()[1:3]
+
+#     fmap1 = Conv2D(
+#         filters=filters,
+#         kernel_size=(1, 1),
+#         strides=(1, 1),
+#         padding="same",
+#         kernel_initializer="he_uniform",
+#         use_bias=False,
+#     )(fmap)
+#     fmap1 = BatchNormalization()(fmap1)
+
+#     fmap2 = SharedDilatedConv(
+#         filters=filters,
+#         kernel_size=(3, 3),
+#         strides=(1, 1),
+#         kernel_initializer="he_uniform",
+#         use_bias=False,
+#     )(fmap)
+
+#     fmap3 = AveragePooling2D(pool_size=(height, width))(fmap)
+#     fmap3 = Conv2D(
+#         filters=filters,
+#         kernel_size=(1, 1),
+#         strides=(1, 1),
+#         padding="same",
+#         kernel_initializer="he_uniform",
+#         use_bias=False,
+#     )(fmap3)
+#     fmap3 = UpSampling2D(size=(height, width), interpolation="bilinear")(fmap3)
+
+#     fmap = Concatenate(axis=-1)([fmap1, fmap2, fmap3])
+
+#     return conv_bn_relu(tensor=fmap, filters=filters, kernel_size=1, name="ksac_module")
 
 
 def decoder(fmap1, fmap2, filters):
@@ -243,7 +351,7 @@ def get_segmentation_module(
 
     c2_output, _, c4_output, _ = backbone.outputs
 
-    fm = ksac_module(c4_output, filters=ksac_filters)
+    fm = KSAConv2D(filters=ksac_filters)(c4_output)
 
     fmap = decoder(fm, c2_output, filters=decoder_filters)
 

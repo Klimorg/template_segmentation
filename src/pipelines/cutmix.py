@@ -4,11 +4,24 @@ import albumentations as A
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-from loguru import logger
 
 
 class CutMix(object):
-    
+    """
+    Class used to create tensor datasets for TensorFlow via the CutMix method.
+
+    Inheritance:
+        object: The base class of the class hierarchy, used only to enforce WPS306.
+        See https://wemake-python-stylegui.de/en/latest/pages/usage/violations/consistency.html#consistency.
+
+    Args:
+        n_classes (int): Number of classes in the dataset.
+        img_shape (Tuple[int,int,int]): Dimension of the image, format is (H,W,C).
+        random_seed (int): Fixed random seed for reproducibility.
+        random_seed1 (int): Fixed random seed needed for cutmix method.
+        random_seed2 (int): Fixed random seed needed for cutmix method.
+    """
+
     def __init__(
         self,
         n_classes: int,
@@ -17,15 +30,10 @@ class CutMix(object):
         random_seed1: int,
         random_seed2: int,
     ) -> None:
-        """Initialization of the class Featurize.
+        """Initialization of the class CutMix.
 
-        Initialize the class the number of classes in the datasets, the shape of the
-        images and the random seed.
-
-        Args:
-            n_classes (int): Number of classes in the dataset.
-            img_shape (Tuple[int, int, int]): Dimension of the image, format is (H,W,C).
-            random_seed (int): Fixed random seed for reproducibility.
+        Initialize the class, the number of classes in the datasets, the shape of the
+        images and the random seeds.
         """
         self.n_classes = n_classes
         self.img_shape = img_shape
@@ -93,6 +101,14 @@ class CutMix(object):
         self,
         data_path: str,
     ):
+        """[summary]
+
+        Args:
+            data_path (str): [description]
+
+        Returns:
+            [type]: [description]
+        """
 
         df = pd.read_csv(data_path)
         features = self.load_images(data_frame=df, column_name="filename")
@@ -115,6 +131,16 @@ class CutMix(object):
     def sample_beta_distribution(
         self, size: int, concentration0: List[float], concentration1: List[float]
     ):
+        """[summary]
+
+        Args:
+            size (int): [description]
+            concentration0 (List[float]): [description]
+            concentration1 (List[float]): [description]
+
+        Returns:
+            [type]: [description]
+        """
 
         gamma1sample = tf.random.gamma(shape=[size], alpha=concentration1)
         gamma2sample = tf.random.gamma(shape=[size], alpha=concentration0)
@@ -123,6 +149,14 @@ class CutMix(object):
 
     @tf.function
     def get_box(self, lambda_value):
+        """[summary]
+
+        Args:
+            lambda_value ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
 
         cut_rat = tf.math.sqrt(1.0 - lambda_value)
 
@@ -157,6 +191,15 @@ class CutMix(object):
 
     @tf.function
     def cutmix(self, train_ds_one, train_ds_two):
+        """[summary]
+
+        Args:
+            train_ds_one ([type]): [description]
+            train_ds_two ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
 
         (image1, mask1), (image2, mask2) = train_ds_one, train_ds_two
 
@@ -252,6 +295,15 @@ class CutMix(object):
 
     @tf.function
     def apply_augments(self, image, mask):
+        """[summary]
+
+        Args:
+            image ([type]): [description]
+            mask ([type]): [description]
+
+        Returns:
+            [type]: [description]
+        """
 
         image, mask = tf.numpy_function(
             func=self.train_preprocess, inp=[image, mask], Tout=[tf.float32, tf.float32]
@@ -268,6 +320,20 @@ class CutMix(object):
     def create_train_dataset(
         self, data_path: str, batch: int, repet: int, augment: bool, prefecth: int
     ):
+        """Creation of a tensor dataset for TensorFlow.
+
+        Args:
+            data_path (str): Path where the csv file containing the dataframe is
+                located.
+            batch (int): Batch size, usually 32.
+            repet (int): How many times the dataset has to be repeated.
+            prefetch (int): How many batch the CPU has to prepare in advance for the
+                GPU.
+            augment (bool): Does the dataset has to be augmented or no.
+
+        Returns:
+            A batch of observations and masks.
+        """
 
         dataset = self.create_double_dataset(data_path)
         dataset = dataset.shuffle(len(dataset), seed=self.random_seed)
@@ -296,7 +362,6 @@ class CutMix(object):
             repet (int): How many times the dataset has to be repeated.
             prefetch (int): How many batch the CPU has to prepare in advance for the
                 GPU.
-            augment (bool): Does the dataset has to be augmented or no.
 
         Returns:
             A batch of observations and masks.

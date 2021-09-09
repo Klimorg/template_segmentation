@@ -2,6 +2,7 @@ import tensorflow as tf
 from loguru import logger
 from tensorflow.keras.layers import (
     Activation,
+    AveragePooling2D,
     BatchNormalization,
     Concatenate,
     Conv2D,
@@ -247,8 +248,151 @@ class Base_OC_Module(tf.keras.layers.Layer):
         return config
 
 
+class ASPP_OC(tf.keras.layers.Layer):
+    def __init__(self, filters, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.filters = filters
+
+        self.isa_block1 = ISA2D(8, 8)
+        self.isa_block2 = ISA2D(8, 8)
+        self.isa_block3 = ISA2D(8, 8)
+        self.isa_block4 = ISA2D(8, 8)
+
+        self.concat = Concatenate(axis=-1)
+
+        self.conv1 = Sequential(
+            [
+                Conv2D(
+                    filters,
+                    kernel_size=(1, 1),
+                    padding="same",
+                    use_bias=False,
+                    kernel_initializer="he_uniform",
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
+                ),
+                BatchNormalization(),
+                ReLU(),
+            ]
+        )
+        self.conv2 = Sequential(
+            [
+                Conv2D(
+                    filters,
+                    kernel_size=(3, 3),
+                    padding="same",
+                    use_bias=False,
+                    kernel_initializer="he_uniform",
+                    dilation_rate=6,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
+                ),
+                BatchNormalization(),
+                ReLU(),
+            ]
+        )
+        self.conv3 = Sequential(
+            [
+                Conv2D(
+                    filters,
+                    kernel_size=(3, 3),
+                    padding="same",
+                    use_bias=False,
+                    kernel_initializer="he_uniform",
+                    dilation_rate=12,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
+                ),
+                BatchNormalization(),
+                ReLU(),
+            ]
+        )
+        self.conv4 = Sequential(
+            [
+                Conv2D(
+                    filters,
+                    kernel_size=(3, 3),
+                    padding="same",
+                    use_bias=False,
+                    kernel_initializer="he_uniform",
+                    dilation_rate=18,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
+                ),
+                BatchNormalization(),
+                ReLU(),
+            ]
+        )
+
+        self.conv5 = Sequential(
+            [
+                Conv2D(
+                    filters,
+                    kernel_size=(1, 1),
+                    padding="same",
+                    use_bias=False,
+                    kernel_initializer="he_uniform",
+                    dilation_rate=1,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
+                ),
+                BatchNormalization(),
+                ReLU(),
+            ]
+        )
+
+        self.conv6 = Sequential(
+            [
+                Conv2D(
+                    filters,
+                    kernel_size=(1, 1),
+                    padding="same",
+                    use_bias=False,
+                    kernel_initializer="he_uniform",
+                    dilation_rate=1,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
+                ),
+                BatchNormalization(),
+                ReLU(),
+            ]
+        )
+
+    def build(self, input_shape):
+        _, height, width, *_ = input_shape
+        self.pooling = AveragePooling2D(pool_size=(height, width))
+        self.upsample = UpSampling2D(size=(height, width), interpolation="bilinear")
+
+    def call(self, inputs, training=None):
+
+        fmap1 = self.conv1(inputs)
+        fmap1 = self.isa_block1(fmap1)
+
+        fmap2 = self.conv2(inputs)
+        fmap2 = self.isa_block2(fmap2)
+
+        fmap3 = self.conv3(inputs)
+        fmap3 = self.isa_block3(fmap3)
+
+        fmap4 = self.conv4(inputs)
+        fmap4 = self.isa_block4(fmap4)
+
+        fmap_pool = self.pooling(inputs)
+        fmap_pool = self.conv5(fmap_pool)
+        fmap_pool = self.upsample(fmap_pool)
+
+        fmap = self.concat([fmap_pool, fmap1, fmap2, fmap3, fmap4])
+
+        return self.conv6(fmap)
+
+    def get_config(self):
+
+        config = super().get_config()
+        config.update({"filters": self.filters})
+        return config
+
+
 def get_segmentation_module(
-    n_classes: int, backbone: tf.keras.Model, name: str
+    n_classes: int,
+    backbone: tf.keras.Model,
+    architecture: str,
+    filters: int,
+    name: str,
 ) -> tf.keras.Model:
     """Instantiate the segmentation head module for the segmentation task.
 
@@ -261,10 +405,13 @@ def get_segmentation_module(
         A semantic segmentation model.
     """
 
-    _, c3_output, _, _ = backbone.outputs
+    fmap = backbone.outputs[1]
 
-    fmap = conv_bn_relu(c3_output, filters=1024, kernel_size=3, name="pre_OCP_conv")
-    fmap = Base_OC_Module(filters=512)(fmap)
+    if architecture == "base_ocnet":
+        fmap = conv_bn_relu(fmap, filters=1024, kernel_size=3, name="pre_OCP_conv")
+        fmap = Base_OC_Module(filters=filters)(fmap)
+    elif architecture == "aspp_ocnet":
+        fmap = ASPP_OC(filters=filters)(fmap)
 
     fmap = Conv2D(
         filters=n_classes,

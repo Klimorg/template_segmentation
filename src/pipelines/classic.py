@@ -25,7 +25,7 @@ class Tensorize(object):
     ) -> None:
         """Initialization of the class Tensorize.
 
-        Initialize the class the number of classes in the datasets, the shape of the
+        Initialize the class, the number of classes in the datasets, the shape of the
         images and the random seed.
         """
 
