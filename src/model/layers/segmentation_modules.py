@@ -858,3 +858,7 @@ def JPU(endpoints: List[tf.Tensor], filters: int = 256) -> tf.Tensor:
     sep_fmap2 = sepconv_bn_relu(fmap, filters=filters, kernel_size=3, dilation_rate=2)
     sep_fmap4 = sepconv_bn_relu(fmap, filters=filters, kernel_size=3, dilation_rate=4)
     sep_fmap8 = sepconv_bn_relu(fmap, filters=filters, kernel_size=3, dilation_rate=8)
+
+    fmap = Concatenate(axis=-1)([sep_fmap1, sep_fmap2, sep_fmap4, sep_fmap8])
+
+    return conv_gn_relu(fmap, filters=filters, kernel_size=1)
