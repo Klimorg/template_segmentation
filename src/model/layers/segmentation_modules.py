@@ -1,4 +1,5 @@
 import tensorflow as tf
+import tensorflow_addons as tfa
 from tensorflow.keras.layers import (
     Activation,
     AveragePooling2D,
@@ -7,6 +8,7 @@ from tensorflow.keras.layers import (
     Conv2D,
     Permute,
     ReLU,
+    SeparableConv2D,
     UpSampling2D,
 )
 from tensorflow.keras.models import Sequential
@@ -606,6 +608,48 @@ class ASPP_OC(tf.keras.layers.Layer):
 
 
 class FeaturePyramidNetwork(tf.keras.layers.Layer):
+    """
+    Description of FeaturePyramidNetwork
+
+    The Feature Pyramid Networks head.
+
+    Architecture:
+        ![screen](./images/fpn_head.svg)
+
+
+    Attributes:
+        filters (type):
+        kernel_size (type):
+        strides (type):
+        padding (type):
+        kernel_initializer (type):
+        l2_regul (type):
+        conv1 (type):
+        conv2 (type):
+        conv3 (type):
+        conv4 (type):
+        upsample (type):
+
+    Inheritance:
+        tf.keras.layers.Layer:
+
+    Args:
+       filters (int, optional): Number of filters in each `Conv2D` layers. Defaults to 256.
+        kernel_size (tuple, optional): Size of the convolution kernels in each `Conv2D` layers.
+            Defaults to (1, 1).
+        strides (tuple, optional): Stride parameter in each `Conv2D` layers. Defaults to (1, 1).
+        padding (str, optional): Paddinf parameter in each `Conv2D` layers. Defaults to "same".
+        kernel_initializer (str, optional): Kernel initialization method used in each `Conv2D` layers.
+            Defaults to "he_uniform".
+        l2_regul (float, optional): Value of the constraint used for the
+            $L_2$ regularization. Defaults to 1e-4.
+        *args (undefined):
+        **kwargs (undefined):
+
+    Returns:
+        A list of feature maps, of dimensions $[(OS4, 256), (OS8, 256), (OS16, 256), (OS32, 256)]$.
+    """
+
     def __init__(
         self,
         filters: int = 256,
@@ -614,6 +658,7 @@ class FeaturePyramidNetwork(tf.keras.layers.Layer):
         padding: str = "same",
         kernel_initializer: str = "he_uniform",
         l2_regul: float = 1e-4,
+        backbone=None,
         *args,
         **kwargs,
     ):
@@ -625,45 +670,46 @@ class FeaturePyramidNetwork(tf.keras.layers.Layer):
         self.padding = padding
         self.kernel_initializer = kernel_initializer
         self.l2_regul = l2_regul
+        self.backbone = backbone
 
+    def build(self, input_shape):
         self.conv1 = Conv2D(
-            filters=filters,
-            kernel_size=kernel_size,
-            strides=strides,
-            padding=padding,
-            kernel_initializer=kernel_initializer,
-            kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
+            filters=self.filters,
+            kernel_size=self.kernel_size,
+            strides=self.strides,
+            padding=self.padding,
+            kernel_initializer=self.kernel_initializer,
+            kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
         )
         self.conv2 = Conv2D(
-            filters=filters,
-            kernel_size=kernel_size,
-            strides=strides,
-            padding=padding,
-            kernel_initializer=kernel_initializer,
-            kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
+            filters=self.filters,
+            kernel_size=self.kernel_size,
+            strides=self.strides,
+            padding=self.padding,
+            kernel_initializer=self.kernel_initializer,
+            kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
         )
         self.conv3 = Conv2D(
-            filters=filters,
-            kernel_size=kernel_size,
-            strides=strides,
-            padding=padding,
-            kernel_initializer=kernel_initializer,
-            kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
+            filters=self.filters,
+            kernel_size=self.kernel_size,
+            strides=self.strides,
+            padding=self.padding,
+            kernel_initializer=self.kernel_initializer,
+            kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
         )
         self.conv4 = Conv2D(
-            filters=filters,
-            kernel_size=kernel_size,
-            strides=strides,
-            padding=padding,
-            kernel_initializer=kernel_initializer,
-            kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
+            filters=self.filters,
+            kernel_size=self.kernel_size,
+            strides=self.strides,
+            padding=self.padding,
+            kernel_initializer=self.kernel_initializer,
+            kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
         )
         self.upsample = UpSampling2D(size=(2, 2), interpolation="bilinear")
 
     def call(self, inputs, training=None):
 
         c2_output, c3_output, c4_output, c5_output = inputs
-
         p2_output = self.conv1(c2_output)
         p3_output = self.conv2(c3_output)
         p4_output = self.conv3(c4_output)
@@ -693,104 +739,47 @@ class FeaturePyramidNetwork(tf.keras.layers.Layer):
         return config
 
 
-class SemanticFPN(tf.keras.layers.Layer):
-    pass
-
-
-def FPN(
-    c2_output: tf.Tensor,
-    c3_output: tf.Tensor,
-    c4_output: tf.Tensor,
-    c5_output: tf.Tensor,
-    filters: int = 256,
-    kernel_size: int = 1,
-    strides: int = 1,
-    padding: str = "same",
-    kernel_initializer: str = "he_uniform",
-    l2_regul: float = 1e-4,
-) -> List[tf.Tensor]:
-    """The Feature Pyramid Networks head.
-
-    Architecture:
-        ![screen](./images/fpn_head.svg)
-
-    Args:
-        c2_output (tf.Tensor): Feature map coming from the backbone, output stride 4.
-        c3_output (tf.Tensor): Feature map coming from the backbone, output stride 8.
-        c4_output (tf.Tensor): Feature map coming from the backbone, output stride 16.
-        c5_output (tf.Tensor): Feature map coming from the backbone, output stride 32.
-        filters (int, optional): Number of filters in each `Conv2D` layers. Defaults to 256.
-        kernel_size (tuple, optional): Size of the convolution kernels in each `Conv2D` layers.
-            Defaults to (1, 1).
-        strides (tuple, optional): Stride parameter in each `Conv2D` layers. Defaults to (1, 1).
-        padding (str, optional): Paddinf parameter in each `Conv2D` layers. Defaults to "same".
-        kernel_initializer (str, optional): Kernel initialization method used in each `Conv2D` layers.
-            Defaults to "he_uniform".
-        l2_regul (float, optional): Value of the constraint used for the
-            $L_2$ regularization. Defaults to 1e-4.
-
-    Returns:
-        A list of feature maps, of dimensions $[(OS4, 256), (OS8, 256), (OS16, 256), (OS32, 256)]$.
+class SemanticHeadFPN(tf.keras.layers.Layer):
     """
+    Description of SemanticHeadFPN
 
-    # rescale filters and go down through pyramid network
-    p5_output = Conv2D(
-        filters=filters,
-        kernel_size=kernel_size,
-        strides=strides,
-        padding=padding,
-        kernel_initializer=kernel_initializer,
-        kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
-    )(c5_output)
-
-    p4_output = Conv2D(
-        filters=filters,
-        kernel_size=kernel_size,
-        strides=strides,
-        padding=padding,
-        kernel_initializer=kernel_initializer,
-        kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
-    )(c4_output)
-
-    p3_output = Conv2D(
-        filters=filters,
-        kernel_size=kernel_size,
-        strides=strides,
-        padding=padding,
-        kernel_initializer=kernel_initializer,
-        kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
-    )(c3_output)
-
-    p2_output = Conv2D(
-        filters=filters,
-        kernel_size=kernel_size,
-        strides=strides,
-        padding=padding,
-        kernel_initializer=kernel_initializer,
-        kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
-    )(c2_output)
-
-    p4_output = p4_output + UpSampling2D(size=(2, 2))(p5_output)
-
-    p3_output = p3_output + UpSampling2D(size=(2, 2))(p4_output)
-
-    p2_output = p2_output + UpSampling2D(size=(2, 2))(p3_output)
-
-    return [p2_output, p3_output, p4_output, p5_output]
-
-
-def semantic_head_fpn(
-    p2_output: tf.Tensor,
-    p3_output: tf.Tensor,
-    p4_output: tf.Tensor,
-    p5_output: tf.Tensor,
-) -> tf.Tensor:
-    """The segmentation head added to the FPN.
+    The segmentation head added to the FPN.
 
     Architecture:
         ![screenshot](./images/fpn_segmentation_head.svg)
 
+
+    Attributes:
+        filters (type):
+        kernel_size (type):
+        strides (type):
+        padding (type):
+        kernel_initializer (type):
+        l2_regul (type):
+        conv1 (type):
+        conv2 (type):
+        conv3 (type):
+        conv4 (type):
+        conv5 (type):
+        conv6 (type):
+        conv7 (type):
+        upsample (type):
+        concat (type):
+
+    Inheritance:
+        tf.keras.layers.Layer:
+
     Args:
+        filters (int, optional): [description]. Defaults to 128.
+        kernel_size (int, optional): [description]. Defaults to 1.
+        strides (int, optional): [description]. Defaults to 1.
+        padding (str, optional): [description]. Defaults to "same".
+        kernel_initializer (str, optional): [description]. Defaults to "he_uniform".
+        l2_regul (float, optional): [description]. Defaults to 1e-4.
+        *args (undefined):
+        **kwargs (undefined):
+
+    Inputs:
         p2_output (tf.Tensor): Feature map coming from the `p2_output` FPN head, output stride 4.
         p3_output (tf.Tensor): Feature map coming from the `p3_output` FPN head, output stride 8.
         p4_output (tf.Tensor): Feature map coming from the `p4_output` FPN head, output stride 16.
@@ -798,67 +787,400 @@ def semantic_head_fpn(
 
     Returns:
         An output feature map of size $OS4$, with 512 filters.
+
     """
 
-    p5_output = UpSampling2D(size=(2, 2), interpolation="bilinear")(
-        conv_gn_relu(p5_output, filters=128, kernel_size=3)
-    )
-    p5_output = UpSampling2D(size=(2, 2), interpolation="bilinear")(
-        conv_gn_relu(p5_output, filters=128, kernel_size=3)
-    )
-    fmap5 = UpSampling2D(size=(2, 2), interpolation="bilinear")(
-        conv_gn_relu(p5_output, filters=128, kernel_size=3)
-    )
+    def __init__(
+        self,
+        filters: int = 128,
+        kernel_size: int = 1,
+        strides: int = 1,
+        padding: str = "same",
+        kernel_initializer: str = "he_uniform",
+        l2_regul: float = 1e-4,
+        *args,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
 
-    p4_output = UpSampling2D(size=(2, 2), interpolation="bilinear")(
-        conv_gn_relu(p4_output, filters=128, kernel_size=3)
-    )
-    fmap4 = UpSampling2D(size=(2, 2), interpolation="bilinear")(
-        conv_gn_relu(p4_output, filters=128, kernel_size=3)
-    )
+        self.filters = filters
+        self.kernel_size = kernel_size
+        self.strides = strides
+        self.padding = padding
+        self.kernel_initializer = kernel_initializer
+        self.l2_regul = l2_regul
 
-    fmap3 = UpSampling2D(size=(2, 2), interpolation="bilinear")(
-        conv_gn_relu(p3_output, filters=128, kernel_size=3)
-    )
+    def build(self, input_shape):
+        self.conv1 = Sequential(
+            [
+                Conv2D(
+                    filters=self.filters,
+                    kernel_size=self.kernel_size,
+                    padding=self.padding,
+                    use_bias=False,
+                    kernel_initializer=self.kernel_initializer,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
+                ),
+                tfa.layers.GroupNormalization(),
+                ReLU(),
+            ],
+            name="seg1",
+        )
+        self.conv2 = Sequential(
+            [
+                Conv2D(
+                    filters=self.filters,
+                    kernel_size=self.kernel_size,
+                    padding=self.padding,
+                    use_bias=False,
+                    kernel_initializer=self.kernel_initializer,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
+                ),
+                tfa.layers.GroupNormalization(),
+                ReLU(),
+            ],
+            name="seg2",
+        )
+        self.conv3 = Sequential(
+            [
+                Conv2D(
+                    filters=self.filters,
+                    kernel_size=self.kernel_size,
+                    padding=self.padding,
+                    use_bias=False,
+                    kernel_initializer=self.kernel_initializer,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
+                ),
+                tfa.layers.GroupNormalization(),
+                ReLU(),
+            ],
+            name="seg3",
+        )
+        self.conv4 = Sequential(
+            [
+                Conv2D(
+                    filters=self.filters,
+                    kernel_size=self.kernel_size,
+                    padding=self.padding,
+                    use_bias=False,
+                    kernel_initializer=self.kernel_initializer,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
+                ),
+                tfa.layers.GroupNormalization(),
+                ReLU(),
+            ],
+            name="seg4",
+        )
+        self.conv5 = Sequential(
+            [
+                Conv2D(
+                    filters=self.filters,
+                    kernel_size=self.kernel_size,
+                    padding=self.padding,
+                    use_bias=False,
+                    kernel_initializer=self.kernel_initializer,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
+                ),
+                tfa.layers.GroupNormalization(),
+                ReLU(),
+            ],
+            name="seg5",
+        )
+        self.conv6 = Sequential(
+            [
+                Conv2D(
+                    filters=self.filters,
+                    kernel_size=self.kernel_size,
+                    padding=self.padding,
+                    use_bias=False,
+                    kernel_initializer=self.kernel_initializer,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
+                ),
+                tfa.layers.GroupNormalization(),
+                ReLU(),
+            ],
+            name="seg6",
+        )
+        self.conv7 = Sequential(
+            [
+                Conv2D(
+                    filters=self.filters,
+                    kernel_size=self.kernel_size,
+                    padding=self.padding,
+                    use_bias=False,
+                    kernel_initializer=self.kernel_initializer,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
+                ),
+                tfa.layers.GroupNormalization(),
+                ReLU(),
+            ],
+            name="seg7",
+        )
+        self.upsample = UpSampling2D(size=(2, 2), interpolation="bilinear")
+        self.concat = Concatenate(axis=-1)
 
-    fmap2 = conv_gn_relu(p2_output, filters=128, kernel_size=3)
+    def call(self, inputs, training=None):
 
-    return Concatenate(axis=-1)([fmap5, fmap4, fmap3, fmap2])
+        p2_output, p3_output, p4_output, p5_output = inputs
+
+        p5_output = self.upsample(self.conv1(p5_output))
+        p5_output = self.upsample(self.conv2(p5_output))
+        fmap5 = self.upsample(self.conv3(p5_output))
+
+        p4_output = self.upsample(self.conv4(p4_output))
+        fmap4 = self.upsample(self.conv5(p4_output))
+
+        fmap3 = self.upsample(self.conv6(p3_output))
+
+        fmap2 = self.conv7(p2_output)
+
+        return self.concat([fmap5, fmap4, fmap3, fmap2])
+
+    def get_config(self):
+
+        config = super().get_config()
+        config.update(
+            {
+                "filters": self.filters,
+                "kernel_size": self.kernel_size,
+                "strides": self.strides,
+                "padding": self.padding,
+                "kernel_initializer": self.kernel_initializer,
+                "l2_regul": self.l2_regul,
+            }
+        )
+        return config
 
 
-def JPU(endpoints: List[tf.Tensor], filters: int = 256) -> tf.Tensor:
-    """Joint Pyramid Upsampling module.
+class JointPyramidUpsampling(tf.keras.layers.Layer):
+    """
+    Description of JointPyramidUpsampling
+
+    Joint Pyramid Upsampling module.
 
     Architecture:
         ![screenshot](./images/jpu_details.svg)
 
+
+    Attributes:
+        filters (type):
+        kernel_size (type):
+        strides (type):
+        padding (type):
+        kernel_initializer (type):
+        l2_regul (type):
+        conv1 (type):
+        conv2 (type):
+        conv3 (type):
+        conv4 (type):
+        upsample (type):
+        concat (type):
+        sepconv1 (type):
+        sepconv2 (type):
+        sepconv4 (type):
+        sepconv8 (type):
+
+    Inheritance:
+        tf.keras.layers.Layer:
+
     Args:
+        filters (int, optional): [description]. Defaults to 256.
+        kernel_size (int, optional): [description]. Defaults to 1.
+        strides (int, optional): [description]. Defaults to 1.
+        padding (str, optional): [description]. Defaults to "same".
+        kernel_initializer (str, optional): [description]. Defaults to "he_uniform".
+        l2_regul (float, optional): [description]. Defaults to 1e-4.
+        *args (undefined):
+        **kwargs (undefined):
+
+    Inputs:
         endpoints (List[tf.Tensor]): OS8, OS16, and OS32 endpoint feature maps of the backbone.
-        filters (int, optional): Number of filters used in each `conv_gn_relu` and `sepconv_bn_relu` layers. Defaults to 256.
 
     Returns:
         Output feature map, $(H,W,C)$.
     """
 
-    _, c3_output, c4_output, c5_output = endpoints
+    def __init__(
+        self,
+        filters: int = 256,
+        kernel_size: int = 3,
+        strides: int = 1,
+        padding: str = "same",
+        kernel_initializer: str = "he_uniform",
+        l2_regul: float = 1e-4,
+        *args,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
 
-    height, width = c3_output.shape.as_list()[1:3]
+        self.filters = filters
+        self.kernel_size = kernel_size
+        self.strides = strides
+        self.padding = padding
+        self.kernel_initializer = kernel_initializer
+        self.l2_regul = l2_regul
 
-    fmap3 = conv_gn_relu(c3_output, filters, 3)
+    def build(self, input_shape):
+        self.conv1 = Sequential(
+            [
+                Conv2D(
+                    filters=self.filters,
+                    kernel_size=self.kernel_size,
+                    padding=self.padding,
+                    use_bias=False,
+                    kernel_initializer=self.kernel_initializer,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
+                ),
+                tfa.layers.GroupNormalization(),
+                ReLU(),
+            ]
+        )
+        self.conv2 = Sequential(
+            [
+                Conv2D(
+                    filters=self.filters,
+                    kernel_size=self.kernel_size,
+                    padding=self.padding,
+                    use_bias=False,
+                    kernel_initializer=self.kernel_initializer,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
+                ),
+                tfa.layers.GroupNormalization(),
+                ReLU(),
+            ]
+        )
+        self.conv3 = Sequential(
+            [
+                Conv2D(
+                    filters=self.filters,
+                    kernel_size=self.kernel_size,
+                    padding=self.padding,
+                    use_bias=False,
+                    kernel_initializer=self.kernel_initializer,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
+                ),
+                tfa.layers.GroupNormalization(),
+                ReLU(),
+            ]
+        )
+        self.conv4 = Sequential(
+            [
+                Conv2D(
+                    filters=self.filters,
+                    kernel_size=self.kernel_size,
+                    padding=self.padding,
+                    use_bias=False,
+                    kernel_initializer=self.kernel_initializer,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
+                ),
+                tfa.layers.GroupNormalization(),
+                ReLU(),
+            ]
+        )
 
-    fmap4 = conv_gn_relu(c4_output, filters, 3)
-    fmap4 = upsampling(fmap4, height, width)
+        self.upsample = UpSampling2D(size=(2, 2), interpolation="bilinear")
+        self.upsample4 = UpSampling2D(size=(4, 4), interpolation="bilinear")
+        self.concat = Concatenate(axis=-1)
 
-    fmap5 = conv_gn_relu(c5_output, filters, 3)
-    fmap5 = upsampling(fmap5, height, width)
+        self.sepconv1 = Sequential(
+            [
+                SeparableConv2D(
+                    filters=self.filters,
+                    depth_multiplier=1,
+                    kernel_size=self.kernel_size,
+                    padding=self.padding,
+                    strides=self.strides,
+                    dilation_rate=1,
+                    depthwise_initializer=self.kernel_initializer,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
+                    use_bias=False,
+                ),
+                BatchNormalization(),
+                ReLU(),
+            ]
+        )
+        self.sepconv2 = Sequential(
+            [
+                SeparableConv2D(
+                    filters=self.filters,
+                    depth_multiplier=1,
+                    kernel_size=self.kernel_size,
+                    padding=self.padding,
+                    strides=self.strides,
+                    dilation_rate=1,
+                    depthwise_initializer=self.kernel_initializer,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
+                    use_bias=False,
+                ),
+                BatchNormalization(),
+                ReLU(),
+            ]
+        )
+        self.sepconv4 = Sequential(
+            [
+                SeparableConv2D(
+                    filters=self.filters,
+                    depth_multiplier=1,
+                    kernel_size=self.kernel_size,
+                    padding=self.padding,
+                    strides=self.strides,
+                    dilation_rate=1,
+                    depthwise_initializer=self.kernel_initializer,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
+                    use_bias=False,
+                ),
+                BatchNormalization(),
+                ReLU(),
+            ]
+        )
+        self.sepconv8 = Sequential(
+            [
+                SeparableConv2D(
+                    filters=self.filters,
+                    depth_multiplier=1,
+                    kernel_size=self.kernel_size,
+                    padding=self.padding,
+                    strides=self.strides,
+                    dilation_rate=1,
+                    depthwise_initializer=self.kernel_initializer,
+                    kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
+                    use_bias=False,
+                ),
+                BatchNormalization(),
+                ReLU(),
+            ]
+        )
 
-    fmap = Concatenate(axis=-1)([fmap3, fmap4, fmap5])
+    def call(self, inputs, training=None):
 
-    sep_fmap1 = sepconv_bn_relu(fmap, filters=filters, kernel_size=3, dilation_rate=1)
-    sep_fmap2 = sepconv_bn_relu(fmap, filters=filters, kernel_size=3, dilation_rate=2)
-    sep_fmap4 = sepconv_bn_relu(fmap, filters=filters, kernel_size=3, dilation_rate=4)
-    sep_fmap8 = sepconv_bn_relu(fmap, filters=filters, kernel_size=3, dilation_rate=8)
+        c3_output, c4_output, c5_output = inputs
 
-    fmap = Concatenate(axis=-1)([sep_fmap1, sep_fmap2, sep_fmap4, sep_fmap8])
+        fmap3 = self.conv1(c3_output)
+        fmap4 = self.upsample(self.conv2(c4_output))
+        fmap5 = self.upsample4(self.conv3(c5_output))
 
-    return conv_gn_relu(fmap, filters=filters, kernel_size=1)
+        fmap1 = self.concat([fmap3, fmap4, fmap5])
+
+        sep_fmap1 = self.sepconv1(fmap1)
+        sep_fmap2 = self.sepconv2(fmap1)
+        sep_fmap4 = self.sepconv4(fmap1)
+        sep_fmap8 = self.sepconv8(fmap1)
+
+        fmap2 = self.concat([sep_fmap1, sep_fmap2, sep_fmap4, sep_fmap8])
+
+        return self.conv4(fmap2)
+
+    def get_config(self):
+
+        config = super().get_config()
+        config.update(
+            {
+                "filters": self.filters,
+                "kernel_size": self.kernel_size,
+                "strides": self.strides,
+                "padding": self.padding,
+                "kernel_initializer": self.kernel_initializer,
+                "l2_regul": self.l2_regul,
+            }
+        )
+        return config
