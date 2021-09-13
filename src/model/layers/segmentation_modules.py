@@ -368,7 +368,7 @@ class ISA2D(tf.keras.layers.Layer):
         return config
 
 
-class Base_OC_Module(tf.keras.layers.Layer):
+class BaseOC(tf.keras.layers.Layer):
     """
     Description of Base_OC_Module
 
@@ -478,7 +478,7 @@ class ASPP_OC(tf.keras.layers.Layer):
         self.conv1 = Sequential(
             [
                 Conv2D(
-                    filters,
+                    filters=filters,
                     kernel_size=(1, 1),
                     padding="same",
                     use_bias=False,
@@ -492,7 +492,7 @@ class ASPP_OC(tf.keras.layers.Layer):
         self.conv2 = Sequential(
             [
                 Conv2D(
-                    filters,
+                    filters=filters,
                     kernel_size=(3, 3),
                     padding="same",
                     use_bias=False,
@@ -507,7 +507,7 @@ class ASPP_OC(tf.keras.layers.Layer):
         self.conv3 = Sequential(
             [
                 Conv2D(
-                    filters,
+                    filters=filters,
                     kernel_size=(3, 3),
                     padding="same",
                     use_bias=False,
@@ -522,7 +522,7 @@ class ASPP_OC(tf.keras.layers.Layer):
         self.conv4 = Sequential(
             [
                 Conv2D(
-                    filters,
+                    filters=filters,
                     kernel_size=(3, 3),
                     padding="same",
                     use_bias=False,
@@ -538,7 +538,7 @@ class ASPP_OC(tf.keras.layers.Layer):
         self.conv5 = Sequential(
             [
                 Conv2D(
-                    filters,
+                    filters=filters,
                     kernel_size=(1, 1),
                     padding="same",
                     use_bias=False,
@@ -554,7 +554,7 @@ class ASPP_OC(tf.keras.layers.Layer):
         self.conv6 = Sequential(
             [
                 Conv2D(
-                    filters,
+                    filters=filters,
                     kernel_size=(1, 1),
                     padding="same",
                     use_bias=False,
