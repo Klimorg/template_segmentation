@@ -8,10 +8,157 @@ from tensorflow.keras.layers import (
     Conv2D,
     Permute,
     ReLU,
+    Reshape,
     SeparableConv2D,
     UpSampling2D,
 )
 from tensorflow.keras.models import Sequential
+
+
+class PositionAttentionModule2D(tf.keras.layers.Layer):
+    def __init__(
+        self,
+        filters: int,
+        l2_regul: float = 1e-4,
+        *args,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
+
+        self.filters = filters
+        self.l2_regul = l2_regul
+
+        self.query = Conv2D(
+            filters // 8,
+            kernel_size=(1, 1),
+            padding="same",
+            use_bias=False,
+            kernel_initializer="he_uniform",
+            kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
+        )
+        self.key = Conv2D(
+            filters // 8,
+            kernel_size=(1, 1),
+            padding="same",
+            use_bias=False,
+            kernel_initializer="he_uniform",
+            kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
+        )
+        self.values = Conv2D(
+            filters,
+            kernel_size=(1, 1),
+            padding="same",
+            use_bias=False,
+            kernel_initializer="he_uniform",
+            kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
+        )
+
+        self.alpha = None
+        self.softmax = tf.keras.layers.Activation("softmax")
+
+    def build(self, input_shape):
+
+        _, height, width, channels = input_shape
+
+        self.alpha = self.add_weight(
+            shape=(1,),
+            initializer="random_normal",
+            name="alpha",
+            trainable=True,
+        )
+        self.reshape = Reshape(target_shape=(-1, channels))
+        self.reshape_out = Reshape(target_shape=(height, width, channels))
+
+    def call(self, inputs, trainable=None):
+        fmap_query = self.query(inputs)
+        fmap_query = self.reshape(fmap_query)
+
+        fmap_key = self.key(inputs)
+        fmap_key = self.reshape(fmap_key)
+
+        fmap_values = self.values(inputs)
+        fmap_values = self.reshape(fmap_values)
+
+        out = tf.matmul(fmap_query, fmap_key, transpose_b=True)
+
+        attention = self.softmax(out)
+
+        fmap_out = tf.matmul(fmap_values, attention, transpose_b=True)
+        fmap_out = self.reshape_out(fmap_out)
+
+        return self.alpha * fmap_out + inputs
+
+    def get_config(self):
+
+        config = super().get_config()
+        config.update(
+            {
+                "filters": self.filters,
+                "l2_regularization": self.l2_regul,
+            }
+        )
+        return config
+
+
+class ChannelAttentionModule2D(tf.keras.layers.Layer):
+    def __init__(
+        self,
+        *args,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
+
+        self.beta = None
+        self.softmax = tf.keras.layers.Activation("softmax")
+
+    def build(self, input_shape):
+
+        _, height, width, channels = input_shape
+
+        self.beta = self.add_weight(
+            shape=(1,),
+            initializer="random_normal",
+            name="beta",
+            trainable=True,
+        )
+        self.reshape = Reshape(target_shape=(-1, channels))
+        self.reshape_out = Reshape(target_shape=(height, width, channels))
+
+    def call(self, inputs, trainable=None):
+
+        fmap_query = self.reshape(inputs)
+        fmap_key = self.reshape(inputs)
+        fmap_values = self.reshape(inputs)
+
+        energy = tf.matmul(fmap_query, fmap_key, transpose_b=True)
+        energy = self.softmax(energy)
+
+        fmap_out = tf.matmul(energy, fmap_values, transpose_b=True)
+        fmap_out = self.reshape_out(fmap_out)
+
+        return self.beta * fmap_out + inputs
+
+
+class DualAttentionModule(tf.keras.layers.Layer):
+    def __init__(
+        self,
+        *args,
+        **kwargs,
+    ):
+
+        super().__init__(*args, **kwargs)
+
+    def build(self, input_shape):
+
+        self.position_attention = PositionAttentionModule2D(filters=input_shape[-1])
+        self.channel_attention = ChannelAttentionModule2D()
+
+    def call(self, inputs, trainable=None):
+
+        pos_attention = self.position_attention(inputs)
+        chan_attention = self.channel_attention(inputs)
+
+        return pos_attention + chan_attention
 
 
 class ASPP(tf.keras.layers.Layer):

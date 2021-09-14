@@ -19,13 +19,13 @@ theme:
       primary: indigo
       accent: indigo
       toggle:
-        icon: material/toggle-switch-off-outline
+        icon: material/lightbulb
         name: Basculer en mode sombre
     - scheme: slate
       primary: teal
       accent: deep orange
       toggle:
-        icon: material/toggle-switch
+        icon: material/lightbulb-outline
         name: Basculer en mode clair
 
 # extra_css:
@@ -64,6 +64,7 @@ nav:
       - Classic pipeline: datasets/classic.md
       - CutMix pipeline: datasets/cutmix.md
   - Semantic segmentation:
+    - Architecture descrption: models/description.md
     - Common layers: models/common_layers.md
     - Backbones:
       - MobileNetv2: models/backbone/mobilenetv2.md
