@@ -31,6 +31,7 @@
 		"coenraads.bracket-pair-colorizer-2",
 		"emmanuelbeziat.vscode-great-icons",
 		"zainchen.json",
+		"yzhang.markdown-all-in-one"
 	],
 	//Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [5000,8001,6006],

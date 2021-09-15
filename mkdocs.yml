@@ -64,7 +64,7 @@ nav:
       - Classic pipeline: datasets/classic.md
       - CutMix pipeline: datasets/cutmix.md
   - Semantic segmentation:
-    - Architecture descrption: models/description.md
+    - Architecture description: models/description.md
     - Common layers: models/common_layers.md
     - Backbones:
       - MobileNetv2: models/backbone/mobilenetv2.md
