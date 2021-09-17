@@ -11,7 +11,8 @@ class RetinaNetClassificationLoss(tf.losses.Loss):
 
     def __init__(self, alpha, gamma):
         super(RetinaNetClassificationLoss, self).__init__(
-            reduction="none", name="RetinaNetClassificationLoss"
+            reduction="none",
+            name="RetinaNetClassificationLoss",
         )
         self._alpha = alpha
         self._gamma = gamma
@@ -20,7 +21,8 @@ class RetinaNetClassificationLoss(tf.losses.Loss):
         axis = -1
 
         cross_entropy = tf.nn.sigmoid_cross_entropy_with_logits(
-            labels=y_true, logits=y_pred
+            labels=y_true,
+            logits=y_pred,
         )
 
         # logits = tf.math.log(tf.clip_by_value(y_pred, _EPSILON, 1 - _EPSILON))

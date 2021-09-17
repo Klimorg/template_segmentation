@@ -138,7 +138,11 @@ def test_create_dataset_without_augment(tensor):
         df ([type]): [description]
     """
     ds = tensor.create_dataset(
-        "tests/test_datas/test_datas.csv", batch=5, repet=1, prefetch=1, augment=False
+        "tests/test_datas/test_datas.csv",
+        batch=5,
+        repet=1,
+        prefetch=1,
+        augment=False,
     )
 
     for imgs, _ in ds.take(1):
@@ -153,7 +157,11 @@ def test_create_dataset_with_augment(tensor):
         df ([type]): [description]
     """
     ds = tensor.create_dataset(
-        "tests/test_datas/test_datas.csv", batch=5, repet=1, prefetch=1, augment=True
+        "tests/test_datas/test_datas.csv",
+        batch=5,
+        repet=1,
+        prefetch=1,
+        augment=True,
     )
 
     for imgs, _ in ds.take(1):

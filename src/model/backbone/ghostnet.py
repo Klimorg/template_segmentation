@@ -72,7 +72,7 @@ def ghost_module(
     )(fmap)
 
     return Concatenate(axis=-1, name=f"concat_ghost_module_{name}")(
-        [fmap, dwfmap[:, :, :, :channels]]
+        [fmap, dwfmap[:, :, :, :channels]],
     )
 
 
@@ -218,7 +218,10 @@ def ghost_bottleneck_module(
 
     if use_se:
         fmap = se_module(
-            fmap_in=fmap, filters=exp, ratio=ratio, name=f"gbneck_module_{name}"
+            fmap_in=fmap,
+            filters=exp,
+            ratio=ratio,
+            name=f"gbneck_module_{name}",
         )
 
     fmap = ghost_module(

@@ -32,13 +32,13 @@ def get_backbone(img_shape: List[int], backbone_name: str) -> tf.keras.Model:
     height = img_shape[1]
 
     logger.info(
-        f"conv2_block3_preact_relu OS : {int(height/c2_output.shape.as_list()[1])}"
+        f"conv2_block3_preact_relu OS : {int(height/c2_output.shape.as_list()[1])}",
     )
     logger.info(
-        f"conv3_block4_preact_relu OS : {int(height/c3_output.shape.as_list()[1])}"
+        f"conv3_block4_preact_relu OS : {int(height/c3_output.shape.as_list()[1])}",
     )
     logger.info(
-        f"conv4_block6_preact_relu OS : {int(height/c4_output.shape.as_list()[1])}"
+        f"conv4_block6_preact_relu OS : {int(height/c4_output.shape.as_list()[1])}",
     )
     logger.info(f"conv5_block3_out OS : {int(height/c5_output.shape.as_list()[1])}")
 

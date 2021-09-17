@@ -104,7 +104,10 @@ def create_train_val_test_datasets(
         random_state=random_seed,
     )
     images_val, images_test, labels_val, labels_test = train_test_split(
-        images_val, labels_val, test_size=0.5, random_state=random_seed
+        images_val,
+        labels_val,
+        test_size=0.5,
+        random_state=random_seed,
     )
 
     return (

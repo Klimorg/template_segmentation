@@ -51,7 +51,7 @@ plugins:
 
 nav:
   - Acceuil: index.md
-  - Hydra configuration: hydra_config/hydra.md
+  # - Hydra configuration: hydra_config/hydra.md
   - Various configuration:
     - Docker config: misc_config/docker.md
     - Makefile : misc_config/make.md
@@ -66,6 +66,11 @@ nav:
   - Semantic segmentation:
     - Architecture description: models/description.md
     - Common layers: models/common_layers.md
+    - Segmentation heads:
+      - KSAC: models/heads/ksac.md
+      - FPN: models/heads/fpn.md
+      - OCNet: models/heads/ocnet.md
+      - JPU: models/heads/jpu.md
     - Backbones:
       - MobileNetv2: models/backbone/mobilenetv2.md
       - GhostNet: models/backbone/ghostnet.md
@@ -74,11 +79,6 @@ nav:
       - ResNet50v2: models/backbone/resnet50v2.md
       - ResNet101: models/backbone/resnet101.md
       - ResNet101v2: models/backbone/resnet101v2.md
-    - Segmentation heads:
-      - KSAC: models/heads/ksac.md
-      - FPN: models/heads/fpn.md
-      - OCNet: models/heads/ocnet.md
-      - JPU: models/heads/jpu.md
   - Training loop: train.md
   - Loss: loss/focal_loss.md
   - Metrics : metrics/mean_iou.md

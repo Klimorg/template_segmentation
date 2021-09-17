@@ -36,7 +36,8 @@ def conv_relu(tensor: tf.Tensor, filters: int) -> tf.Tensor:
 
 
 def downsample(
-    tensor: tf.Tensor, sampling_method: Optional[str] = "maxpool"
+    tensor: tf.Tensor,
+    sampling_method: Optional[str] = "maxpool",
 ) -> tf.Tensor:
 
     if sampling_method == "maxpool":
@@ -51,7 +52,7 @@ def downsample(
         )(tensor)
     else:
         logger.error(
-            "sampling_method argument not recognized. Please use either 'maxpool' or 'conv'."
+            "sampling_method argument not recognized. Please use either 'maxpool' or 'conv'.",
         )
 
     return fmap

@@ -73,7 +73,8 @@ def flatten_omegaconf(cfg: Any) -> Dict[Any, Any]:
         if isinstance(datas, list):
             for idx, _ in enumerate(datas):
                 recurse(
-                    datas[idx], parent_key + sep + str(idx) if parent_key else str(idx)
+                    datas[idx],
+                    parent_key + sep + str(idx) if parent_key else str(idx),
                 )
         elif isinstance(datas, dict):
             for key, attributed_value in datas.items():
@@ -118,7 +119,9 @@ def set_seed(random_seed: int) -> None:
 
 # https://github.com/GokuMohandas/applied-ml/blob/main/tagifai/utils.py
 def get_sorted_runs(
-    experiment_name: str, order_by: List[str], top_k: Optional[int] = 10
+    experiment_name: str,
+    order_by: List[str],
+    top_k: Optional[int] = 10,
 ) -> pd.DataFrame:
     """Get top_k best runs for a given experiment_name according to given metrics.
 

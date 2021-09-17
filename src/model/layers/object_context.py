@@ -1,3 +1,5 @@
+from typing import Any, Dict
+
 import tensorflow as tf
 from tensorflow.keras.layers import (
     AveragePooling2D,
@@ -16,29 +18,29 @@ class SelfAttention2D(tf.keras.layers.Layer):
     Description of SelfAttention2D
 
     Attributes:
-        filters (type):
-        regul (type):
-        filters (type):
-        softmax (type):
-        theta (type):
-        phi (type):
-        gamma (type):
-        rho (type):
+        softmax (type): `Softmax` function.
+        theta (type): `[Conv2D-BatchNormalization-ReLU]x2` layer.
+        phi (type): `[Conv2D-BatchNormalization-ReLU]x2` layer.
+        gamma (type): `Conv2D` layer.
+        rho (type): `Conv2D` layer.
 
     Inheritance:
         tf.keras.layers.Layer:
-
-    Args:
-        filters (undefined):
-        **kwargs (undefined):
-
     """
 
-    def __init__(self, filters: int, l2_regul: float = 1e-4, *args, **kwargs):
+    def __init__(self, filters: int, l2_regul: float = 1e-4, *args, **kwargs) -> None:
+        """Initilization of the class.
+
+        Args:
+            filters (int, optional): Number of filters in each `Conv2D` layers.
+            l2_regul (float, optional): Value of the constraint used for the
+                $L_2$ regularization. Defaults to 1e-4.
+        """
         super().__init__(*args, **kwargs)
 
         self.filters = filters
         self.l2_regul = l2_regul
+
         self.regul = tf.sqrt(2 / self.filters)
         self.softmax = tf.keras.layers.Activation("softmax")
 
@@ -64,7 +66,7 @@ class SelfAttention2D(tf.keras.layers.Layer):
                 ),
                 BatchNormalization(),
                 ReLU(),
-            ]
+            ],
         )
 
         self.phi = Sequential(
@@ -89,7 +91,7 @@ class SelfAttention2D(tf.keras.layers.Layer):
                 ),
                 BatchNormalization(),
                 ReLU(),
-            ]
+            ],
         )
 
         self.gamma = Conv2D(
@@ -110,7 +112,7 @@ class SelfAttention2D(tf.keras.layers.Layer):
             kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
         )
 
-    def call(self, inputs, training=None):
+    def call(self, inputs, training=None) -> tf.Tensor:
 
         out_phi = self.phi(inputs)
         out_theta = self.theta(inputs)
@@ -124,14 +126,14 @@ class SelfAttention2D(tf.keras.layers.Layer):
 
         return self.rho(out_product2)
 
-    def get_config(self):
+    def get_config(self) -> Dict[str, Any]:
 
         config = super().get_config()
         config.update(
             {
                 "filters": self.filters,
                 "l2_regularization": self.l2_regul,
-            }
+            },
         )
         return config
 
@@ -140,32 +142,28 @@ class ISA2D(tf.keras.layers.Layer):
     """
     Description of ISA2D
 
-    Attributes:
-        P_h (type):
-        P_w (type):
-
     Inheritance:
         tf.keras.layers.Layer:
-
-    Args:
-        P_h (undefined):
-        P_w (undefined):
-        **kwargs (undefined):
-
     """
 
-    def __init__(self, P_h, P_w, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, P_h: int, P_w: int, *args, **kwargs) -> None:
+        """Initilization of the class.
+
+        Args:
+            P_h (int): Number of partitions wanted for the height axis.
+            P_w (int): Number of partitions wanted for the width axis.
+        """
+        super().__init__(*args, **kwargs)
 
         self.P_h = P_h
         self.P_w = P_w
 
-    def build(self, input_shape):
+    def build(self, input_shape) -> None:
 
         self.attention1 = SelfAttention2D(input_shape[-1])
         self.attention2 = SelfAttention2D(input_shape[-1])
 
-    def call(self, inputs, training=None):
+    def call(self, inputs, training=None) -> tf.Tensor:
 
         _, H, W, C = tf.keras.backend.int_shape(inputs)
         Q_h, Q_w = H // self.P_h, W // self.P_w
@@ -188,7 +186,7 @@ class ISA2D(tf.keras.layers.Layer):
 
         return tf.reshape(fmap, [-1, H, W, C])
 
-    def get_config(self):
+    def get_config(self) -> Dict[str, Any]:
 
         config = super().get_config()
         config.update({"P_h": self.P_h, "P_w": self.P_w})
@@ -200,21 +198,23 @@ class BaseOC(tf.keras.layers.Layer):
     Description of Base_OC_Module
 
     Attributes:
-        filters (type):
-        isa_block (type):
-        concat (type):
-        conv_bn_relu (type):
+        isa_block (type): `ISA2D` layer.
+        concat (type): `Concatenate` layer.
+        conv (type): `Conv2D-BatchNormalization-ReLU` layer.
 
     Inheritance:
         tf.keras.layers.Layer:
 
-    Args:
-        filters (undefined):
-        **kwargs (undefined):
-
     """
 
-    def __init__(self, filters: int, l2_regul: float = 1e-4, *args, **kwargs):
+    def __init__(self, filters: int, l2_regul: float = 1e-4, *args, **kwargs) -> None:
+        """Initialization of the class.
+
+        Args:
+            filters (int, optional): Number of filters in each `Conv2D` layers.
+            l2_regul (float, optional): Value of the constraint used for the
+                $L_2$ regularization. Defaults to 1e-4.
+        """
         super().__init__(*args, **kwargs)
 
         self.filters = filters
@@ -222,7 +222,7 @@ class BaseOC(tf.keras.layers.Layer):
 
         self.isa_block = ISA2D(8, 8)
         self.concat = Concatenate(axis=-1)
-        self.conv_bn_relu = Sequential(
+        self.conv = Sequential(
             [
                 Conv2D(
                     filters,
@@ -234,17 +234,17 @@ class BaseOC(tf.keras.layers.Layer):
                 ),
                 BatchNormalization(),
                 ReLU(),
-            ]
+            ],
         )
 
-    def call(self, inputs, training=None):
+    def call(self, inputs, training=None) -> tf.Tensor:
 
         attention = self.isa_block(inputs)
         fmap = self.concat([attention, inputs])
 
-        return self.conv_bn_relu(fmap)
+        return self.conv(fmap)
 
-    def get_config(self):
+    def get_config(self) -> Dict[str, Any]:
 
         config = super().get_config()
         config.update({"filters": self.filters, "l2_regularization": self.l2_regul})
@@ -256,30 +256,21 @@ class ASPP_OC(tf.keras.layers.Layer):
     Description of ASPP_OC
 
     Attributes:
-        filters (type):
-        l2_regul (type):
-        dilation_rate (type):
-        isa_block1 (type):
-        isa_block2 (type):
-        isa_block3 (type):
-        isa_block4 (type):
-        concat (type):
-        conv1 (type):
-        conv2 (type):
-        conv3 (type):
-        conv4 (type):
-        conv5 (type):
-        conv6 (type):
+        dilation_rate (type): Dilations rates used for the `Conv2D` layers.
+        isa_block1 (type): `ISA2D` layer.
+        isa_block2 (type): `ISA2D` layer.
+        isa_block3 (type): `ISA2D` layer.
+        isa_block4 (type): `ISA2D` layer.
+        concat (type): `Concatenate` layer.
+        conv1 (type): `Conv2D-BatchNormalization-ReLU` layer.
+        conv2 (type): `Conv2D-BatchNormalization-ReLU` layer.
+        conv3 (type): `Conv2D-BatchNormalization-ReLU` layer.
+        conv4 (type): `Conv2D-BatchNormalization-ReLU` layer.
+        conv5 (type): `Conv2D-BatchNormalization-ReLU` layer.
+        conv6 (type): `Conv2D-BatchNormalization-ReLU` layer.
 
     Inheritance:
         tf.keras.layers.Layer:
-
-    Args:
-        filters (int):
-        l2_regul (float=1e-4):
-        *args (undefined):
-        **kwargs (undefined):
-
     """
 
     def __init__(
@@ -288,7 +279,14 @@ class ASPP_OC(tf.keras.layers.Layer):
         l2_regul: float = 1e-4,
         *args,
         **kwargs,
-    ):
+    ) -> None:
+        """Initialization of the class.
+
+        Args:
+            filters (int): Number of filters in each `Conv2D` layers.
+            l2_regul (float, optional): Value of the constraint used for the
+                $L_2$ regularization. Defaults to 1e-4.
+        """
         super().__init__(*args, **kwargs)
 
         self.filters = filters
@@ -314,7 +312,7 @@ class ASPP_OC(tf.keras.layers.Layer):
                 ),
                 BatchNormalization(),
                 ReLU(),
-            ]
+            ],
         )
         self.conv2 = Sequential(
             [
@@ -329,7 +327,7 @@ class ASPP_OC(tf.keras.layers.Layer):
                 ),
                 BatchNormalization(),
                 ReLU(),
-            ]
+            ],
         )
         self.conv3 = Sequential(
             [
@@ -344,7 +342,7 @@ class ASPP_OC(tf.keras.layers.Layer):
                 ),
                 BatchNormalization(),
                 ReLU(),
-            ]
+            ],
         )
         self.conv4 = Sequential(
             [
@@ -359,7 +357,7 @@ class ASPP_OC(tf.keras.layers.Layer):
                 ),
                 BatchNormalization(),
                 ReLU(),
-            ]
+            ],
         )
 
         self.conv5 = Sequential(
@@ -375,7 +373,7 @@ class ASPP_OC(tf.keras.layers.Layer):
                 ),
                 BatchNormalization(),
                 ReLU(),
-            ]
+            ],
         )
 
         self.conv6 = Sequential(
@@ -391,15 +389,16 @@ class ASPP_OC(tf.keras.layers.Layer):
                 ),
                 BatchNormalization(),
                 ReLU(),
-            ]
+            ],
         )
 
-    def build(self, input_shape):
+    def build(self, input_shape) -> None:
+
         _, height, width, *_ = input_shape
         self.pooling = AveragePooling2D(pool_size=(height, width))
         self.upsample = UpSampling2D(size=(height, width), interpolation="bilinear")
 
-    def call(self, inputs, training=None):
+    def call(self, inputs, training=None) -> tf.Tensor:
 
         fmap1 = self.conv1(inputs)
         fmap1 = self.isa_block1(fmap1)
@@ -421,7 +420,7 @@ class ASPP_OC(tf.keras.layers.Layer):
 
         return self.conv6(fmap)
 
-    def get_config(self):
+    def get_config(self) -> Dict[str, Any]:
 
         config = super().get_config()
         config.update(
@@ -429,6 +428,6 @@ class ASPP_OC(tf.keras.layers.Layer):
                 "filters": self.filters,
                 "l2_regularization": self.l2_regul,
                 "dilation_rate": self.dilation_rate,
-            }
+            },
         )
         return config

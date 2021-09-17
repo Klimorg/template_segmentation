@@ -80,16 +80,16 @@ class SegmentationMasks(object):
             X_coordinates.append(
                 segmentation_datas["regions"][polygon]["shape_attributes"][
                     "all_points_x"
-                ]
+                ],
             )
             Y_coordinates.append(
                 segmentation_datas["regions"][polygon]["shape_attributes"][
                     "all_points_y"
-                ]
+                ],
             )
             # get the labels corresponding to the polygons
             labels.append(
-                segmentation_datas["regions"][polygon]["region_attributes"]["label"]
+                segmentation_datas["regions"][polygon]["region_attributes"]["label"],
             )
 
         assert len(X_coordinates) == len(Y_coordinates)
@@ -189,7 +189,8 @@ class SegmentationMasks(object):
         for image_name in image_names_list:
 
             X_coordinates, Y_coordinates, labels = self.get_data(
-                image_name, coordinates_and_labels
+                image_name,
+                coordinates_and_labels,
             )
 
             polygon_masks = self.get_polygon_masks(
@@ -210,7 +211,7 @@ class SegmentationMasks(object):
             if save:
                 image_name_stem = Path(f"{image_name}").stem
                 address = Path(self.segmentation_config.raw_datas.masks) / Path(
-                    f"{image_name_stem}_mask.png"
+                    f"{image_name_stem}_mask.png",
                 )
                 segmentation_mask = Image.fromarray(segmentation_mask).convert("L")
                 segmentation_mask.save(address)
@@ -252,7 +253,7 @@ class SegmentationMasks(object):
                 product(
                     range(mult * overlap, height - height % stride, stride),
                     range(mult * overlap, width - width % stride, stride),
-                )
+                ),
             )
             for idy, idx in grid:
                 box = (idx, idy, idx + stride, idy + stride)
@@ -280,11 +281,13 @@ class SegmentationMasks(object):
 
         logger.info("Searching for images and corresponding masks.")
         images_paths = get_items_list(
-            directory=self.segmentation_config.raw_datas.images, extension=".jpg"
+            directory=self.segmentation_config.raw_datas.images,
+            extension=".jpg",
         )
 
         masks_paths = get_items_list(
-            directory=self.segmentation_config.raw_datas.masks, extension=".png"
+            directory=self.segmentation_config.raw_datas.masks,
+            extension=".png",
         )
 
         assert len(images_paths) == len(masks_paths)
@@ -302,7 +305,8 @@ class SegmentationMasks(object):
         """
 
         json_files = get_items_list(
-            directory=self.segmentation_config.raw_datas.labels, extension=".json"
+            directory=self.segmentation_config.raw_datas.labels,
+            extension=".json",
         )
 
         logger.info(f"Found {len(json_files)} json files.")

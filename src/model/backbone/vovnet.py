@@ -40,7 +40,10 @@ from src.model.layers.common_layers import conv_bn_relu
 
 
 def osa_module(
-    tensor: tf.Tensor, filters_conv3x3: int, filters_conv1x1: int, block_name: str
+    tensor: tf.Tensor,
+    filters_conv3x3: int,
+    filters_conv1x1: int,
+    block_name: str,
 ) -> tf.Tensor:
     """One-Shot Aggregation module, the backbone of the VoVNet model.
 
@@ -94,7 +97,7 @@ def osa_module(
     )
 
     fmap = Concatenate(axis=-1, name=f"concat_{block_name}")(
-        [fmap1, fmap2, fmap3, fmap4, fmap5]
+        [fmap1, fmap2, fmap3, fmap4, fmap5],
     )
 
     return conv_bn_relu(

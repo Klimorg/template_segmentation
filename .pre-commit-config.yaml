@@ -10,6 +10,12 @@ repos:
       #- id: check-added-large-files
       - id: requirements-txt-fixer
 
+  - repo: https://github.com/asottile/add-trailing-comma
+    rev: v2.1.0
+    hooks:
+      - id: add-trailing-comma
+
+
   - repo: local
     hooks:
       - id: isort

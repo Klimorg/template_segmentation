@@ -21,7 +21,10 @@ class Tensorize(object):
     """
 
     def __init__(
-        self, n_classes: int, img_shape: Tuple[int, int, int], random_seed: int
+        self,
+        n_classes: int,
+        img_shape: Tuple[int, int, int],
+        random_seed: int,
     ) -> None:
         """Initialization of the class Tensorize.
 
@@ -51,7 +54,9 @@ class Tensorize(object):
 
     @tf.function
     def parse_image_and_mask(
-        self, image: str, mask: str
+        self,
+        image: str,
+        mask: str,
     ) -> Tuple[np.ndarray, np.ndarray]:
         """Transform image and mask.
 
@@ -74,7 +79,9 @@ class Tensorize(object):
         # This will convert to float values in [0, 1]
         image = tf.image.convert_image_dtype(image, tf.float32)
         image = tf.image.resize(
-            image, resized_dims, method=tf.image.ResizeMethod.NEAREST_NEIGHBOR
+            image,
+            resized_dims,
+            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR,
         )
 
         mask = tf.io.read_file(mask)
@@ -82,13 +89,17 @@ class Tensorize(object):
         # or the output shape will be undefined
         mask = tf.io.decode_png(mask, channels=1)
         mask = tf.image.resize(
-            mask, resized_dims, method=tf.image.ResizeMethod.NEAREST_NEIGHBOR
+            mask,
+            resized_dims,
+            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR,
         )
 
         return image, mask
 
     def train_preprocess(
-        self, image: np.ndarray, mask: List[int]
+        self,
+        image: np.ndarray,
+        mask: List[int],
     ) -> Tuple[np.ndarray, List[int]]:
         """Augmentation preprocess, if needed.
 
@@ -106,7 +117,7 @@ class Tensorize(object):
                 A.VerticalFlip(p=0.5),
                 A.RandomRotate90(p=0.5),
                 A.Transpose(p=0.5),
-            ]
+            ],
         )
 
         augmented = aug(image=image, mask=mask)
@@ -123,7 +134,9 @@ class Tensorize(object):
     def apply_augments(self, image, mask):
 
         image, mask = tf.numpy_function(
-            func=self.train_preprocess, inp=[image, mask], Tout=[tf.float32, tf.float32]
+            func=self.train_preprocess,
+            inp=[image, mask],
+            Tout=[tf.float32, tf.float32],
         )
 
         img_shape = [self.img_shape[0], self.img_shape[1], 3]
@@ -165,7 +178,8 @@ class Tensorize(object):
         dataset = dataset.shuffle(len(features), seed=self.random_seed)
         dataset = dataset.repeat(repet)
         dataset = dataset.map(
-            self.parse_image_and_mask, num_parallel_calls=self.AUTOTUNE
+            self.parse_image_and_mask,
+            num_parallel_calls=self.AUTOTUNE,
         )
         if augment:
             dataset = dataset.map(self.apply_augments, num_parallel_calls=self.AUTOTUNE)
@@ -202,7 +216,8 @@ class Tensorize(object):
         dataset = dataset.shuffle(len(features), seed=self.random_seed)
         dataset = dataset.repeat(repet)
         dataset = dataset.map(
-            self.parse_image_and_mask, num_parallel_calls=self.AUTOTUNE
+            self.parse_image_and_mask,
+            num_parallel_calls=self.AUTOTUNE,
         )
         dataset = dataset.batch(batch)
         return dataset.prefetch(prefetch)

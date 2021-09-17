@@ -117,13 +117,13 @@ def sparse_categorical_focal_loss(
         if axis != y_pred_rank - 1:
             # Put channel axis last for sparse_softmax_cross_entropy_with_logits
             perm = list(
-                itertools.chain(range(axis), range(axis + 1, y_pred_rank), [axis])
+                itertools.chain(range(axis), range(axis + 1, y_pred_rank), [axis]),
             )
             y_pred = tf.transpose(y_pred, perm=perm)
     elif axis != -1:
         raise ValueError(
             f"Cannot compute sparse categorical focal loss with axis={axis} on "
-            "a prediction tensor with statically unknown rank."
+            "a prediction tensor with statically unknown rank.",
         )
     y_pred_shape = tf.shape(y_pred)
 
@@ -134,7 +134,7 @@ def sparse_categorical_focal_loss(
     if y_true_rank is None:
         raise NotImplementedError(
             "Sparse categorical focal loss not supported "
-            "for target/label tensors of unknown rank"
+            "for target/label tensors of unknown rank",
         )
 
     reshape_needed = (

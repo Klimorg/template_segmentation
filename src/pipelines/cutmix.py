@@ -62,7 +62,9 @@ class CutMix(object):
 
     @tf.function
     def parse_image_and_mask(
-        self, image: str, mask: str
+        self,
+        image: str,
+        mask: str,
     ) -> Tuple[np.ndarray, np.ndarray]:
         """Transform image and mask.
 
@@ -84,7 +86,9 @@ class CutMix(object):
         # This will convert to float values in [0, 1]
         image = tf.image.convert_image_dtype(image, tf.float32)
         image = tf.image.resize(
-            image, resized_dims, method=tf.image.ResizeMethod.NEAREST_NEIGHBOR
+            image,
+            resized_dims,
+            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR,
         )
 
         mask = tf.io.read_file(mask)
@@ -92,7 +96,9 @@ class CutMix(object):
         # or the output shape will be undefined
         mask = tf.io.decode_png(mask, channels=1)
         mask = tf.image.resize(
-            mask, resized_dims, method=tf.image.ResizeMethod.NEAREST_NEIGHBOR
+            mask,
+            resized_dims,
+            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR,
         )
 
         return image, mask
@@ -117,19 +123,24 @@ class CutMix(object):
         dataset_one = tf.data.Dataset.from_tensor_slices((features, masks))
         dataset_one = dataset_one.shuffle(len(features), seed=self.random_seed1)
         dataset_one = dataset_one.map(
-            self.parse_image_and_mask, num_parallel_calls=self.AUTOTUNE
+            self.parse_image_and_mask,
+            num_parallel_calls=self.AUTOTUNE,
         )
 
         dataset_two = tf.data.Dataset.from_tensor_slices((features, masks))
         dataset_two = dataset_two.shuffle(len(features), seed=self.random_seed2)
         dataset_two = dataset_two.map(
-            self.parse_image_and_mask, num_parallel_calls=self.AUTOTUNE
+            self.parse_image_and_mask,
+            num_parallel_calls=self.AUTOTUNE,
         )
 
         return tf.data.Dataset.zip((dataset_one, dataset_two))
 
     def sample_beta_distribution(
-        self, size: int, concentration0: List[float], concentration1: List[float]
+        self,
+        size: int,
+        concentration0: List[float],
+        concentration1: List[float],
     ):
         """[summary]
 
@@ -167,11 +178,17 @@ class CutMix(object):
         cut_h = tf.cast(cut_h, tf.int32)
 
         cut_x = tf.random.uniform(
-            (1,), minval=0, maxval=self.image_size, dtype=tf.int32
+            (1,),
+            minval=0,
+            maxval=self.image_size,
+            dtype=tf.int32,
         )  # rx
 
         cut_y = tf.random.uniform(
-            (1,), minval=0, maxval=self.image_size, dtype=tf.int32
+            (1,),
+            minval=0,
+            maxval=self.image_size,
+            dtype=tf.int32,
         )  # ry
 
         boundaryx1 = tf.clip_by_value(cut_x[0] - cut_w // 2, 0, self.image_size)
@@ -215,19 +232,35 @@ class CutMix(object):
 
         # Get a patch from the second image (`image2`)
         img_crop2 = tf.image.crop_to_bounding_box(
-            image2, boundaryy1, boundaryx1, target_h, target_w
+            image2,
+            boundaryy1,
+            boundaryx1,
+            target_h,
+            target_w,
         )
         # Pad the `image2` patch (`crop2`) with the same offset
         image2 = tf.image.pad_to_bounding_box(
-            img_crop2, boundaryy1, boundaryx1, self.image_size, self.image_size
+            img_crop2,
+            boundaryy1,
+            boundaryx1,
+            self.image_size,
+            self.image_size,
         )
         # Get a patch from the first image (`image1`)
         img_crop1 = tf.image.crop_to_bounding_box(
-            image1, boundaryy1, boundaryx1, target_h, target_w
+            image1,
+            boundaryy1,
+            boundaryx1,
+            target_h,
+            target_w,
         )
         # Pad the `image1` patch (`crop1`) with the same offset
         img1 = tf.image.pad_to_bounding_box(
-            img_crop1, boundaryy1, boundaryx1, self.image_size, self.image_size
+            img_crop1,
+            boundaryy1,
+            boundaryx1,
+            self.image_size,
+            self.image_size,
         )
 
         # Modify the first image by subtracting the patch from `image1`
@@ -238,19 +271,35 @@ class CutMix(object):
 
         # Get a patch from the second image (`image2`)
         mask_crop2 = tf.image.crop_to_bounding_box(
-            mask2, boundaryy1, boundaryx1, target_h, target_w
+            mask2,
+            boundaryy1,
+            boundaryx1,
+            target_h,
+            target_w,
         )
         # Pad the `image2` patch (`crop2`) with the same offset
         mask2 = tf.image.pad_to_bounding_box(
-            mask_crop2, boundaryy1, boundaryx1, self.image_size, self.image_size
+            mask_crop2,
+            boundaryy1,
+            boundaryx1,
+            self.image_size,
+            self.image_size,
         )
         # Get a patch from the first image (`image1`)
         mask_crop1 = tf.image.crop_to_bounding_box(
-            mask1, boundaryy1, boundaryx1, target_h, target_w
+            mask1,
+            boundaryy1,
+            boundaryx1,
+            target_h,
+            target_w,
         )
         # Pad the `image1` patch (`crop1`) with the same offset
         msk1 = tf.image.pad_to_bounding_box(
-            mask_crop1, boundaryy1, boundaryx1, self.image_size, self.image_size
+            mask_crop1,
+            boundaryy1,
+            boundaryx1,
+            self.image_size,
+            self.image_size,
         )
 
         # Modify the first image by subtracting the patch from `image1`
@@ -262,7 +311,9 @@ class CutMix(object):
         return image, mask
 
     def train_preprocess(
-        self, image: np.ndarray, mask: List[int]
+        self,
+        image: np.ndarray,
+        mask: List[int],
     ) -> Tuple[np.ndarray, List[int]]:
         """Augmentation preprocess, if needed.
 
@@ -280,7 +331,7 @@ class CutMix(object):
                 A.VerticalFlip(p=0.5),
                 A.RandomRotate90(p=0.5),
                 A.Transpose(p=0.5),
-            ]
+            ],
         )
 
         augmented = aug(image=image, mask=mask)
@@ -306,7 +357,9 @@ class CutMix(object):
         """
 
         image, mask = tf.numpy_function(
-            func=self.train_preprocess, inp=[image, mask], Tout=[tf.float32, tf.float32]
+            func=self.train_preprocess,
+            inp=[image, mask],
+            Tout=[tf.float32, tf.float32],
         )
 
         img_shape = [self.img_shape[0], self.img_shape[1], 3]
@@ -318,7 +371,12 @@ class CutMix(object):
         return image, mask
 
     def create_train_dataset(
-        self, data_path: str, batch: int, repet: int, augment: bool, prefecth: int
+        self,
+        data_path: str,
+        batch: int,
+        repet: int,
+        augment: bool,
+        prefecth: int,
     ):
         """Creation of a tensor dataset for TensorFlow.
 
@@ -375,7 +433,8 @@ class CutMix(object):
         dataset = dataset.shuffle(len(features), seed=self.random_seed)
         dataset = dataset.repeat(repet)
         dataset = dataset.map(
-            self.parse_image_and_mask, num_parallel_calls=self.AUTOTUNE
+            self.parse_image_and_mask,
+            num_parallel_calls=self.AUTOTUNE,
         )
         dataset = dataset.batch(batch)
         return dataset.prefetch(prefetch)

@@ -16,6 +16,11 @@
 
     ![screenshot](images/fpn.svg)
 
+::: src.model.layers.feature_pyramids
+    rendering:
+        show_source: true
+
+
 ::: src.model.fpn
     rendering:
         show_source: true

@@ -14,6 +14,14 @@
 !!! note "Architecture"
     ![screenshot](./images/jpu.svg)
 
+::: src.model.layers.joint_pyramid_upsampling
+    rendering:
+        show_source: true
+
+::: src.model.layers.aspp
+    rendering:
+        show_source: true
+
 ::: src.model.jpu
     rendering:
         show_source: true

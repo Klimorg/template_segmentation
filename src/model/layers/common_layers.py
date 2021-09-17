@@ -180,7 +180,11 @@ def residual_bottleneck(
     residual_fmap = out
     # main stream
     fmap = bn_relu_conv(
-        out, inner_filters, kernel_size=1, strides=strides, name=f"1_{name}"
+        out,
+        inner_filters,
+        kernel_size=1,
+        strides=strides,
+        name=f"1_{name}",
     )
     fmap = bn_relu_conv(
         fmap,

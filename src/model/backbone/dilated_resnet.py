@@ -18,14 +18,22 @@ def get_dilated_resnet(
         img_input = Input(img_shape)
 
         fmap = bn_relu_conv(
-            tensor=img_input, filters=64, kernel_size=3, strides=2, name="block_2"
+            tensor=img_input,
+            filters=64,
+            kernel_size=3,
+            strides=2,
+            name="block_2",
         )
         fmap = MaxPooling2D(name="maxpool_block2")(fmap)
     else:
         img_input = Input(img_shape)
 
         fmap = bn_relu_conv(
-            tensor=img_input, filters=16, kernel_size=3, strides=1, name="block_1"
+            tensor=img_input,
+            filters=16,
+            kernel_size=3,
+            strides=1,
+            name="block_1",
         )
         fmap = residual_bottleneck(
             tensor=fmap,
@@ -53,7 +61,10 @@ def get_dilated_resnet(
         fmap = residual_bottleneck(tensor=fmap, filters=64, name=f"res{idx0+1}_block3")
 
     fmap = residual_bottleneck(
-        tensor=fmap, filters=128, name="res0_block4", shortcut=True
+        tensor=fmap,
+        filters=128,
+        name="res0_block4",
+        shortcut=True,
     )
     for idx1 in range(block_repetitions[1]):
         fmap = residual_bottleneck(tensor=fmap, filters=128, name=f"res{idx1+1}_block4")
@@ -67,7 +78,10 @@ def get_dilated_resnet(
     )
     for idx2 in range(block_repetitions[2] - 1):
         fmap = residual_bottleneck(
-            tensor=fmap, filters=256, dilation_rate=2, name=f"res{idx2+1}_block5"
+            tensor=fmap,
+            filters=256,
+            dilation_rate=2,
+            name=f"res{idx2+1}_block5",
         )
 
     fmap = residual_bottleneck(
@@ -79,7 +93,10 @@ def get_dilated_resnet(
     )
     for idx3 in range(block_repetitions[3] - 1):
         fmap = residual_bottleneck(
-            tensor=fmap, filters=512, dilation_rate=4, name=f"res{idx3+1}_block6"
+            tensor=fmap,
+            filters=512,
+            dilation_rate=4,
+            name=f"res{idx3+1}_block6",
         )
 
     if architecture == "C":

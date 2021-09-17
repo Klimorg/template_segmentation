@@ -63,7 +63,7 @@ class WeightBalancing(object):
                 mask = np.asarray(mask).astype("uint8")
 
                 number_of_pixels_in_class = len(
-                    mask[mask == self.datasets.class_dict[label]]
+                    mask[mask == self.datasets.class_dict[label]],
                 )
 
                 pixels_of_class += number_of_pixels_in_class
@@ -85,7 +85,7 @@ class WeightBalancing(object):
         ]
 
         logger.info(
-            f"The weights for the median frequency balancing method are the following ones {balancing}."
+            f"The weights for the median frequency balancing method are the following ones {balancing}.",
         )
 
         OmegaConf.save(
@@ -101,7 +101,12 @@ def add_sample_weights(image, label):
     # The weights for each class, with the constraint that:
     #     somme(class_weights) = 1.0
     class_weights = tf.constant(
-        [0.6736764277552485, 0.9097746315154771, 1.1100914521609606, 2.3813523569399893]
+        [
+            0.6736764277552485,
+            0.9097746315154771,
+            1.1100914521609606,
+            2.3813523569399893,
+        ],
     )
     class_weights = class_weights / tf.reduce_sum(class_weights)
 
