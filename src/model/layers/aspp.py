@@ -62,7 +62,7 @@ class ASPP(tf.keras.layers.Layer):
                 ),
                 BatchNormalization(),
                 ReLU(),
-            ]
+            ],
         )
         self.conv2 = Sequential(
             [
@@ -77,7 +77,7 @@ class ASPP(tf.keras.layers.Layer):
                 ),
                 BatchNormalization(),
                 ReLU(),
-            ]
+            ],
         )
         self.conv3 = Sequential(
             [
@@ -92,7 +92,7 @@ class ASPP(tf.keras.layers.Layer):
                 ),
                 BatchNormalization(),
                 ReLU(),
-            ]
+            ],
         )
         self.conv4 = Sequential(
             [
@@ -107,7 +107,7 @@ class ASPP(tf.keras.layers.Layer):
                 ),
                 BatchNormalization(),
                 ReLU(),
-            ]
+            ],
         )
 
         self.conv5 = Sequential(
@@ -123,7 +123,7 @@ class ASPP(tf.keras.layers.Layer):
                 ),
                 BatchNormalization(),
                 ReLU(),
-            ]
+            ],
         )
 
         self.conv6 = Sequential(
@@ -139,7 +139,7 @@ class ASPP(tf.keras.layers.Layer):
                 ),
                 BatchNormalization(),
                 ReLU(),
-            ]
+            ],
         )
 
     def build(self, input_shape) -> None:
@@ -174,6 +174,6 @@ class ASPP(tf.keras.layers.Layer):
                 "filters": self.filters,
                 "l2_regularization": self.l2_regul,
                 "dilation_rate": self.dilation_rate,
-            }
+            },
         )
         return config
