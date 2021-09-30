@@ -155,11 +155,11 @@ class ConvStage(tf.keras.layers.Layer):
         )
 
     def call(self, inputs, trainable=None) -> tf.Tensor:
-        x = inputs
+        fmap = inputs
         for block in self.conv_blocks:
-            x = x + block(x)
+            fmap = fmap + block(fmap)
 
-        return self.downsample(x)
+        return self.downsample(fmap)
 
     def get_config(self) -> Dict[str, Any]:
 
@@ -224,16 +224,23 @@ class StochasticDepth(tf.keras.layers.Layer):
         **kwargs,
     ) -> None:
         super().__init__(*args, **kwargs)
+
         self.drop_prob = drop_prop
 
     def call(self, inputs, training=None) -> tf.Tensor:
         if training:
-            keep_prob = 1 - self.drop_prob
+            keep_prob = tf.cast(1 - self.drop_prob, dtype=inputs.dtype)
             shape = (tf.shape(inputs)[0],) + (1,) * (len(tf.shape(inputs)) - 1)
-            random_tensor = keep_prob + tf.random.uniform(shape, 0, 1)
+            random_tensor = keep_prob + tf.random.uniform(
+                shape, 0, 1, dtype=inputs.dtype
+            )
             random_tensor = tf.floor(random_tensor)
             return (inputs / keep_prob) * random_tensor
         return inputs
+
+    # def cast_inputs(self, inputs):
+    #     # Casts to float16, the policy's lowest-precision dtype
+    #     return self._mixed_precision_policy.cast_to_lowest(inputs)
 
     def get_config(self) -> Dict[str, Any]:
 
@@ -382,15 +389,18 @@ class BasicStage(tf.keras.layers.Layer):
 
     def build(self, input_shape) -> None:
 
-        dpr = [x for x in np.linspace(0, self.stochastic_depth_rate, self.num_blocks)]
+        dpr = [
+            rates
+            for rates in np.linspace(0, self.stochastic_depth_rate, self.num_blocks)
+        ]
 
         self.blocks = [
             ConvMLPStage(
                 expansion_units=int(self.units * self.mlp_ratio),
                 units=self.units,
-                stochastic_depth_rate=dpr[i],
+                stochastic_depth_rate=dpr[idx],
             )
-            for i in range(self.num_blocks)
+            for idx in range(self.num_blocks)
         ]
 
         self.downsample_mlp = (
@@ -439,27 +449,21 @@ def get_convmlp(
         filters_out=channels,
         filters_downsample=units[0],
         name="conv",
-    )(
-        fmap
-    )  # n_conv_blocks
+    )(fmap)
     fmap = BasicStage(
         num_blocks=num_blocks[0],
         units=units[1],
         mlp_ratio=mlp_ratios[0],
         downsample=True,
         name="mlp1",
-    )(
-        fmap
-    )  # blocks[0], dims[1], dims[0], mlp_ratio[0]
+    )(fmap)
     fmap = BasicStage(
         num_blocks=num_blocks[1],
         units=units[2],
         mlp_ratio=mlp_ratios[1],
         downsample=True,
         name="mlp2",
-    )(
-        fmap
-    )  # blocks[1], dims[], dims[], mlp_ratio[1]
+    )(fmap)
     fmap_out = BasicStage(
         num_blocks=num_blocks[2],
         units=units[3],
