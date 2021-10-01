@@ -595,13 +595,36 @@ if __name__ == "__main__":
 
     fmap = np.random.rand(1, 224, 224, 3)
 
+    # patch_size = [7, 3, 3, 3]  # K
+    # strides = [4, 2, 2, 2]  # S
+    # emb_dims = [32, 64, 160, 256]  # C
+    # attn_reduction_ratios = [8, 4, 2, 1]  # R
+    # num_heads = [1, 2, 5, 8]  # N
+    # mlp_ratios = [8, 8, 4, 4]  # E
+    # depths = [2, 2, 2, 2]  # L
+    # proj_drop_prob = 0
+    # attn_drop_prob = 0
+    # stochastic_depth_rate = 0
+
+    # patch_size = [7, 3, 3, 3]  # K
+    # strides = [4, 2, 2, 2]  # S
+    # emb_dims = [64, 128, 320, 512]  # C
+    # attn_reduction_ratios = [8, 4, 2, 1]  # R
+    # num_heads = [1, 2, 5, 8]  # N
+    # mlp_ratios = [8, 8, 4, 4]  # E
+    # depths = [2, 2, 2, 2]  # L
+    # proj_drop_prob = 0
+    # attn_drop_prob = 0
+    # stochastic_depth_rate = 0
+
+    # B2 24.2
     patch_size = [7, 3, 3, 3]  # K
     strides = [4, 2, 2, 2]  # S
-    emb_dims = [32, 64, 160, 256]  # C
+    emb_dims = [64, 128, 320, 512]  # C
     attn_reduction_ratios = [8, 4, 2, 1]  # R
     num_heads = [1, 2, 5, 8]  # N
     mlp_ratios = [8, 8, 4, 4]  # E
-    depths = [2, 2, 2, 2]  # L
+    depths = [3, 3, 6, 3]  # L
     proj_drop_prob = 0
     attn_drop_prob = 0
     stochastic_depth_rate = 0
