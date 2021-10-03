@@ -13,7 +13,7 @@ from tensorflow.keras.layers import (
     Permute,
     Reshape,
 )
-from tensorflow.keras.models import Model, Sequential
+from tensorflow.keras.models import Model
 
 
 # Referred from: github.com:rwightman/pytorch-image-models.
@@ -34,7 +34,10 @@ class StochasticDepth(tf.keras.layers.Layer):
             keep_prob = tf.cast(1 - self.drop_prob, dtype=inputs.dtype)
             shape = (tf.shape(inputs)[0],) + (1,) * (len(tf.shape(inputs)) - 1)
             random_tensor = keep_prob + tf.random.uniform(
-                shape, 0, 1, dtype=inputs.dtype
+                shape,
+                0,
+                1,
+                dtype=inputs.dtype,
             )
             random_tensor = tf.floor(random_tensor)
             return (inputs / keep_prob) * random_tensor
@@ -46,6 +49,10 @@ class StochasticDepth(tf.keras.layers.Layer):
         config.update({"drop_prob": self.drop_prob})
         return config
 
+    @classmethod
+    def from_config(cls, config):
+        return cls(**config)
+
 
 class Identity(tf.keras.layers.Layer):
     def __init__(self) -> None:
@@ -53,6 +60,14 @@ class Identity(tf.keras.layers.Layer):
 
     def call(self, inputs) -> tf.Tensor:
         return inputs
+
+    def get_config(self) -> Dict[str, Any]:
+        config = super().get_config()
+        return config
+
+    @classmethod
+    def from_config(cls, config):
+        return cls(**config)
 
 
 class OverlapPatchEmbed(tf.keras.layers.Layer):
@@ -97,9 +112,7 @@ class OverlapPatchEmbed(tf.keras.layers.Layer):
     def call(self, inputs, training=None) -> tf.Tensor:
 
         fmap = self.proj(inputs)
-        print(f"proj : {fmap.shape}")
         fmap = self.reshape(fmap)
-        print(f"reshape : {fmap.shape}")
         return self.norm(fmap)
 
     def get_config(self) -> Dict[str, Any]:
@@ -111,9 +124,13 @@ class OverlapPatchEmbed(tf.keras.layers.Layer):
                 "strides": self.strides,
                 "emb_dim": self.emb_dim,
                 "l2_regul": self.l2_regul,
-            }
+            },
         )
         return config
+
+    @classmethod
+    def from_config(cls, config):
+        return cls(**config)
 
 
 class Mlp(tf.keras.layers.Layer):
@@ -136,22 +153,22 @@ class Mlp(tf.keras.layers.Layer):
 
     def build(self, input_shape) -> None:
 
-        _, units, _ = input_shape
+        _, tensors, _ = input_shape
 
-        height = int(tf.sqrt(float(units)))
-        width = int(tf.sqrt(float(units)))
+        height = int(tf.sqrt(float(tensors)))
+        width = int(tf.sqrt(float(tensors)))
 
         self.square_reshape = Reshape(target_shape=(height, width, -1))
-        self.wide_reshape = Reshape(target_shape=(units, -1))
+        self.wide_reshape = Reshape(target_shape=(tensors, -1))
 
         self.fc1 = Dense(
-            units=self.fc1_units,
+            self.fc1_units,
             kernel_initializer="he_uniform",
             kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
         )
 
         self.fc2 = Dense(
-            units=self.fc2_units,
+            self.fc2_units,
             kernel_initializer="he_uniform",
             kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
         )
@@ -184,15 +201,19 @@ class Mlp(tf.keras.layers.Layer):
                 "fc1_units": self.fc1_units,
                 "fc2_units": self.fc2_units,
                 "l2_regularization": self.l2_regul,
-            }
+            },
         )
         return config
 
+    @classmethod
+    def from_config(cls, config):
+        return cls(**config)
 
-class Attention(tf.keras.layers.Layer):
+
+class CustomAttention(tf.keras.layers.Layer):
     def __init__(
         self,
-        fc_units: int,
+        units: int,
         num_heads: int = 8,
         attn_drop_prob: float = 0,
         proj_drop_prob: float = 0,
@@ -204,57 +225,57 @@ class Attention(tf.keras.layers.Layer):
 
         super().__init__(*args, **kwargs)
         assert (
-            fc_units % num_heads == 0
-        ), f"dim {fc_units} should be divided by num_heads {num_heads}."
+            units % num_heads == 0
+        ), f"dim {units} should be divided by num_heads {num_heads}."
 
-        self.fc_units = fc_units
+        self.units = units
         self.num_heads = num_heads
         self.attn_drop_prob = attn_drop_prob
         self.proj_drop_prob = proj_drop_prob
         self.attn_reduction_ratio = attn_reduction_ratio
         self.l2_regul = l2_regul
 
-        self.head_dims = fc_units / num_heads
+        self.head_dims = units / num_heads
         self.scale = 1 / tf.sqrt(self.head_dims)
 
         self.softmax = tf.keras.activations.softmax
 
     def build(self, input_shape) -> None:
 
-        _, units, _ = input_shape
+        _, tensors, _ = input_shape
 
-        height = int(tf.sqrt(float(units)))
-        width = int(tf.sqrt(float(units)))
+        height = int(tf.sqrt(float(tensors)))
+        width = int(tf.sqrt(float(tensors)))
 
         reduction_height = height // self.attn_reduction_ratio
         reduction_width = width // self.attn_reduction_ratio
 
-        self.heads_reshape = Reshape(target_shape=(units, self.num_heads, -1))
+        self.heads_reshape = Reshape(target_shape=(tensors, self.num_heads, -1))
         self.square_reshape = Reshape(target_shape=(height, width, -1))
-        self.wide_reshape = Reshape(target_shape=(units, -1))
+        self.wide_reshape = Reshape(target_shape=(tensors, -1))
         self.wide_reduction_reshape = Reshape(
-            target_shape=(reduction_height * reduction_width, -1)
+            target_shape=(reduction_height * reduction_width, -1),
         )
         self.kv_reshape = Reshape(
-            target_shape=(-1, 2, self.num_heads, int(self.head_dims))
+            target_shape=(-1, 2, self.num_heads, int(self.head_dims)),
         )
 
         self.query = Dense(
-            units=self.fc_units,
+            self.units,
             use_bias=False,
             kernel_initializer="he_uniform",
             kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
         )
 
         self.key_value = Dense(
-            units=self.fc_units * 2,
+            self.units * 2,
             use_bias=False,
             kernel_initializer="he_uniform",
             kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
         )
 
         self.proj = Dense(
-            units=self.fc_units,
+            self.units,
             kernel_initializer="he_uniform",
             kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
         )
@@ -266,7 +287,7 @@ class Attention(tf.keras.layers.Layer):
 
         if self.attn_reduction_ratio > 1:
             self.attn_conv = Conv2D(
-                self.fc_units,
+                filters=self.units,
                 kernel_size=self.attn_reduction_ratio,
                 strides=self.attn_reduction_ratio,
                 padding="same",
@@ -312,21 +333,25 @@ class Attention(tf.keras.layers.Layer):
         config = super().get_config()
         config.update(
             {
-                "fc_units": self.fc_units,
+                "units": self.units,
                 "num_heads": self.num_heads,
                 "attn_drop_prob": self.attn_drop_prob,
                 "proj_drop_prob": self.proj_drop_prob,
                 "attn_reduction_ratio": self.attn_reduction_ratio,
                 "l2_regul": self.l2_regul,
-            }
+            },
         )
         return config
+
+    @classmethod
+    def from_config(cls, config):
+        return cls(**config)
 
 
 class FFNAttentionBlock(tf.keras.layers.Layer):
     def __init__(
         self,
-        fc_units: int,
+        units: int,
         num_heads: int = 8,
         mlp_ratio: int = 4,
         attn_drop_prob: float = 0,
@@ -339,7 +364,7 @@ class FFNAttentionBlock(tf.keras.layers.Layer):
 
         super().__init__(*args, **kwargs)
 
-        self.fc_units = fc_units
+        self.units = units
         self.num_heads = num_heads
         self.mlp_ratio = mlp_ratio
         self.attn_drop_prob = attn_drop_prob
@@ -349,8 +374,8 @@ class FFNAttentionBlock(tf.keras.layers.Layer):
 
     def build(self, input_shape) -> None:
 
-        self.attn = Attention(
-            fc_units=self.fc_units,
+        self.attn = CustomAttention(
+            units=self.units,
             num_heads=self.num_heads,
             attn_drop_prob=self.attn_drop_prob,
             proj_drop_prob=self.proj_drop_prob,
@@ -364,18 +389,16 @@ class FFNAttentionBlock(tf.keras.layers.Layer):
         )
 
         self.mlp = Mlp(
-            fc1_units=self.fc_units * self.mlp_ratio,
-            fc2_units=self.fc_units,
+            fc1_units=self.units * self.mlp_ratio,
+            fc2_units=self.units,
         )
 
         self.norm1 = LayerNormalization()
         self.norm2 = LayerNormalization()
 
     def call(self, inputs, training=None) -> tf.Tensor:
-        print(f"Input : {inputs.shape}")
 
         fmap = self.stochastic_drop(self.attn(self.norm1(inputs)))
-        print(f"fmap : {fmap.shape}")
         fmap = inputs + fmap
         fmap = fmap + self.stochastic_drop(self.mlp(self.norm2(fmap)))
 
@@ -386,82 +409,20 @@ class FFNAttentionBlock(tf.keras.layers.Layer):
         config = super().get_config()
         config.update(
             {
-                "fc_units": self.fc_units,
+                "units": self.units,
                 "num_heads": self.num_heads,
                 "mlp_ratio": self.mlp_ratio,
                 "attn_drop_prob": self.attn_drop_prob,
                 "proj_drop_prob": self.proj_drop_prob,
                 "attn_reduction_ratio": self.attn_reduction_ratio,
                 "stochastic_depth_rate": self.stochastic_depth_rate,
-            }
+            },
         )
         return config
 
-
-class StageBlock(tf.keras.layers.Layer):
-    def __init__(
-        self,
-        fc_units: int,
-        depth: int,
-        num_heads: int = 8,
-        mlp_ratio: int = 4,
-        attn_drop_prob: float = 0,
-        proj_drop_prob: float = 0,
-        attn_reduction_ratio: int = 1,
-        stochastic_depth_rate: float = 0.1,
-        *args,
-        **kwargs,
-    ) -> None:
-
-        super().__init__(*args, **kwargs)
-
-        self.fc_units = fc_units
-        self.num_heads = num_heads
-        self.mlp_ratio = mlp_ratio
-        self.attn_drop_prob = attn_drop_prob
-        self.proj_drop_prob = proj_drop_prob
-        self.attn_reduction_ratio = attn_reduction_ratio
-        self.stochastic_depth_rate = stochastic_depth_rate
-        self.depth = depth
-
-    def build(self, input_shape) -> None:
-
-        self.blocks = [
-            FFNAttentionBlock(
-                fc_units=self.fc_units,
-                num_heads=self.num_heads,
-                mlp_ratio=self.mlp_ratio,
-                attn_drop_prob=self.attn_drop_prob,
-                proj_drop_prob=self.proj_drop_prob,
-                attn_reduction_ratio=self.attn_reduction_ratio,
-                stochastic_depth_rate=self.stochastic_depth_rate,
-            )
-            for _ in range(self.depth)
-        ]
-
-    def call(self, inputs, training=None) -> tf.Tensor:
-
-        for blk in self.blocks:
-            inputs = blk(inputs)
-
-        return inputs
-
-    def get_config(self) -> Dict[str, Any]:
-
-        config = super().get_config()
-        config.update(
-            {
-                "fc_units": self.fc_units,
-                "depth": self.depth,
-                "num_heads": self.num_heads,
-                "mlp_ratio": self.mlp_ratio,
-                "attn_drop_prob": self.attn_drop_prob,
-                "proj_drop_prob": self.proj_drop_prob,
-                "attn_reduction_ratio": self.attn_reduction_ratio,
-                "stochastic_depth_rate": self.stochastic_depth_rate,
-            }
-        )
-        return config
+    @classmethod
+    def from_config(cls, config):
+        return cls(**config)
 
 
 class SquareReshape(tf.keras.layers.Layer):
@@ -475,10 +436,10 @@ class SquareReshape(tf.keras.layers.Layer):
 
     def build(self, input_shape) -> None:
 
-        _, units, _ = input_shape
+        _, tensors, _ = input_shape
 
-        height = int(tf.sqrt(float(units)))
-        width = int(tf.sqrt(float(units)))
+        height = int(tf.sqrt(float(tensors)))
+        width = int(tf.sqrt(float(tensors)))
 
         self.square_reshape = Reshape(target_shape=(height, width, -1))
 
@@ -487,10 +448,12 @@ class SquareReshape(tf.keras.layers.Layer):
         return self.square_reshape(inputs)
 
     def get_config(self) -> Dict[str, Any]:
-
         config = super().get_config()
-
         return config
+
+    @classmethod
+    def from_config(cls, config):
+        return cls(**config)
 
 
 def get_mix_vision_transformer(
@@ -517,95 +480,185 @@ def get_mix_vision_transformer(
     img_input = Input(img_shape)
 
     fmap = OverlapPatchEmbed(
-        patch_size=patch_size[0], strides=strides[0], emb_dim=emb_dims[0]
+        patch_size=patch_size[0],
+        strides=strides[0],
+        emb_dim=emb_dims[0],
     )(img_input)
 
-    fmap = StageBlock(
-        fc_units=emb_dims[0],
-        depth=depths[0],
-        num_heads=num_heads[0],
-        mlp_ratio=mlp_ratios[0],
-        attn_drop_prob=attn_drop_prob,
-        proj_drop_prob=proj_drop_prob,
-        attn_reduction_ratio=attn_reduction_ratios[0],
-        stochastic_depth_rate=dpr[0],
-        name="stage_1",
-    )(fmap)
+    # stage 1
+    cur = 0
+    for idx0 in range(depths[0]):
+        fmap = FFNAttentionBlock(
+            units=emb_dims[0],
+            num_heads=num_heads[0],
+            mlp_ratio=mlp_ratios[0],
+            attn_drop_prob=attn_drop_prob,
+            proj_drop_prob=proj_drop_prob,
+            attn_reduction_ratio=attn_reduction_ratios[0],
+            stochastic_depth_rate=dpr[cur + idx0],
+            name=f"block_{idx0}_stage_1",
+        )(fmap)
     fmap = LayerNormalization()(fmap)
-    fmap = SquareReshape()(fmap)
+    fmap = SquareReshape(name="reshape_stage1")(fmap)
 
+    # stage 2
     fmap = OverlapPatchEmbed(
-        patch_size=patch_size[1], strides=strides[1], emb_dim=emb_dims[1]
+        patch_size=patch_size[1],
+        strides=strides[1],
+        emb_dim=emb_dims[1],
     )(fmap)
 
-    fmap = StageBlock(
-        fc_units=emb_dims[1],
-        depth=depths[1],
-        num_heads=num_heads[1],
-        mlp_ratio=mlp_ratios[1],
-        attn_drop_prob=attn_drop_prob,
-        proj_drop_prob=proj_drop_prob,
-        attn_reduction_ratio=attn_reduction_ratios[1],
-        stochastic_depth_rate=dpr[1],
-        name="stage_2",
-    )(fmap)
+    cur += depths[0]
+    for idx1 in range(depths[1]):
+        fmap = FFNAttentionBlock(
+            units=emb_dims[1],
+            num_heads=num_heads[1],
+            mlp_ratio=mlp_ratios[1],
+            attn_drop_prob=attn_drop_prob,
+            proj_drop_prob=proj_drop_prob,
+            attn_reduction_ratio=attn_reduction_ratios[1],
+            stochastic_depth_rate=dpr[cur + idx1],
+            name=f"block_{idx1}_stage_2",
+        )(fmap)
     fmap = LayerNormalization()(fmap)
-    fmap = SquareReshape()(fmap)
+    fmap = SquareReshape(name="reshape_stage2")(fmap)
 
+    # stage 3
     fmap = OverlapPatchEmbed(
-        patch_size=patch_size[2], strides=strides[2], emb_dim=emb_dims[2]
+        patch_size=patch_size[2],
+        strides=strides[2],
+        emb_dim=emb_dims[2],
     )(fmap)
 
-    fmap = StageBlock(
-        fc_units=emb_dims[2],
-        depth=depths[2],
-        num_heads=num_heads[2],
-        mlp_ratio=mlp_ratios[2],
-        attn_drop_prob=attn_drop_prob,
-        proj_drop_prob=proj_drop_prob,
-        attn_reduction_ratio=attn_reduction_ratios[2],
-        stochastic_depth_rate=dpr[2],
-        name="stage_3",
-    )(fmap)
+    cur += depths[1]
+    for idx2 in range(depths[2]):
+        fmap = FFNAttentionBlock(
+            units=emb_dims[2],
+            num_heads=num_heads[2],
+            mlp_ratio=mlp_ratios[2],
+            attn_drop_prob=attn_drop_prob,
+            proj_drop_prob=proj_drop_prob,
+            attn_reduction_ratio=attn_reduction_ratios[2],
+            stochastic_depth_rate=dpr[cur + idx2],
+            name=f"block_{idx2}_stage_3",
+        )(fmap)
     fmap = LayerNormalization()(fmap)
-    fmap = SquareReshape()(fmap)
+    fmap = SquareReshape(name="reshape_stage3")(fmap)
 
+    # stage 4
     fmap = OverlapPatchEmbed(
-        patch_size=patch_size[3], strides=strides[3], emb_dim=emb_dims[3]
+        patch_size=patch_size[3],
+        strides=strides[3],
+        emb_dim=emb_dims[3],
     )(fmap)
 
-    fmap = StageBlock(
-        fc_units=emb_dims[3],
-        depth=depths[3],
-        num_heads=num_heads[3],
-        mlp_ratio=mlp_ratios[3],
-        attn_drop_prob=attn_drop_prob,
-        proj_drop_prob=proj_drop_prob,
-        attn_reduction_ratio=attn_reduction_ratios[3],
-        stochastic_depth_rate=dpr[3],
-        name="stage_4",
-    )(fmap)
+    cur += depths[2]
+    for idx3 in range(depths[3]):
+        fmap = FFNAttentionBlock(
+            units=emb_dims[3],
+            num_heads=num_heads[3],
+            mlp_ratio=mlp_ratios[3],
+            attn_drop_prob=attn_drop_prob,
+            proj_drop_prob=proj_drop_prob,
+            attn_reduction_ratio=attn_reduction_ratios[3],
+            stochastic_depth_rate=dpr[cur + idx3],
+            name=f"block_{idx3}_stage_4",
+        )(fmap)
     fmap = LayerNormalization()(fmap)
-    fmap = SquareReshape()(fmap)
+    fmap = SquareReshape(name="reshape_stage4")(fmap)
 
     return Model(img_input, fmap)
 
 
+def get_backbone(
+    img_shape: List[int],
+    patch_size: List[int],
+    strides: List[int],
+    emb_dims: List[int],
+    num_heads: List[int],
+    mlp_ratios: List[int],
+    proj_drop_prob: float,
+    attn_drop_prob: float,
+    stochastic_depth_rate: float,
+    attn_reduction_ratios: List[int],
+    depths: List[int],
+    backbone_name: str,
+) -> tf.keras.Model:
+    """Instantiate the model and use it as a backbone (feature extractor) for a semantic segmentation task.
+
+    Args:
+        img_shape (List[int]): [description]
+        patch_size (List[int]): [description]
+        strides (List[int]): [description]
+        emb_dims (List[int]): [description]
+        num_heads (List[int]): [description]
+        mlp_ratios (List[int]): [description]
+        proj_drop_prob (float): [description]
+        attn_drop_prob (float): [description]
+        stochastic_depth_rate (float): [description]
+        attn_reduction_ratios (List[int]): [description]
+        depths (List[int]): [description]
+        backbone_name (str): [description]
+
+    Returns:
+        A `tf.keras` model.
+    """
+
+    backbone = get_mix_vision_transformer(
+        img_shape=img_shape,
+        patch_size=patch_size,
+        strides=strides,
+        emb_dims=emb_dims,
+        num_heads=num_heads,
+        mlp_ratios=mlp_ratios,
+        proj_drop_prob=proj_drop_prob,
+        attn_drop_prob=attn_drop_prob,
+        stochastic_depth_rate=stochastic_depth_rate,
+        attn_reduction_ratios=attn_reduction_ratios,
+        depths=depths,
+    )
+
+    endpoint_layers = [
+        "reshape_stage1",
+        "reshape_stage2",
+        "reshape_stage3",
+        "reshape_stage4",
+    ]
+
+    os4_output, os8_output, os16_output, os32_output = [
+        backbone.get_layer(layer_name).output for layer_name in endpoint_layers
+    ]
+
+    height = img_shape[1]
+    logger.info(f"os4_output OS : {int(height/os4_output.shape.as_list()[1])}")
+    logger.info(f"os8_output OS : {int(height/os8_output.shape.as_list()[1])}")
+    logger.info(f"os16_output OS : {int(height/os16_output.shape.as_list()[1])}")
+    logger.info(f"os32_output OS : {int(height/os32_output.shape.as_list()[1])}")
+
+    return Model(
+        inputs=[backbone.input],
+        outputs=[os4_output, os8_output, os16_output, os32_output],
+        name=backbone_name,
+    )
+
+
 if __name__ == "__main__":
 
-    fmap = np.random.rand(1, 224, 224, 3)
+    fmap = np.random.rand(1, 256, 256, 3)
 
-    # patch_size = [7, 3, 3, 3]  # K
-    # strides = [4, 2, 2, 2]  # S
-    # emb_dims = [32, 64, 160, 256]  # C
-    # attn_reduction_ratios = [8, 4, 2, 1]  # R
-    # num_heads = [1, 2, 5, 8]  # N
-    # mlp_ratios = [8, 8, 4, 4]  # E
-    # depths = [2, 2, 2, 2]  # L
-    # proj_drop_prob = 0
-    # attn_drop_prob = 0
-    # stochastic_depth_rate = 0
+    # B0 3.4
+    patch_size = [7, 3, 3, 3]  # K
+    strides = [4, 2, 2, 2]  # S
+    emb_dims = [32, 64, 160, 256]  # C
+    attn_reduction_ratios = [8, 4, 2, 1]  # R
+    num_heads = [1, 2, 5, 8]  # N
+    mlp_ratios = [8, 8, 4, 4]  # E
+    depths = [2, 2, 2, 2]  # L
+    proj_drop_prob = 0
+    attn_drop_prob = 0
+    stochastic_depth_rate = 0
 
+    # B1 13.4
     # patch_size = [7, 3, 3, 3]  # K
     # strides = [4, 2, 2, 2]  # S
     # emb_dims = [64, 128, 320, 512]  # C
@@ -618,36 +671,55 @@ if __name__ == "__main__":
     # stochastic_depth_rate = 0
 
     # B2 24.2
-    patch_size = [7, 3, 3, 3]  # K
-    strides = [4, 2, 2, 2]  # S
-    emb_dims = [64, 128, 320, 512]  # C
-    attn_reduction_ratios = [8, 4, 2, 1]  # R
-    num_heads = [1, 2, 5, 8]  # N
-    mlp_ratios = [8, 8, 4, 4]  # E
-    depths = [3, 3, 6, 3]  # L
-    proj_drop_prob = 0
-    attn_drop_prob = 0
-    stochastic_depth_rate = 0
+    # patch_size = [7, 3, 3, 3]  # K
+    # strides = [4, 2, 2, 2]  # S
+    # emb_dims = [64, 128, 320, 512]  # C
+    # attn_reduction_ratios = [8, 4, 2, 1]  # R
+    # num_heads = [1, 2, 5, 8]  # N
+    # mlp_ratios = [8, 8, 4, 4]  # E
+    # depths = [3, 3, 6, 3]  # L
+    # proj_drop_prob = 0
+    # attn_drop_prob = 0
+    # stochastic_depth_rate = 0
 
-    # fmap = OverlapPatchEmbed(
-    #     patch_size=patch_size[0], strides=patch_size[0], emb_dim=emb_dims[0]
-    # )(fmap)
+    # B3 44.0
+    # patch_size = [7, 3, 3, 3]  # K
+    # strides = [4, 2, 2, 2]  # S
+    # emb_dims = [64, 128, 320, 512]  # C
+    # attn_reduction_ratios = [8, 4, 2, 1]  # R
+    # num_heads = [1, 2, 5, 8]  # N
+    # mlp_ratios = [8, 8, 4, 4]  # E
+    # depths = [3, 3, 18, 3]  # L
+    # proj_drop_prob = 0
+    # attn_drop_prob = 0
+    # stochastic_depth_rate = 0
 
-    # out = StageBlock(
-    #     fc_units=emb_dims[0],
-    #     depth=depths[0],  # L
-    #     num_heads=num_heads[0],  # N
-    #     mlp_ratio=mlp_ratios[0],  # E
-    #     attn_drop_prob=attn_drop_prob,
-    #     proj_drop_prob=proj_drop_prob,
-    #     attn_reduction_ratio=attn_reduction_ratios[0],  # R
-    #     stochastic_depth_rate=0,
-    #     name="stage_1",
-    # )(fmap)
+    # B4 60.8
+    # patch_size = [7, 3, 3, 3]  # K
+    # strides = [4, 2, 2, 2]  # S
+    # emb_dims = [64, 128, 320, 512]  # C
+    # attn_reduction_ratios = [8, 4, 2, 1]  # R
+    # num_heads = [1, 2, 5, 8]  # N
+    # mlp_ratios = [8, 8, 4, 4]  # E
+    # depths = [3, 8, 27, 3]  # L
+    # proj_drop_prob = 0
+    # attn_drop_prob = 0
+    # stochastic_depth_rate = 0
 
-    # out = StageBlock(fc_units=16, depth=4)(fmap)
-    model = get_mix_vision_transformer(
-        img_shape=[224, 224, 3],
+    # B5 81.4
+    # patch_size = [7, 3, 3, 3]  # K
+    # strides = [4, 2, 2, 2]  # S
+    # emb_dims = [64, 128, 320, 512]  # C
+    # attn_reduction_ratios = [8, 4, 2, 1]  # R
+    # num_heads = [1, 2, 5, 8]  # N
+    # mlp_ratios = [8, 4, 4, 4]  # E
+    # depths = [3, 6, 40, 3]  # L
+    # proj_drop_prob = 0
+    # attn_drop_prob = 0
+    # stochastic_depth_rate = 0
+
+    model = get_backbone(
+        img_shape=[256, 256, 3],
         patch_size=patch_size,
         strides=strides,
         emb_dims=emb_dims,
@@ -658,7 +730,8 @@ if __name__ == "__main__":
         stochastic_depth_rate=stochastic_depth_rate,
         attn_reduction_ratios=attn_reduction_ratios,
         depths=depths,
+        backbone_name="test",
     )
-    out = model(fmap)
-    print(f"{out.shape.as_list()}")
+    outs = model(fmap)
+    print(f"{[out.shape.as_list() for out in outs]}")
     model.summary()

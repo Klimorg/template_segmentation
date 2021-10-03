@@ -141,6 +141,8 @@ def train(config: DictConfig):
             callbacks=callbacks,
         )
 
+        # tf.keras.models.save_model(model, f"{config.mlflow.run_name}")
+
         model.save(f"{config.mlflow.run_name}")
 
 

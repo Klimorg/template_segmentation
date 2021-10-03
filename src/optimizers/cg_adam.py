@@ -18,3 +18,8 @@ class GCAdam(tf.keras.optimizers.Adam):
             grads.append(grad)
 
         return grads
+
+    def get_config(self):
+
+        config = super().get_config()
+        return config

@@ -225,9 +225,10 @@ class SparseCategoricalFocalLoss(tf.keras.losses.Loss):
         alpha: float,
         class_weight: Optional[Any] = None,
         from_logits: bool = False,
+        *args,
         **kwargs,
     ):
-        super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
         self.alpha = alpha
         self.gamma = gamma
         self.class_weight = class_weight

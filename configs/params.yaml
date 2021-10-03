@@ -1,6 +1,6 @@
 defaults:
-  - backbone: convmlpL
-  - segmentation_model: ksac
+  - backbone: mitb3
+  - segmentation_model: allmlp
   - losses: focal_loss
   - optimizer: cg_adam
   - lr_decay: cosine_decay_restart
