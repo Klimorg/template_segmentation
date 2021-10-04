@@ -99,8 +99,8 @@ class Tensorize(object):
     def train_preprocess(
         self,
         image: np.ndarray,
-        mask: List[int],
-    ) -> Tuple[np.ndarray, List[int]]:
+        mask: np.ndarray,
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """Augmentation preprocess, if needed.
 
         Args:
@@ -131,7 +131,11 @@ class Tensorize(object):
         return image, mask
 
     @tf.function
-    def apply_augments(self, image, mask):
+    def apply_augments(
+        self,
+        image: np.ndarray,
+        mask: np.ndarray,
+    ) -> Tuple[np.ndarray, np.ndarray]:
 
         image, mask = tf.numpy_function(
             func=self.train_preprocess,

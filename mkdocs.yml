@@ -50,8 +50,8 @@ plugins:
             show_source: true
 
 nav:
-  - Acceuil: index.md
-  # - Hydra configuration: hydra_config/hydra.md
+  - Home: index.md
+  - Hydra configuration: config_hydra/hydra.md
   - Various configuration:
     - Docker config: misc_config/docker.md
     - Makefile : misc_config/make.md

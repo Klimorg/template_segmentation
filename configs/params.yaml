@@ -8,7 +8,6 @@ defaults:
   - datasets: datasets
   - pipeline: classic
   - training: custom_training
-# - weight_sampling: None
 
 lrd:
   activate: true
