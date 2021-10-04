@@ -22,32 +22,33 @@ def get_segmentation_module(
 
     l2_regul = 1e-4
     bil = "bilinear"
+    he = "he_uniform"
 
     os4_output, os8_output, os16_output, os32_output = backbone.outputs
 
     fmap1 = Dense(
         units,
-        kernel_initializer="he_uniform",
+        kernel_initializer=he,
         kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
     )(os4_output)
 
     fmap2 = Dense(
         units,
-        kernel_initializer="he_uniform",
+        kernel_initializer=he,
         kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
     )(os8_output)
     fmap2 = UpSampling2D(size=(2, 2), interpolation=bil)(fmap2)
 
     fmap3 = Dense(
         units,
-        kernel_initializer="he_uniform",
+        kernel_initializer=he,
         kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
     )(os16_output)
     fmap3 = UpSampling2D(size=(4, 4), interpolation=bil)(fmap3)
 
     fmap4 = Dense(
         units,
-        kernel_initializer="he_uniform",
+        kernel_initializer=he,
         kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
     )(os32_output)
     fmap4 = UpSampling2D(size=(8, 8), interpolation=bil)(fmap4)
@@ -56,13 +57,13 @@ def get_segmentation_module(
 
     fmap = Dense(
         units,
-        kernel_initializer="he_uniform",
+        kernel_initializer=he,
         kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
     )(fmap)
 
     fmap = Dense(
         n_classes,
-        kernel_initializer="he_uniform",
+        kernel_initializer=he,
         kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
     )(fmap)
 
