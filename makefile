@@ -50,8 +50,8 @@ install:
 .PHONY: install-dev
 install-dev:
 	python -m pip install -e ".[dev]" --no-cache-dir
-	# pre-commit install
-	# pre-commit autoupdate
+	pre-commit install
+	pre-commit autoupdate
 
 .PHONY: install-docs
 install-docs:

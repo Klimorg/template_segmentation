@@ -14,7 +14,7 @@ from utils.utils import flatten_omegaconf, set_log_infos, set_seed
 @logger.catch()
 @hydra.main(config_path="../configs/", config_name="params.yaml")
 def train(config: DictConfig):
-    """Train loop of the classification model.
+    """Training loop.
 
     Lorsque que l'on travaille avec Hydra, toute la logique de la fonction doit
     être contenu dans `main()`, on ne peut pas faire appel à des fonctions
@@ -140,6 +140,8 @@ def train(config: DictConfig):
             validation_data=ds_val,
             callbacks=callbacks,
         )
+
+        # tf.keras.models.save_model(model, f"{config.mlflow.run_name}")
 
         model.save(f"{config.mlflow.run_name}")
 

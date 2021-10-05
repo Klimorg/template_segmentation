@@ -88,7 +88,7 @@ class JointPyramidUpsampling(tf.keras.layers.Layer):
                 ),
                 tfa.layers.GroupNormalization(),
                 ReLU(),
-            ]
+            ],
         )
         self.conv2 = Sequential(
             [
@@ -102,7 +102,7 @@ class JointPyramidUpsampling(tf.keras.layers.Layer):
                 ),
                 tfa.layers.GroupNormalization(),
                 ReLU(),
-            ]
+            ],
         )
         self.conv3 = Sequential(
             [
@@ -116,7 +116,7 @@ class JointPyramidUpsampling(tf.keras.layers.Layer):
                 ),
                 tfa.layers.GroupNormalization(),
                 ReLU(),
-            ]
+            ],
         )
         self.conv4 = Sequential(
             [
@@ -130,7 +130,7 @@ class JointPyramidUpsampling(tf.keras.layers.Layer):
                 ),
                 tfa.layers.GroupNormalization(),
                 ReLU(),
-            ]
+            ],
         )
 
         self.upsample = UpSampling2D(size=(2, 2), interpolation="bilinear")
@@ -152,7 +152,7 @@ class JointPyramidUpsampling(tf.keras.layers.Layer):
                 ),
                 BatchNormalization(),
                 ReLU(),
-            ]
+            ],
         )
         self.sepconv2 = Sequential(
             [
@@ -169,7 +169,7 @@ class JointPyramidUpsampling(tf.keras.layers.Layer):
                 ),
                 BatchNormalization(),
                 ReLU(),
-            ]
+            ],
         )
         self.sepconv4 = Sequential(
             [
@@ -186,7 +186,7 @@ class JointPyramidUpsampling(tf.keras.layers.Layer):
                 ),
                 BatchNormalization(),
                 ReLU(),
-            ]
+            ],
         )
         self.sepconv8 = Sequential(
             [
@@ -203,7 +203,7 @@ class JointPyramidUpsampling(tf.keras.layers.Layer):
                 ),
                 BatchNormalization(),
                 ReLU(),
-            ]
+            ],
         )
 
     def call(self, inputs, training=None) -> tf.Tensor:
@@ -236,6 +236,6 @@ class JointPyramidUpsampling(tf.keras.layers.Layer):
                 "padding": self.padding,
                 "kernel_initializer": self.kernel_initializer,
                 "l2_regul": self.l2_regul,
-            }
+            },
         )
         return config

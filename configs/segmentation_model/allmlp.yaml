@@ -1,0 +1,4 @@
+_target_: model.all_mlp.get_segmentation_module
+n_classes: ${datasets.metadatas.n_classes}
+units: 128
+name: AllMLP

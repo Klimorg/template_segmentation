@@ -125,7 +125,7 @@ class FeaturePyramidNetwork(tf.keras.layers.Layer):
                 "padding": self.padding,
                 "kernel_initializer": self.kernel_initializer,
                 "l2_regul": self.l2_regul,
-            }
+            },
         )
         return config
 
@@ -328,6 +328,6 @@ class SemanticHeadFPN(tf.keras.layers.Layer):
                 "padding": self.padding,
                 "kernel_initializer": self.kernel_initializer,
                 "l2_regul": self.l2_regul,
-            }
+            },
         )
         return config

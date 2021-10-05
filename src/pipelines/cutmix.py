@@ -34,6 +34,13 @@ class CutMix(object):
 
         Initialize the class, the number of classes in the datasets, the shape of the
         images and the random seeds.
+
+        Args:
+            n_classes (int): Number of classes in the dataset.
+            img_shape (Tuple[int,int,int]): Dimension of the image, format is (H,W,C).
+            random_seed (int): Fixed random seed for reproducibility.
+            random_seed1 (int): Fixed random seed needed for cutmix method.
+            random_seed2 (int): Fixed random seed needed for cutmix method.
         """
         self.n_classes = n_classes
         self.img_shape = img_shape
@@ -72,10 +79,10 @@ class CutMix(object):
 
         Args:
             filename (str): The path of the image to parse.
-            mask (str): The mask of the image.
+            mask (str):  The path of the mask of the image.
 
         Returns:
-            A np.ndarray corresponding to the image and the corresponding one-hot mask.
+            A np.ndarray corresponding to the image and the corresponding mask.
         """
         resized_dims = [self.img_shape[0], self.img_shape[1]]
         # decode image
@@ -106,14 +113,14 @@ class CutMix(object):
     def create_double_dataset(
         self,
         data_path: str,
-    ):
-        """[summary]
+    ) -> Tuple[tf.data.Dataset, tf.data.Dataset]:
+        """Creates two datasets to be used for CutMix.
 
         Args:
-            data_path (str): [description]
+            data_path (str): The csv file containing the train datas.
 
         Returns:
-            [type]: [description]
+            Two datasets.
         """
 
         df = pd.read_csv(data_path)
@@ -207,15 +214,19 @@ class CutMix(object):
         return boundaryx1, boundaryy1, target_h, target_w
 
     @tf.function
-    def cutmix(self, train_ds_one, train_ds_two):
-        """[summary]
+    def cutmix(
+        self,
+        train_ds_one: tf.data.Dataset,
+        train_ds_two: tf.data.Dataset,
+    ) -> Tuple[np.ndarray, np.ndarray]:
+        """Define CutMix fonction.
 
         Args:
-            train_ds_one ([type]): [description]
-            train_ds_two ([type]): [description]
+            train_ds_one (tf.data.Dataset): Dataset.
+            train_ds_two (tf.data.Dataset): Dataset.
 
         Returns:
-            [type]: [description]
+            An image and a mask augmented by the CutMix function.
         """
 
         (image1, mask1), (image2, mask2) = train_ds_one, train_ds_two
@@ -313,8 +324,8 @@ class CutMix(object):
     def train_preprocess(
         self,
         image: np.ndarray,
-        mask: List[int],
-    ) -> Tuple[np.ndarray, List[int]]:
+        mask: np.ndarray,
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """Augmentation preprocess, if needed.
 
         Args:
@@ -345,7 +356,11 @@ class CutMix(object):
         return image, mask
 
     @tf.function
-    def apply_augments(self, image, mask):
+    def apply_augments(
+        self,
+        image: np.ndarray,
+        mask: np.ndarray,
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """[summary]
 
         Args:
@@ -377,7 +392,7 @@ class CutMix(object):
         repet: int,
         augment: bool,
         prefecth: int,
-    ):
+    ) -> tf.data.Dataset:
         """Creation of a tensor dataset for TensorFlow.
 
         Args:

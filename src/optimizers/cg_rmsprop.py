@@ -18,3 +18,8 @@ class GCRMSprop(tf.keras.optimizers.RMSprop):
             grads.append(grad)
 
         return grads
+
+    def get_config(self):
+
+        config = super().get_config()
+        return config

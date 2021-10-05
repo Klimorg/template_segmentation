@@ -9,6 +9,7 @@
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
 		"editor.rulers": [88,120],
+		"editor.fontSize": 14,
 		"workbench.colorTheme": "One Dark Pro",
 		"workbench.colorCustomizations": {
 			"editorRuler.foreground": "#750917"
@@ -22,7 +23,6 @@
 		"esbenp.prettier-vscode",
 		"ms-azuretools.vscode-docker",
 		"njpwerner.autodocstring",
-		"ms-python.vscode-pylance",
 		"mechatroner.rainbow-csv",
 		"shardulm94.trailing-spaces",
 		"visualstudioexptteam.vscodeintellicode",

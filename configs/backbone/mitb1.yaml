@@ -1,0 +1,13 @@
+_target_: model.backbone.mit.get_backbone
+img_shape: ${datasets.params.img_shape}
+patch_size: [7, 3, 3, 3]  # K
+strides: [4, 2, 2, 2]  # S
+emb_dims: [64, 128, 320, 512]  # C
+attn_reduction_ratios: [8, 4, 2, 1]  # R
+num_heads: [1, 2, 5, 8]  # N
+mlp_ratios: [8, 8, 4, 4]  # E
+depths: [2, 2, 2, 2]  # L
+proj_drop_prob: 0
+attn_drop_prob: 0
+stochastic_depth_rate: 0.1
+backbone_name: MiT-B1
