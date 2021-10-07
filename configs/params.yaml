@@ -1,5 +1,5 @@
 defaults:
-  - backbone: mitb3
+  - backbone: mitb0
   - segmentation_model: allmlp
   - losses: focal_loss
   - optimizer: cg_adam
