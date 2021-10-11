@@ -2,7 +2,7 @@ bandit==1.7.0
 # linting, formating, typing
 black==21.8b0
 darglint==1.8.0
-flake8==3.9.0
+flake8==4.0.1
 isort==5.9.3
 mypy==0.812
 # requirements writing
