@@ -66,7 +66,7 @@ class ConvTokenizer(tf.keras.layers.Layer):
                 BatchNormalization(),
                 ReLU(),
                 MaxPool2D(pool_size=3, strides=2, padding="same"),
-            ]
+            ],
         )
 
     def call(self, inputs, training=None) -> tf.Tensor:
@@ -79,7 +79,7 @@ class ConvTokenizer(tf.keras.layers.Layer):
             {
                 "filters": self.filters,
                 "l2_regularization": self.l2_regul,
-            }
+            },
         )
         return config
 
@@ -139,7 +139,7 @@ class ConvStage(tf.keras.layers.Layer):
                     ),
                     BatchNormalization(),
                     ReLU(),
-                ]
+                ],
             )
             for _ in range(num_blocks)
         ]
@@ -171,7 +171,7 @@ class ConvStage(tf.keras.layers.Layer):
                 "filters_out": self.filters_out,
                 "filters_downsample": self.filters_downsample,
                 "l2_regularization": self.l2_regul,
-            }
+            },
         )
         return config
 
@@ -209,7 +209,7 @@ class ConvDownsample(tf.keras.layers.Layer):
             {
                 "filters": self.filters,
                 "l2_regularization": self.l2_regul,
-            }
+            },
         )
         return config
 
@@ -232,7 +232,10 @@ class StochasticDepth(tf.keras.layers.Layer):
             keep_prob = tf.cast(1 - self.drop_prob, dtype=inputs.dtype)
             shape = (tf.shape(inputs)[0],) + (1,) * (len(tf.shape(inputs)) - 1)
             random_tensor = keep_prob + tf.random.uniform(
-                shape, 0, 1, dtype=inputs.dtype
+                shape,
+                0,
+                1,
+                dtype=inputs.dtype,
             )
             random_tensor = tf.floor(random_tensor)
             return (inputs / keep_prob) * random_tensor
@@ -302,7 +305,7 @@ class Mlp(tf.keras.layers.Layer):
                 "fc1_units": self.fc1_units,
                 "fc2_units": self.fc2_units,
                 "l2_regularization": self.l2_regul,
-            }
+            },
         )
         return config
 
@@ -363,7 +366,7 @@ class ConvMLPStage(tf.keras.layers.Layer):
                 "units": self.units,
                 "stochastic_depth_rate": self.stochastic_depth_rate,
                 "l2_regularization": self.l2_regul,
-            }
+            },
         )
         return config
 
@@ -426,12 +429,12 @@ class BasicStage(tf.keras.layers.Layer):
                 "mlp_ratio": self.mlp_ratio,
                 "stochastic_depth_rate": self.stochastic_depth_rate,
                 "downsample": self.downsample,
-            }
+            },
         )
         return config
 
 
-def get_convmlp(
+def get_feature_extractor(
     img_shape: List[int],
     channels: int,
     n_conv_blocks: int,
@@ -498,7 +501,7 @@ def get_backbone(
     Returns:
         A `tf.keras` model.
     """
-    backbone = get_convmlp(
+    backbone = get_feature_extractor(
         img_shape=img_shape,
         channels=channels,
         n_conv_blocks=n_conv_blocks,

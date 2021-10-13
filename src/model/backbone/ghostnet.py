@@ -237,7 +237,7 @@ def ghost_bottleneck_module(
     return Add(name=f"add_gbneck_module_{name}")([fmap_shortcut, fmap])
 
 
-def get_ghostnet(
+def get_feature_extractor(
     img_shape: List[int],
 ) -> tf.keras.Model:
     """Instantiate a GhostNet model.
@@ -481,7 +481,7 @@ def get_backbone(img_shape: List[int], backbone_name: str) -> tf.keras.Model:
         A `tf.keras` model.
     """
 
-    backbone = get_ghostnet(
+    backbone = get_feature_extractor(
         img_shape=img_shape,
     )
 

@@ -456,7 +456,7 @@ class SquareReshape(tf.keras.layers.Layer):
         return cls(**config)
 
 
-def get_mix_vision_transformer(
+def get_feature_extractor(
     img_shape: List[int],
     patch_size: List[int],
     strides: List[int],
@@ -604,7 +604,7 @@ def get_backbone(
         A `tf.keras` model.
     """
 
-    backbone = get_mix_vision_transformer(
+    backbone = get_feature_extractor(
         img_shape=img_shape,
         patch_size=patch_size,
         strides=strides,

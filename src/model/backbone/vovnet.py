@@ -109,7 +109,7 @@ def osa_module(
     )
 
 
-def get_vovnet(
+def get_feature_extractor(
     img_shape: List[int],
     filters_conv3x3: List[int],
     filters_conv1x1: List[int],
@@ -215,7 +215,7 @@ def get_backbone(
         A `tf.keras` model.
     """
 
-    backbone = get_vovnet(
+    backbone = get_feature_extractor(
         img_shape=img_shape,
         filters_conv3x3=filters_conv3x3,
         filters_conv1x1=filters_conv1x1,
