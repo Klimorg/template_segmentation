@@ -71,14 +71,20 @@ nav:
       - FPN: models/heads/fpn.md
       - OCNet: models/heads/ocnet.md
       - JPU: models/heads/jpu.md
+      - AllMLP SegFormer:
     - Backbones:
-      - MobileNetv2: models/backbone/mobilenetv2.md
-      - GhostNet: models/backbone/ghostnet.md
-      - VoVNet: models/backbone/vovnet.md
-      - ResNet50: models/backbone/resnet50.md
-      - ResNet50v2: models/backbone/resnet50v2.md
-      - ResNet101: models/backbone/resnet101.md
-      - ResNet101v2: models/backbone/resnet101v2.md
+      - Classic CNNs backbones:
+        - MobileNetv2: models/backbone/mobilenetv2.md
+        - GhostNet: models/backbone/ghostnet.md
+        - VoVNet: models/backbone/vovnet.md
+        - ResNet50: models/backbone/resnet50.md
+        - ResNet50v2: models/backbone/resnet50v2.md
+        - ResNet101: models/backbone/resnet101.md
+        - ResNet101v2: models/backbone/resnet101v2.md
+      - Attention and MLP backbones:
+        - ConvMLP:
+        - MixTransformer:
+        - MobileViT:
   - Training loop: train.md
   - Loss: loss/focal_loss.md
   - Metrics : metrics/mean_iou.md

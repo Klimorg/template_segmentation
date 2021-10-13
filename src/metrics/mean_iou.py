@@ -1,6 +1,7 @@
 import tensorflow as tf
 
 
+@tf.keras.utils.register_keras_serializable()
 class UpdatedMeanIoU(tf.keras.metrics.MeanIoU):
     def __init__(
         self,

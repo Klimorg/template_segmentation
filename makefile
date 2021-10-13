@@ -34,11 +34,13 @@ segmentation_masks:
 
 .PHONY: segmentation_info
 segmentation_info:
-	python src/utils_weight_sampling.py
+	python src/utils/utils_weight_sampling.py
 
+.PHONY: prepared_dataset
 prepared_dataset:
-	python src/make_dataset.py
+	python src/utils/make_dataset.py
 
+.PHONY: train
 train:
 	python src/train.py
 
@@ -84,7 +86,7 @@ run_docker:
 
 # Experiments monitoring
 mlflow:
-	mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri $(PWD)/outputs/mlflow/
+	mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri $(PWD)/mlruns/
 
 tensorboard:
 	tensorboard --logdir $(PWD)/mlruns/

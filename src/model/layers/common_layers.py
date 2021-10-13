@@ -29,7 +29,7 @@ def conv_gn_relu(
         tensor (tf.Tensor): Input feature map of the module, size = $(H,W,C)$.
         filters (int): Number of filters used in the `Conv2D` layer.
         kernel_size (int): Size of the convolution kernels used in the `Conv2D` layer.
-        padding (str, optional): Padding parameter of the `Conv2D` layer.. Defaults to "same".
+        padding (str, optional): Padding parameter of the `Conv2D` layer. Defaults to "same".
         strides (int, optional): Strides parameter of the `Conv2D` layer. Defaults to 1.
         dilation_rate (int, optional): Dilation rate of the `Conv2D` layer. Defaults to 1.
         w_init (str, optional): Kernel initialization method used in th `Conv2D` layer. Defaults to "he_normal".
@@ -262,6 +262,7 @@ def sepconv_bn_relu(
     return ReLU()(fmap)
 
 
+# @tf.keras.utils.register_keras_serializable()
 class InvertedResidualBottleneck2D(tf.keras.layers.Layer):
     def __init__(
         self,

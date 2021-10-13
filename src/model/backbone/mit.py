@@ -18,6 +18,7 @@ from tensorflow.keras.models import Model
 
 # Referred from: github.com:rwightman/pytorch-image-models.
 # https://keras.io/examples/vision/cct/#stochastic-depth-for-regularization
+@tf.keras.utils.register_keras_serializable()
 class StochasticDepth(tf.keras.layers.Layer):
     def __init__(
         self,
@@ -54,6 +55,7 @@ class StochasticDepth(tf.keras.layers.Layer):
         return cls(**config)
 
 
+@tf.keras.utils.register_keras_serializable()
 class Identity(tf.keras.layers.Layer):
     def __init__(self) -> None:
         super().__init__(name="IdentityTF")
@@ -70,6 +72,7 @@ class Identity(tf.keras.layers.Layer):
         return cls(**config)
 
 
+@tf.keras.utils.register_keras_serializable()
 class OverlapPatchEmbed(tf.keras.layers.Layer):
     def __init__(
         self,
@@ -133,6 +136,7 @@ class OverlapPatchEmbed(tf.keras.layers.Layer):
         return cls(**config)
 
 
+@tf.keras.utils.register_keras_serializable()
 class Mlp(tf.keras.layers.Layer):
     def __init__(
         self,
@@ -210,6 +214,7 @@ class Mlp(tf.keras.layers.Layer):
         return cls(**config)
 
 
+@tf.keras.utils.register_keras_serializable()
 class CustomAttention(tf.keras.layers.Layer):
     def __init__(
         self,
@@ -348,6 +353,7 @@ class CustomAttention(tf.keras.layers.Layer):
         return cls(**config)
 
 
+@tf.keras.utils.register_keras_serializable()
 class FFNAttentionBlock(tf.keras.layers.Layer):
     def __init__(
         self,
@@ -425,6 +431,7 @@ class FFNAttentionBlock(tf.keras.layers.Layer):
         return cls(**config)
 
 
+@tf.keras.utils.register_keras_serializable()
 class SquareReshape(tf.keras.layers.Layer):
     def __init__(
         self,

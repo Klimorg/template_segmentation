@@ -98,6 +98,9 @@ def train(config: DictConfig):
         # ds_val = ds_val.map(add_sample_weights)
 
         logger.info("Instantiate model")
+        # if False:
+        #     pass
+        # else:
         backbone = {"backbone": instantiate(config.backbone)}
         model = instantiate(config.segmentation_model, **backbone)
 

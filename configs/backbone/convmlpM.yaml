@@ -1,4 +1,4 @@
-_target_: model.backbone.mlp_vision.get_backbone
+_target_: model.backbone.convmlp.get_backbone
 img_shape: ${datasets.params.img_shape}
 channels: 64
 n_conv_blocks: 3

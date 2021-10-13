@@ -1,11 +1,9 @@
 import os
 import random
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union
 
-import mlflow
 import numpy as np
-import pandas as pd
 import tensorflow as tf
 from loguru import logger
 from omegaconf import DictConfig, OmegaConf
@@ -115,35 +113,6 @@ def set_seed(random_seed: int) -> None:
     # https://github.com/tensorflow/tensorflow/issues/39751
     # needed until a deterministic fix of tf.gather is implemented
     os.environ["TF_DISABLE_SEGMENT_REDUCTION_OP_DETERMINISM_EXCEPTIONS"] = "1"
-
-
-# https://github.com/GokuMohandas/applied-ml/blob/main/tagifai/utils.py
-def get_sorted_runs(
-    experiment_name: str,
-    order_by: List[str],
-    top_k: Optional[int] = 10,
-) -> pd.DataFrame:
-    """Get top_k best runs for a given experiment_name according to given metrics.
-
-    Usage:
-    ```python
-    runs = get_sorted_runs(experiment_name="best", order_by=["metrics.val_loss ASC"])
-    ```
-
-    Args:
-        experiment_name (str): [description]
-        order_by (List): [description]
-        top_k (Optional[int], optional): [description]. Defaults to 10.
-
-    Returns:
-        A dataframe of top_k best runs sorted by given metrics.
-    """
-    experiment_id = mlflow.get_experiment_by_name(experiment_name).experiment_id
-
-    return mlflow.search_runs(
-        experiment_ids=experiment_id,
-        order_by=order_by,
-    )[:top_k]
 
 
 def set_log_infos(cfg: DictConfig) -> Tuple[Dict[str, str], str]:

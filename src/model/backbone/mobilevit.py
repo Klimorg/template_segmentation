@@ -3,96 +3,22 @@ from typing import Any, Dict, List
 import numpy as np
 import tensorflow as tf
 from loguru import logger
-from tensorflow.keras import Model, backend
+from tensorflow.keras import Model
 from tensorflow.keras.activations import swish
 from tensorflow.keras.layers import (
-    Add,
-    BatchNormalization,
     Concatenate,
     Conv2D,
     Dense,
-    DepthwiseConv2D,
-    GlobalAveragePooling2D,
     Input,
     LayerNormalization,
     MultiHeadAttention,
-    ReLU,
     Reshape,
 )
 
 from src.model.layers.common_layers import InvertedResidualBottleneck2D
 
 
-def inverted_residual_bottleneck(
-    fmap: tf.Tensor,
-    filters: int,
-    expansion_factor: int,
-    strides: int,
-    skip_connection: bool,
-    name: str,
-) -> tf.Tensor:
-    """Inverted Residual Bottleneck, the backbone of the GhostNet model.
-
-    Architecture:
-        ![Architecture](./images/inv_residual_bottleneck.svg)
-
-    Args:
-        fmap (tf.Tensor): Input feature map of the module, size = $(H,W,C)$.
-        filters (int): Number of filters used in the second `Conv2D` layer.
-        expansion_factor (int): Integer by which multiply the number of channels $C$ of the
-            input feature map to define the number of filters in the first `Conv2D`.
-        strides (Tuple[int, int]): Stride parameter of the `DepthwiseConv2D` layers, used
-            to downsample.
-        skip_connection (bool): Determine wheter or not add a skip connection to the module.
-        name (str): Name of the module.
-
-    Returns:
-        Output feature map.
-    """
-
-    in_channels = backend.int_shape(fmap)[-1]
-
-    img = Conv2D(
-        filters=expansion_factor * in_channels,
-        kernel_size=(1, 1),
-        strides=(1, 1),
-        padding="same",
-        kernel_initializer="he_normal",
-        use_bias=False,
-        name=f"conv1_{name}",
-    )(fmap)
-    img = BatchNormalization(name=f"bn1_{name}")(img)
-    img = ReLU(max_value=6, name=f"relu1_{name}")(img)
-
-    img = DepthwiseConv2D(
-        kernel_size=(3, 3),
-        strides=strides,
-        padding="same",
-        depth_multiplier=1,
-        depthwise_initializer="he_normal",
-        use_bias=False,
-        name=f"depthconv1_{name}",
-    )(img)
-    img = BatchNormalization(name=f"bn2_{name}")(img)
-    img = ReLU(max_value=6, name=f"relu2_{name}")(img)
-
-    img = Conv2D(
-        filters=filters,
-        kernel_size=(1, 1),
-        strides=(1, 1),
-        padding="same",
-        kernel_initializer="he_normal",
-        use_bias=False,
-        name=f"conv2_{name}",
-    )(img)
-    img = BatchNormalization(name=f"bn3_{name}")(img)
-
-    if skip_connection:
-        img = Add(name=f"skip_connection_{name}")([img, fmap])
-
-    return img
-
-
+# @tf.keras.utils.register_keras_serializable()
 class Transformer(tf.keras.layers.Layer):
     def __init__(
         self,
@@ -174,6 +100,7 @@ class Transformer(tf.keras.layers.Layer):
         return cls(**config)
 
 
+# @tf.keras.utils.register_keras_serializable()
 class MobileViT2D(tf.keras.layers.Layer):
     def __init__(
         self,
@@ -308,6 +235,7 @@ def get_feature_extractor(
     num_heads: int,
 ):
 
+    # Input block
     img_input = Input(img_shape)
 
     fmap = Conv2D(
@@ -327,16 +255,9 @@ def get_feature_extractor(
         skip_connection=True,
         name="ivrb0",
     )(fmap)
-    # fmap = inverted_residual_bottleneck(
-    #     fmap=fmap,
-    #     filters=filters[1],
-    #     expansion_factor=expansion_rate[0],
-    #     strides=1,
-    #     skip_connection=True,
-    #     name="ivrb0",
-    # )
     fmap = swish(fmap)
 
+    # Block 1
     fmap = InvertedResidualBottleneck2D(
         expansion_rate=expansion_rate[0],
         filters=filters[2],
@@ -344,14 +265,6 @@ def get_feature_extractor(
         skip_connection=False,
         name="ivrb1",
     )(fmap)
-    # fmap = inverted_residual_bottleneck(
-    #     fmap=fmap,
-    #     filters=filters[2],
-    #     expansion_factor=expansion_rate[0],
-    #     strides=2,
-    #     skip_connection=False,
-    #     name="ivrb1",
-    # )
     fmap = swish(fmap)
     fmap = InvertedResidualBottleneck2D(
         expansion_rate=expansion_rate[0],
@@ -360,14 +273,6 @@ def get_feature_extractor(
         skip_connection=True,
         name="ivrb2",
     )(fmap)
-    # fmap = inverted_residual_bottleneck(
-    #     fmap=fmap,
-    #     filters=filters[3],
-    #     expansion_factor=expansion_rate[0],
-    #     strides=1,
-    #     skip_connection=True,
-    #     name="ivrb2",
-    # )
     fmap = swish(fmap)
     fmap = InvertedResidualBottleneck2D(
         expansion_rate=expansion_rate[0],
@@ -376,16 +281,9 @@ def get_feature_extractor(
         skip_connection=True,
         name="ivrb3",
     )(fmap)
-    # fmap = inverted_residual_bottleneck(
-    #     fmap=fmap,
-    #     filters=filters[4],
-    #     expansion_factor=expansion_rate[0],
-    #     strides=1,
-    #     skip_connection=True,
-    #     name="ivrb3",
-    # )
     fmap = swish(fmap)
 
+    # Block 2
     fmap = InvertedResidualBottleneck2D(
         expansion_rate=expansion_rate[0],
         filters=filters[5],
@@ -393,14 +291,6 @@ def get_feature_extractor(
         skip_connection=False,
         name="ivrb4",
     )(fmap)
-    # fmap = inverted_residual_bottleneck(
-    #     fmap=fmap,
-    #     filters=filters[5],
-    #     expansion_factor=expansion_rate[0],
-    #     strides=2,
-    #     skip_connection=False,
-    #     name="ivrb4",
-    # )
     fmap = swish(fmap)
     fmap = MobileViT2D(
         expansion_rate=expansion_rate[1],
@@ -408,10 +298,11 @@ def get_feature_extractor(
         emb_dim=emb_dim[0],
         repetitions=repetitions[0],
         num_heads=num_heads,
-        name="MobileViT2D_block1",
+        name="MobileViT2D_block2",
     )(fmap)
     fmap = swish(fmap)
 
+    # Block 3
     fmap = InvertedResidualBottleneck2D(
         expansion_rate=expansion_rate[0],
         filters=filters[7],
@@ -419,14 +310,6 @@ def get_feature_extractor(
         skip_connection=False,
         name="ivrb5",
     )(fmap)
-    # fmap = inverted_residual_bottleneck(
-    #     fmap=fmap,
-    #     filters=filters[7],
-    #     expansion_factor=expansion_rate[0],
-    #     strides=2,
-    #     skip_connection=False,
-    #     name="ivrb5",
-    # )
     fmap = swish(fmap)
     fmap = MobileViT2D(
         expansion_rate=expansion_rate[1],
@@ -434,10 +317,11 @@ def get_feature_extractor(
         emb_dim=emb_dim[1],
         repetitions=repetitions[1],
         num_heads=num_heads,
-        name="MobileViT2D_block2",
+        name="MobileViT2D_block3",
     )(fmap)
     fmap = swish(fmap)
 
+    # Block 4
     fmap = InvertedResidualBottleneck2D(
         expansion_rate=expansion_rate[0],
         filters=filters[9],
@@ -445,14 +329,6 @@ def get_feature_extractor(
         skip_connection=False,
         name="ivrb6",
     )(fmap)
-    # fmap = inverted_residual_bottleneck(
-    #     fmap=fmap,
-    #     filters=filters[9],
-    #     expansion_factor=expansion_rate[0],
-    #     strides=2,
-    #     skip_connection=False,
-    #     name="ivrb7",
-    # )
     fmap = swish(fmap)
     fmap = MobileViT2D(
         expansion_rate=expansion_rate[1],
@@ -460,10 +336,10 @@ def get_feature_extractor(
         emb_dim=emb_dim[2],
         repetitions=repetitions[2],
         num_heads=num_heads,
-        name="MobileViT2D_block3",
+        name="MobileViT2D_block4",
     )(fmap)
     fmap = swish(fmap)
-    fmap = Conv2D(
+    fmap_out = Conv2D(
         filters=filters[11],
         kernel_size=1,
         strides=1,
@@ -472,11 +348,6 @@ def get_feature_extractor(
         use_bias=False,
         name="conv_output",
     )(fmap)
-    fmap = swish(fmap)
-
-    fmap = GlobalAveragePooling2D()(fmap)
-    fmap = swish(fmap)
-    fmap_out = Dense(1000)(fmap)
 
     return Model(img_input, fmap_out)
 
@@ -515,9 +386,9 @@ def get_backbone(
     )
 
     endpoint_layers = [
-        "ivrb1",
-        "ivrb4",
-        "ivrb5",
+        "ivrb3",
+        "MobileViT2D_block2",
+        "MobileViT2D_block3",
         "conv_output",
     ]
 
@@ -573,4 +444,3 @@ if __name__ == "__main__":
     )
     out = model(fmap)
     model.summary()
-    # logger.info(f"out shape : {out.shape.as_list()}")
