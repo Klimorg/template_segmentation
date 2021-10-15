@@ -18,7 +18,7 @@ from tensorflow.keras.models import Model
 
 # Referred from: github.com:rwightman/pytorch-image-models.
 # https://keras.io/examples/vision/cct/#stochastic-depth-for-regularization
-@tf.keras.utils.register_keras_serializable()
+# @tf.keras.utils.register_keras_serializable()
 class StochasticDepth(tf.keras.layers.Layer):
     def __init__(
         self,
@@ -55,7 +55,7 @@ class StochasticDepth(tf.keras.layers.Layer):
         return cls(**config)
 
 
-@tf.keras.utils.register_keras_serializable()
+# @tf.keras.utils.register_keras_serializable()
 class Identity(tf.keras.layers.Layer):
     def __init__(self) -> None:
         super().__init__(name="IdentityTF")
@@ -136,7 +136,7 @@ class OverlapPatchEmbed(tf.keras.layers.Layer):
         return cls(**config)
 
 
-@tf.keras.utils.register_keras_serializable()
+# @tf.keras.utils.register_keras_serializable()
 class Mlp(tf.keras.layers.Layer):
     def __init__(
         self,

@@ -6,7 +6,7 @@ defaults:
   - lr_decay: cosine_decay_restart
   - metrics: mean_iou
   - datasets: datasets
-  - pipeline: classic
+  - pipeline: cutmix
   - training: custom_training
 
 lrd:

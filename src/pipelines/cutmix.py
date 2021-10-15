@@ -148,16 +148,27 @@ class CutMix(object):
         size: int,
         concentration0: List[float],
         concentration1: List[float],
-    ):
-        """[summary]
+    ) -> float:
+        """Sample a float from Beta distribution.
+
+        This is done by sampling two random variables from two gamma distributions.
+
+        If $X$ and $Y$ are two i.i.d. random variables following Gamma laws, $X \sim \mathrm{Gamma}({\\alpha}, \\theta)$,
+        and $Y \simeq \mathrm{Gamma}(\\beta, \\theta)$, then the random variable $\\frac{X}{X+Y}$ follows the
+        $\mathrm{Beta}(\\alpha, \\beta)$ law.
+
+        Note that if $\\alpha=\\beta=1$, then $\\mathrm{Beta}(1,1)$ is just the Uniform distribution $(0,1)$.
 
         Args:
-            size (int): [description]
-            concentration0 (List[float]): [description]
-            concentration1 (List[float]): [description]
+            size (int): A 1-D integer Tensor or Python array. The shape of the output samples to be drawn per
+                alpha/beta-parameterized distribution.
+            concentration0 (List[float]): A Tensor or Python value or N-D array of type dtype. concentration0 provides the
+                shape parameter(s) describing the gamma distribution(s) to sample.
+            concentration1 (List[float]): A Tensor or Python value or N-D array of type dtype. concentration1- provides the
+                shape parameter(s) describing the gamma distribution(s) to sample.
 
         Returns:
-            [type]: [description]
+            float: A float sampled from Beta(concentration1,concentration2) distribution.
         """
 
         gamma1sample = tf.random.gamma(shape=[size], alpha=concentration1)

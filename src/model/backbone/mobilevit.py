@@ -18,7 +18,7 @@ from tensorflow.keras.layers import (
 from src.model.layers.common_layers import InvertedResidualBottleneck2D
 
 
-# @tf.keras.utils.register_keras_serializable()
+@tf.keras.utils.register_keras_serializable()
 class Transformer(tf.keras.layers.Layer):
     def __init__(
         self,
@@ -100,7 +100,7 @@ class Transformer(tf.keras.layers.Layer):
         return cls(**config)
 
 
-# @tf.keras.utils.register_keras_serializable()
+@tf.keras.utils.register_keras_serializable()
 class MobileViT2D(tf.keras.layers.Layer):
     def __init__(
         self,
