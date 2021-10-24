@@ -23,6 +23,8 @@ RUN /bin/bash -c "pip install -r requirements.txt"
 
 RUN /bin/bash -c "pip install -r requirements-dev.txt"
 
+# RUN /usr/bin/python -m pip install -e . --no-cache-dir
+
 # 5000 pour mlflow
 EXPOSE 5000
 
@@ -31,3 +33,6 @@ EXPOSE 6006
 
 # 8001 pour mkdocs
 EXPOSE 8001
+
+# wandb
+EXPOSE 8080

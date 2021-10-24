@@ -7,3 +7,4 @@ pandas==1.2.4
 PyYAML==5.4.1
 scikit_learn==1.0
 typer==0.4.0
+wandb

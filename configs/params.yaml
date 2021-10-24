@@ -1,5 +1,5 @@
 defaults:
-  - backbone: mobilevit_s
+  - backbone: mobilenetv2
   - segmentation_model: ksac
   - losses: focal_loss
   - optimizer: cg_adam
