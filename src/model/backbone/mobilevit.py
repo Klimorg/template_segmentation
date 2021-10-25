@@ -26,7 +26,6 @@ class Transformer(tf.keras.layers.Layer):
         fc2_units: int,
         num_heads: int = 8,
         emb_dim: int = 64,
-        broadcasting_axis: int = 1,
         l2_regul: float = 1e-4,
         *args,
         **kwargs,
@@ -37,7 +36,6 @@ class Transformer(tf.keras.layers.Layer):
         self.fc2_units = fc2_units
         self.num_heads = num_heads
         self.emb_dim = emb_dim
-        self.broadcasting_axis = broadcasting_axis
         self.l2_regul = l2_regul
 
         self.act = swish
@@ -51,7 +49,6 @@ class Transformer(tf.keras.layers.Layer):
             num_heads=self.num_heads,
             key_dim=self.emb_dim,
             use_bias=False,
-            attention_axes=self.broadcasting_axis,
             kernel_initializer="he_uniform",
             kernel_regularizer=tf.keras.regularizers.l2(l2=self.l2_regul),
         )
@@ -89,7 +86,6 @@ class Transformer(tf.keras.layers.Layer):
                 "fc2_units": self.fc2_units,
                 "num_heads": self.num_heads,
                 "emb_dim": self.emb_dim,
-                "broadcasting_axis": self.broadcasting_axis,
                 "l2_regul": self.l2_regul,
             },
         )
@@ -111,7 +107,6 @@ class MobileViT2D(tf.keras.layers.Layer):
         num_heads: int = 8,
         emb_dim: int = 64,
         repetitions: int = 2,
-        broadcasting_axis: int = 1,
         l2_regul: float = 1e-4,
         *args,
         **kwargs,
@@ -124,7 +119,6 @@ class MobileViT2D(tf.keras.layers.Layer):
         self.num_heads = num_heads
         self.emb_dim = emb_dim
         self.repetitions = repetitions
-        self.broadcasting_axis = broadcasting_axis
         self.l2_regul = l2_regul
 
     def build(self, input_shape) -> None:
@@ -215,7 +209,6 @@ class MobileViT2D(tf.keras.layers.Layer):
                 "num_heads": self.num_heads,
                 "emb_dim": self.emb_dim,
                 "repetitions": self.repetitions,
-                "broadcasting_axis": self.broadcasting_axis,
                 "l2_regul": self.l2_regul,
             },
         )
