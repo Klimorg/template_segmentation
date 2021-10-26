@@ -1,19 +1,21 @@
 defaults:
-  - backbone: mobilevit_s
-  - segmentation_model: ksac
+  - backbone: resnet50
+  - segmentation_model: fpn
   - losses: focal_loss
   - optimizer: cg_adam
   - lr_decay: cosine_decay_restart
   - metrics: mean_iou
   - datasets: datasets
-  - pipeline: cutmix
+  - pipeline: classic
   - training: custom_training
+
+start:
+  from_saved_model: True
+  saved_model_dir: "hydra/2021-10-26_08-56-33/ResNet50_FPN_2021-10-26_08-56-33"
+
 
 lrd:
   activate: true
-
-mixed_precision:
-  activate: false
 
 prepare:
   split: 0.10

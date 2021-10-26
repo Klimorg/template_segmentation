@@ -111,11 +111,11 @@ def create_train_val_test_datasets(
 def main() -> None:
     """Main function."""
     images_paths = get_items_list(
-        directory=datasets.raw_datasets.images,
+        directory=datasets.raw_dataset.images,
         extension=".jpg",
     )
     masks_paths = get_items_list(
-        directory=datasets.raw_datasets.masks,
+        directory=datasets.raw_dataset.masks,
         extension=".png",
     )
 

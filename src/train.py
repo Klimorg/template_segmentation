@@ -6,6 +6,7 @@ from hydra.utils import instantiate
 from loguru import logger
 from mlflow import tensorflow as mltensorflow
 from omegaconf import DictConfig
+from tensorflow.keras.models import load_model, save_model
 
 import hydra
 from utils.utils import flatten_omegaconf, set_log_infos, set_seed
@@ -51,13 +52,6 @@ def train(config: DictConfig) -> tf.keras.Model:
     """
     _, repo_path = set_log_infos(config)
 
-    if config.mixed_precision.activate:
-        logger.info("Setting training policy.")
-        policy = tf.keras.mixed_precision.Policy("mixed_float16")
-        tf.keras.mixed_precision.set_global_policy(policy)
-        logger.info(f"Layers computations dtype : {policy.compute_dtype}")
-        logger.info(f"Layers variables dtype : {policy.variable_dtype}")
-
     mlflow.set_tracking_uri(f"file://{repo_path}/mlruns")
     mlflow.set_experiment(config.mlflow.experiment_name)
 
@@ -94,20 +88,6 @@ def train(config: DictConfig) -> tf.keras.Model:
             config.datasets.params.prefetch,
         )
 
-        # logger.info("Instantiate weight sampling")
-        # ds = ds.map(add_sample_weights)
-        # ds_val = ds_val.map(add_sample_weights)
-
-        logger.info("Instantiate model")
-
-        if True:
-            ...
-        else:
-            ...
-
-        backbone = {"backbone": instantiate(config.backbone)}
-        model = instantiate(config.segmentation_model, **backbone)
-
         if config.lrd.activate:
             logger.info("Found learning rate decay policy.")
             lr = {"learning_rate": instantiate(config.lr_decay)}
@@ -122,6 +102,16 @@ def train(config: DictConfig) -> tf.keras.Model:
 
         logger.info("Instantiate metrics")
         metric = instantiate(config.metrics)
+
+        logger.info("Instantiate model")
+
+        if config.start.from_saved_model:
+            logger.info("Start training back from a saved model.")
+            model = load_model(Path(repo_path) / config.start.saved_model_dir)
+        else:
+            logger.info("Start training from scratch.")
+            backbone = {"backbone": instantiate(config.backbone)}
+            model = instantiate(config.segmentation_model, **backbone)
 
         logger.info("Compiling model")
         model.compile(
@@ -148,9 +138,7 @@ def train(config: DictConfig) -> tf.keras.Model:
             callbacks=callbacks,
         )
 
-        # tf.keras.models.save_model(model, f"{config.mlflow.run_name}")
-
-        model.save(f"{config.mlflow.run_name}")
+        save_model(model, f"{config.mlflow.run_name}")
 
 
 if __name__ == "__main__":

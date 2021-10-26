@@ -60,6 +60,7 @@ install-docs:
 	python -m pip install -e ".[docs]" --no-cache-dir
 
 # Cleaning
+.PHONY: clean
 clean:
 	bash shell/clean_pycache.sh ../template_segmentation
 	find . -type f -name "*.DS_Store" -ls -delete
@@ -70,16 +71,43 @@ clean:
 	find . | grep -E "htmlcov/*" | xargs rm -rf
 	rm -f .coverage
 
+.PHONY: clean_project
 clean_project:
 	find . | grep -E "mlruns/*" | xargs rm -rf
 	find . | grep -E "hydra/*" | xargs rm -rf
 
 # Docker
+.PHONY: build_docker
 build_docker:
 	docker build --build-arg USER_UID=$$(id -u) --build-arg USER_GID=$$(id -g) --rm -f Dockerfile -t segmentation_project:v1 .
 
+.PHONY: run_docker
 run_docker:
 	docker run --gpus all --shm-size=2g --ulimit memlock=-1 --ulimit stack=67108864 -it --rm -P --mount type=bind,source=$(PWD),target=/media/vorph/Datas/template_segmentation -e TF_FORCE_GPU_ALLOW_GROWTH=true -e XLA_FLAGS='--xla_gpu_autotune_level=2' segmentation_project:v1
+
+# Docker
+.PHONY: build_prod
+build_prod:
+	docker build --build-arg USER_UID=$$(id -u) --build-arg USER_GID=$$(id -g) --rm -f Dockerfile.prod -t segmentation_project:v1_prod .
+
+.PHONY: run_prod
+run_prod:
+	docker run --gpus all \
+	--shm-size=2g \
+	--ulimit memlock=-1 \
+	--ulimit stack=67108864 \
+	-it \
+	--rm \
+	-P \
+	--mount type=bind,source=$(PWD)/configs/,target=/home/vorph/configs \
+	--mount type=bind,source=$(PWD)/datas/,target=/home/vorph/datas \
+	--mount type=bind,source=$(PWD)/hydra/,target=/home/vorph/hydra/ \
+	--mount type=bind,source=$(PWD)/mlruns/,target=/home/vorph/mlruns/ \
+	-e TF_FORCE_GPU_ALLOW_GROWTH=true \
+	-e TF_ENABLE_ONEDNN_OPTS=true \
+	-e XLA_FLAGS='--xla_gpu_autotune_level=2' \
+	segmentation_project:v1_prod
+
 
 # https://stackoverflow.com/questions/43133670/getting-docker-container-id-in-makefile-to-use-in-another-command
 # I ran into the same problem and realised that makefiles take output from shell variables with the use of $$.

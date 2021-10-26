@@ -1,10 +1,7 @@
-<<<<<<< HEAD
-=======
->>>>>>> c1c2acca85b34051f93dfccc66dc98a43ecdaafd
 albumentations==1.0.3
 hydra_core==1.1.1
 loguru==0.5.3
-mlflow==1.20.2
+mlflow==1.18.0
 omegaconf==2.1.1
 pandas==1.3.4
 PyYAML==6.0
