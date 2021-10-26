@@ -13,40 +13,41 @@ from utils.utils import flatten_omegaconf, set_log_infos, set_seed
 
 @logger.catch()
 @hydra.main(config_path="../configs/", config_name="params.yaml")
-def train(config: DictConfig):
+def train(config: DictConfig) -> tf.keras.Model:
     """Training loop.
 
-    Lorsque que l'on travaille avec Hydra, toute la logique de la fonction doit
-    être contenu dans `main()`, on ne peut pas faire appel à des fonctions
-    tierces extérieures à `main()`, il faut tout coder dedans.
+    When you wrok with Hydra, all the logic of the funtion has to be contained in
+    the function decorated by `@hydra.main(...)`. You can't define another function in
+    same script asthe one containing the `@hydra.main(...)` decorated one.
 
-    De même faire attention au dossier root : hydra modifie le dossier root :
+    You can import functions from other scripts and use it in the `@hydra.main(...)` decorated
+    function, that's fine, but you can't write other functions in the same script.
 
-    Path(__file__).parent.parent donnera bien `.` mais cette racine est située
-    dans le dossier `outputs`, et non dans vrai dossier racine `cracks_defect`.
+    Also, be careful to the root file : Hydra modify the root file.
 
-    Il faut donc ici utiliser `hydra.utils.get_original_cwd()` pour pouvoir
-    avoir accès au dossier root `cracks_defect`.
+    `Path(__file__).parent.parent` will return `.`, but this root will be located in the
+    `hydra` folder, not the real root of the folder. **This is to be expected**, as the job of
+    `Hydra` is to monitor and record each iteration of the training loop for
+    reproducibility, `hydra` create a new folder for each training loop.
 
-    Pour changer le learning rate d'un optimiseur
-    **après avoir compilé le modèle**, voir la question StackOverflow suivante.
+    The name of the folder were the configuration of the training loop has been configured
+    to be related to the run name :
 
-    [Modifier de lr](https://stackoverflow.com/questions/
-    59737875/keras-change-learning-rate)
+    If we have :
 
-    https://stackoverflow.com/questions/59635474/
-    whats-difference-between-using-metrics-acc-and-tf-keras-metrics-accuracy
+    * `run_name: ${backbone.backbone_name}_${segmentation_model.name}_${now:%Y-%m-%d_%H-%M-%S}`
 
-    I'll just add that as of tf v2.2 in training.py the docs say
-    "When you pass the strings 'accuracy' or 'acc', we convert this to
-    one of tf.keras.metrics.BinaryAccuracy,
-    tf.keras.metrics.CategoricalAccuracy,
-    tf.keras.metrics.SparseCategoricalAccuracy based on the loss function
-    used and the model output shape. We do a similar conversion
-    for the strings 'crossentropy' and 'ce' as well."
+    The various files of this training loop will be stored in :
+
+    * `dir: hydra/${now:%Y-%m-%d_%H-%M-%S}`.
+
+    To access to the root path of the folder, we use the `hydra.utils.get_original_cwd()` command.
 
     Args:
-        config (DictConfig): [description]
+        config (DictConfig): The hydra configuration file used for the training loop.
+
+    Returns:
+        A trained tf.keras model.
     """
     _, repo_path = set_log_infos(config)
 
@@ -98,9 +99,12 @@ def train(config: DictConfig):
         # ds_val = ds_val.map(add_sample_weights)
 
         logger.info("Instantiate model")
-        # if False:
-        #     pass
-        # else:
+
+        if True:
+            ...
+        else:
+            ...
+
         backbone = {"backbone": instantiate(config.backbone)}
         model = instantiate(config.segmentation_model, **backbone)
 

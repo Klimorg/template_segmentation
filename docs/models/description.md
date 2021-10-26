@@ -27,7 +27,7 @@ The segmentation head available in this project are the following ones. For exam
 | **Output stride inputs** | OS 4-8-16-32 | OS 8-16-32 | OS 4  | OS 8  | OS 4  |    OS 4    |
 | **Output stride output** |     OS 4     |    OS 4    | OS 4  | OS 8  | OS 4  |    OS 4    |
 
-The bakcbones available are the following ones.
+The backbones available are the following ones.
 
 * GhostNet
 * MobileNetv2

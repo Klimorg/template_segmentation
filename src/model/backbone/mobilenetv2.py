@@ -386,10 +386,10 @@ def get_backbone(img_shape: List[int], backbone_name: str) -> tf.keras.Model:
     )
 
     endpoint_layers = [
-        "skip_connection_inv_bottleneck_2_2",
-        "skip_connection_inv_bottleneck_3_3",
-        "skip_connection_inv_bottleneck_5_3",
-        "skip_connection_inv_bottleneck_6_3",
+        "inv_bottleneck_2_2",
+        "inv_bottleneck_3_3",
+        "inv_bottleneck_5_3",
+        "inv_bottleneck_6_3",
     ]
 
     os4_output, os8_output, os16_output, os32_output = [
