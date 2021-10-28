@@ -1,0 +1,2732 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <meta name="author" content="Mathieu Klimczak">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
+    
+    
+      
+        <title>CutMix pipeline - Documentation Semantic Segmentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.db9e7362.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+      <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cutmix-pipeline" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href="../.." title="Documentation Semantic Segmentation" class="md-header__button md-logo" aria-label="Documentation Semantic Segmentation" data-md-component="logo">
+      
+  <img src="../../images/logo_blanc.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Documentation Semantic Segmentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CutMix pipeline
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Basculer en mode sombre"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Basculer en mode sombre" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="deep-orange"  aria-label="Basculer en mode clair"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Basculer en mode clair" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Effacer" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Onglets" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../config_hydra/hydra/" class="md-tabs__link">
+      Hydra configuration
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../misc_config/docker/" class="md-tabs__link">
+        Various configuration
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../config/" class="md-tabs__link md-tabs__link--active">
+        Datasets creation
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../models/description/" class="md-tabs__link">
+        Semantic segmentation
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../training_loop/train/" class="md-tabs__link">
+      Training loop
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../loss/focal_loss/" class="md-tabs__link">
+      Loss
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../metrics/mean_iou/" class="md-tabs__link">
+      Metrics
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Documentation Semantic Segmentation" class="md-nav__button md-logo" aria-label="Documentation Semantic Segmentation" data-md-component="logo">
+      
+  <img src="../../images/logo_blanc.svg" alt="logo">
+
+    </a>
+    Documentation Semantic Segmentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../config_hydra/hydra/" class="md-nav__link">
+        Hydra configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Various configuration
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Various configuration" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Various configuration
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../misc_config/docker/" class="md-nav__link">
+        Docker config
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../misc_config/make/" class="md-nav__link">
+        Makefile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../misc_config/requirements/" class="md-nav__link">
+        Requirements
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Datasets creation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Datasets creation" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Datasets creation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config/" class="md-nav__link">
+        Dataset configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils_segmentation/" class="md-nav__link">
+        Masks creation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../make_dataset/" class="md-nav__link">
+        Train-Test-Val datasets creation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_4" type="checkbox" id="__nav_4_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_4">
+          Datasets pipelines
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Datasets pipelines" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_4">
+          <span class="md-nav__icon md-icon"></span>
+          Datasets pipelines
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../classic/" class="md-nav__link">
+        Classic pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          CutMix pipeline
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        CutMix pipeline
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix" class="md-nav__link">
+    src.pipelines.cutmix
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix" class="md-nav__link">
+    CutMix
+  </a>
+  
+    <nav class="md-nav" aria-label="CutMix">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.apply_augments" class="md-nav__link">
+    apply_augments()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.create_double_dataset" class="md-nav__link">
+    create_double_dataset()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.create_test_dataset" class="md-nav__link">
+    create_test_dataset()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.create_train_dataset" class="md-nav__link">
+    create_train_dataset()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.cutmix" class="md-nav__link">
+    cutmix()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.get_box" class="md-nav__link">
+    get_box()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.load_images" class="md-nav__link">
+    load_images()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.parse_image_and_mask" class="md-nav__link">
+    parse_image_and_mask()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.sample_beta_distribution" class="md-nav__link">
+    sample_beta_distribution()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.train_preprocess" class="md-nav__link">
+    train_preprocess()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Semantic segmentation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Semantic segmentation" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Semantic segmentation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/description/" class="md-nav__link">
+        Architecture description
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/common_layers/" class="md-nav__link">
+        Common layers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Segmentation heads
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Segmentation heads" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Segmentation heads
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/ksac/" class="md-nav__link">
+        KSAC
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/fpn/" class="md-nav__link">
+        FPN
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/ocnet/" class="md-nav__link">
+        OCNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/jpu/" class="md-nav__link">
+        JPU
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/allmlp/" class="md-nav__link">
+        SegFormer
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4" type="checkbox" id="__nav_5_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4">
+          Backbones
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Backbones" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_4">
+          <span class="md-nav__icon md-icon"></span>
+          Backbones
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_1" type="checkbox" id="__nav_5_4_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_1">
+          Classic CNNs backbones
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Classic CNNs backbones" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_4_1">
+          <span class="md-nav__icon md-icon"></span>
+          Classic CNNs backbones
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/mobilenetv2/" class="md-nav__link">
+        MobileNetv2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/ghostnet/" class="md-nav__link">
+        GhostNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/vovnet/" class="md-nav__link">
+        VoVNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/resnet50/" class="md-nav__link">
+        ResNet50
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/resnet50v2/" class="md-nav__link">
+        ResNet50v2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/resnet101/" class="md-nav__link">
+        ResNet101
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/resnet101v2/" class="md-nav__link">
+        ResNet101v2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2" type="checkbox" id="__nav_5_4_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2">
+          Attention and MLP backbones
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Attention and MLP backbones" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Attention and MLP backbones
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/convmlp/" class="md-nav__link">
+        ConvMLP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/mit/" class="md-nav__link">
+        MixTransformer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/mobilevit/" class="md-nav__link">
+        MobileViT
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../training_loop/train/" class="md-nav__link">
+        Training loop
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../loss/focal_loss/" class="md-nav__link">
+        Loss
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../metrics/mean_iou/" class="md-nav__link">
+        Metrics
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix" class="md-nav__link">
+    src.pipelines.cutmix
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix" class="md-nav__link">
+    CutMix
+  </a>
+  
+    <nav class="md-nav" aria-label="CutMix">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.apply_augments" class="md-nav__link">
+    apply_augments()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.create_double_dataset" class="md-nav__link">
+    create_double_dataset()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.create_test_dataset" class="md-nav__link">
+    create_test_dataset()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.create_train_dataset" class="md-nav__link">
+    create_train_dataset()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.cutmix" class="md-nav__link">
+    cutmix()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.get_box" class="md-nav__link">
+    get_box()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.load_images" class="md-nav__link">
+    load_images()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.parse_image_and_mask" class="md-nav__link">
+    parse_image_and_mask()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.sample_beta_distribution" class="md-nav__link">
+    sample_beta_distribution()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.pipelines.cutmix.CutMix.train_preprocess" class="md-nav__link">
+    train_preprocess()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="cutmix-pipeline">CutMix pipeline</h1>
+<p><a href="https://arxiv.org/abs/1905.04899v2">CutMix</a> is an image data augmentation strategy.</p>
+<p>Instead of simply removing pixels as in <a href="https://paperswithcode.com/method/cutout">Cutout</a>, we replace the removed regions with a patch from another image. The ground truth masks are also mixed proportionally.</p>
+<p>The added patches further enhance localization ability by requiring the model to identify the object from a partial view.</p>
+
+
+  <div class="doc doc-object doc-module">
+
+<a id="src.pipelines.cutmix"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="src.pipelines.cutmix.CutMix" class="doc doc-heading">
+        <code>
+CutMix        </code>
+
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Class used to create tensor datasets for TensorFlow via the CutMix method.</p>
+<div class="admonition inheritance">
+<p class="admonition-title">Inheritance</p>
+<p>object: The base class of the class hierarchy, used only to enforce WPS306.
+See https://wemake-python-stylegui.de/en/latest/pages/usage/violations/consistency.html#consistency.</p>
+</div>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>n_classes</code></td>
+        <td><code>int</code></td>
+        <td><p>Number of classes in the dataset.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>img_shape</code></td>
+        <td><code>Tuple[int,int,int]</code></td>
+        <td><p>Dimension of the image, format is (H,W,C).</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>random_seed</code></td>
+        <td><code>int</code></td>
+        <td><p>Fixed random seed for reproducibility.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>random_seed1</code></td>
+        <td><code>int</code></td>
+        <td><p>Fixed random seed needed for cutmix method.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>random_seed2</code></td>
+        <td><code>int</code></td>
+        <td><p>Fixed random seed needed for cutmix method.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.pipelines.cutmix.CutMix.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_classes</span><span class="p">,</span> <span class="n">img_shape</span><span class="p">,</span> <span class="n">random_seed</span><span class="p">,</span> <span class="n">random_seed1</span><span class="p">,</span> <span class="n">random_seed2</span><span class="p">)</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-special"><code>special</code></small>
+  </span>
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Initialization of the class CutMix.</p>
+<p>Initialize the class, the number of classes in the datasets, the shape of the
+images and the random seeds.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>n_classes</code></td>
+        <td><code>int</code></td>
+        <td><p>Number of classes in the dataset.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>img_shape</code></td>
+        <td><code>Tuple[int,int,int]</code></td>
+        <td><p>Dimension of the image, format is (H,W,C).</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>random_seed</code></td>
+        <td><code>int</code></td>
+        <td><p>Fixed random seed for reproducibility.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>random_seed1</code></td>
+        <td><code>int</code></td>
+        <td><p>Fixed random seed needed for cutmix method.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>random_seed2</code></td>
+        <td><code>int</code></td>
+        <td><p>Fixed random seed needed for cutmix method.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/pipelines/cutmix.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">n_classes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">img_shape</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">random_seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">random_seed1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">random_seed2</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Initialization of the class CutMix.</span>
+
+<span class="sd">    Initialize the class, the number of classes in the datasets, the shape of the</span>
+<span class="sd">    images and the random seeds.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        n_classes (int): Number of classes in the dataset.</span>
+<span class="sd">        img_shape (Tuple[int,int,int]): Dimension of the image, format is (H,W,C).</span>
+<span class="sd">        random_seed (int): Fixed random seed for reproducibility.</span>
+<span class="sd">        random_seed1 (int): Fixed random seed needed for cutmix method.</span>
+<span class="sd">        random_seed2 (int): Fixed random seed needed for cutmix method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">n_classes</span> <span class="o">=</span> <span class="n">n_classes</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">img_shape</span> <span class="o">=</span> <span class="n">img_shape</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span> <span class="o">=</span> <span class="n">random_seed</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">random_seed1</span> <span class="o">=</span> <span class="n">random_seed1</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">random_seed2</span> <span class="o">=</span> <span class="n">random_seed2</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">AUTOTUNE</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">AUTOTUNE</span>
+
+    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">image_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.pipelines.cutmix.CutMix.apply_augments" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">apply_augments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>[summary]</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>image</code></td>
+        <td><code>[type]</code></td>
+        <td><p>[description]</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>mask</code></td>
+        <td><code>[type]</code></td>
+        <td><p>[description]</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>[type]</code></td>
+      <td><p>[description]</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/pipelines/cutmix.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@tf</span><span class="o">.</span><span class="n">function</span>
+<span class="k">def</span> <span class="nf">apply_augments</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">mask</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;[summary]</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        image ([type]): [description]</span>
+<span class="sd">        mask ([type]): [description]</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        [type]: [description]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">image</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">numpy_function</span><span class="p">(</span>
+        <span class="n">func</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_preprocess</span><span class="p">,</span>
+        <span class="n">inp</span><span class="o">=</span><span class="p">[</span><span class="n">image</span><span class="p">,</span> <span class="n">mask</span><span class="p">],</span>
+        <span class="n">Tout</span><span class="o">=</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">],</span>
+    <span class="p">)</span>
+
+    <span class="n">img_shape</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">img_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">mask_shape</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">img_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">image</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">ensure_shape</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">img_shape</span><span class="p">)</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">ensure_shape</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">mask_shape</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">image</span><span class="p">,</span> <span class="n">mask</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.pipelines.cutmix.CutMix.create_double_dataset" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">create_double_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_path</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Creates two datasets to be used for CutMix.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>data_path</code></td>
+        <td><code>str</code></td>
+        <td><p>The csv file containing the train datas.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Tuple[tensorflow.python.data.ops.dataset_ops.DatasetV2, tensorflow.python.data.ops.dataset_ops.DatasetV2]</code></td>
+      <td><p>Two datasets.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/pipelines/cutmix.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">create_double_dataset</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">data_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Creates two datasets to be used for CutMix.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data_path (str): The csv file containing the train datas.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Two datasets.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_images</span><span class="p">(</span><span class="n">data_frame</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">column_name</span><span class="o">=</span><span class="s2">&quot;filename&quot;</span><span class="p">)</span>
+    <span class="n">masks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_images</span><span class="p">(</span><span class="n">data_frame</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">column_name</span><span class="o">=</span><span class="s2">&quot;mask&quot;</span><span class="p">)</span>
+
+    <span class="n">dataset_one</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_tensor_slices</span><span class="p">((</span><span class="n">features</span><span class="p">,</span> <span class="n">masks</span><span class="p">))</span>
+    <span class="n">dataset_one</span> <span class="o">=</span> <span class="n">dataset_one</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">),</span> <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_seed1</span><span class="p">)</span>
+    <span class="n">dataset_one</span> <span class="o">=</span> <span class="n">dataset_one</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parse_image_and_mask</span><span class="p">,</span>
+        <span class="n">num_parallel_calls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">AUTOTUNE</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">dataset_two</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_tensor_slices</span><span class="p">((</span><span class="n">features</span><span class="p">,</span> <span class="n">masks</span><span class="p">))</span>
+    <span class="n">dataset_two</span> <span class="o">=</span> <span class="n">dataset_two</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">),</span> <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_seed2</span><span class="p">)</span>
+    <span class="n">dataset_two</span> <span class="o">=</span> <span class="n">dataset_two</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parse_image_and_mask</span><span class="p">,</span>
+        <span class="n">num_parallel_calls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">AUTOTUNE</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">zip</span><span class="p">((</span><span class="n">dataset_one</span><span class="p">,</span> <span class="n">dataset_two</span><span class="p">))</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.pipelines.cutmix.CutMix.create_test_dataset" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">create_test_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">repet</span><span class="p">,</span> <span class="n">prefetch</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Creation of a tensor dataset for TensorFlow.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>data_path</code></td>
+        <td><code>str</code></td>
+        <td><p>Path where the csv file containing the dataframe is
+located.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>batch</code></td>
+        <td><code>int</code></td>
+        <td><p>Batch size, usually 32.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>repet</code></td>
+        <td><code>int</code></td>
+        <td><p>How many times the dataset has to be repeated.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>prefetch</code></td>
+        <td><code>int</code></td>
+        <td><p>How many batch the CPU has to prepare in advance for the
+GPU.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>DatasetV2</code></td>
+      <td><p>A batch of observations and masks.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/pipelines/cutmix.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">create_test_dataset</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">data_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">repet</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">prefetch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Creation of a tensor dataset for TensorFlow.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data_path (str): Path where the csv file containing the dataframe is</span>
+<span class="sd">            located.</span>
+<span class="sd">        batch (int): Batch size, usually 32.</span>
+<span class="sd">        repet (int): How many times the dataset has to be repeated.</span>
+<span class="sd">        prefetch (int): How many batch the CPU has to prepare in advance for the</span>
+<span class="sd">            GPU.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A batch of observations and masks.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_images</span><span class="p">(</span><span class="n">data_frame</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">column_name</span><span class="o">=</span><span class="s2">&quot;filename&quot;</span><span class="p">)</span>
+    <span class="n">masks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_images</span><span class="p">(</span><span class="n">data_frame</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">column_name</span><span class="o">=</span><span class="s2">&quot;mask&quot;</span><span class="p">)</span>
+
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_tensor_slices</span><span class="p">((</span><span class="n">features</span><span class="p">,</span> <span class="n">masks</span><span class="p">))</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">),</span> <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span><span class="p">)</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">repet</span><span class="p">)</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parse_image_and_mask</span><span class="p">,</span>
+        <span class="n">num_parallel_calls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">AUTOTUNE</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dataset</span><span class="o">.</span><span class="n">prefetch</span><span class="p">(</span><span class="n">prefetch</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.pipelines.cutmix.CutMix.create_train_dataset" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">create_train_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">repet</span><span class="p">,</span> <span class="n">augment</span><span class="p">,</span> <span class="n">prefecth</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Creation of a tensor dataset for TensorFlow.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>data_path</code></td>
+        <td><code>str</code></td>
+        <td><p>Path where the csv file containing the dataframe is
+located.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>batch</code></td>
+        <td><code>int</code></td>
+        <td><p>Batch size, usually 32.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>repet</code></td>
+        <td><code>int</code></td>
+        <td><p>How many times the dataset has to be repeated.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>prefetch</code></td>
+        <td><code>int</code></td>
+        <td><p>How many batch the CPU has to prepare in advance for the
+GPU.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>augment</code></td>
+        <td><code>bool</code></td>
+        <td><p>Does the dataset has to be augmented or no.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>DatasetV2</code></td>
+      <td><p>A batch of observations and masks.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/pipelines/cutmix.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">create_train_dataset</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">data_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">batch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">repet</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">augment</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">prefecth</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Creation of a tensor dataset for TensorFlow.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data_path (str): Path where the csv file containing the dataframe is</span>
+<span class="sd">            located.</span>
+<span class="sd">        batch (int): Batch size, usually 32.</span>
+<span class="sd">        repet (int): How many times the dataset has to be repeated.</span>
+<span class="sd">        prefetch (int): How many batch the CPU has to prepare in advance for the</span>
+<span class="sd">            GPU.</span>
+<span class="sd">        augment (bool): Does the dataset has to be augmented or no.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A batch of observations and masks.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_double_dataset</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span> <span class="n">seed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span><span class="p">)</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">repet</span><span class="p">)</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cutmix</span><span class="p">,</span> <span class="n">num_parallel_calls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">AUTOTUNE</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">augment</span><span class="p">:</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_augments</span><span class="p">,</span> <span class="n">num_parallel_calls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">AUTOTUNE</span><span class="p">)</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dataset</span><span class="o">.</span><span class="n">prefetch</span><span class="p">(</span><span class="n">prefecth</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.pipelines.cutmix.CutMix.cutmix" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">cutmix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_ds_one</span><span class="p">,</span> <span class="n">train_ds_two</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Define CutMix fonction.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>train_ds_one</code></td>
+        <td><code>tf.data.Dataset</code></td>
+        <td><p>Dataset.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>train_ds_two</code></td>
+        <td><code>tf.data.Dataset</code></td>
+        <td><p>Dataset.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Tuple[numpy.ndarray, numpy.ndarray]</code></td>
+      <td><p>An image and a mask augmented by the CutMix function.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/pipelines/cutmix.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@tf</span><span class="o">.</span><span class="n">function</span>
+<span class="k">def</span> <span class="nf">cutmix</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">train_ds_one</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
+    <span class="n">train_ds_two</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Define CutMix fonction.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        train_ds_one (tf.data.Dataset): Dataset.</span>
+<span class="sd">        train_ds_two (tf.data.Dataset): Dataset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        An image and a mask augmented by the CutMix function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="p">(</span><span class="n">image1</span><span class="p">,</span> <span class="n">mask1</span><span class="p">),</span> <span class="p">(</span><span class="n">image2</span><span class="p">,</span> <span class="n">mask2</span><span class="p">)</span> <span class="o">=</span> <span class="n">train_ds_one</span><span class="p">,</span> <span class="n">train_ds_two</span>
+
+    <span class="n">alpha</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.25</span><span class="p">]</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.25</span><span class="p">]</span>
+
+    <span class="c1"># Get a sample from the Beta distribution</span>
+    <span class="n">lambda_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_beta_distribution</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">)</span>
+    <span class="c1"># Define Lambda</span>
+    <span class="n">lambda_value</span> <span class="o">=</span> <span class="n">lambda_value</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Get the bounding box offsets, heights and widths</span>
+    <span class="n">boundaryx1</span><span class="p">,</span> <span class="n">boundaryy1</span><span class="p">,</span> <span class="n">target_h</span><span class="p">,</span> <span class="n">target_w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_box</span><span class="p">(</span><span class="n">lambda_value</span><span class="p">)</span>
+
+    <span class="c1"># Get a patch from the second image (`image2`)</span>
+    <span class="n">img_crop2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">crop_to_bounding_box</span><span class="p">(</span>
+        <span class="n">image2</span><span class="p">,</span>
+        <span class="n">boundaryy1</span><span class="p">,</span>
+        <span class="n">boundaryx1</span><span class="p">,</span>
+        <span class="n">target_h</span><span class="p">,</span>
+        <span class="n">target_w</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># Pad the `image2` patch (`crop2`) with the same offset</span>
+    <span class="n">image2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">pad_to_bounding_box</span><span class="p">(</span>
+        <span class="n">img_crop2</span><span class="p">,</span>
+        <span class="n">boundaryy1</span><span class="p">,</span>
+        <span class="n">boundaryx1</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_size</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_size</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># Get a patch from the first image (`image1`)</span>
+    <span class="n">img_crop1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">crop_to_bounding_box</span><span class="p">(</span>
+        <span class="n">image1</span><span class="p">,</span>
+        <span class="n">boundaryy1</span><span class="p">,</span>
+        <span class="n">boundaryx1</span><span class="p">,</span>
+        <span class="n">target_h</span><span class="p">,</span>
+        <span class="n">target_w</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># Pad the `image1` patch (`crop1`) with the same offset</span>
+    <span class="n">img1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">pad_to_bounding_box</span><span class="p">(</span>
+        <span class="n">img_crop1</span><span class="p">,</span>
+        <span class="n">boundaryy1</span><span class="p">,</span>
+        <span class="n">boundaryx1</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_size</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_size</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Modify the first image by subtracting the patch from `image1`</span>
+    <span class="c1"># (before applying the `image2` patch)</span>
+    <span class="n">image1</span> <span class="o">-=</span> <span class="n">img1</span>
+    <span class="c1"># Add the modified `image1` and `image2`  together to get the CutMix image</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">image1</span> <span class="o">+</span> <span class="n">image2</span>
+
+    <span class="c1"># Get a patch from the second image (`image2`)</span>
+    <span class="n">mask_crop2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">crop_to_bounding_box</span><span class="p">(</span>
+        <span class="n">mask2</span><span class="p">,</span>
+        <span class="n">boundaryy1</span><span class="p">,</span>
+        <span class="n">boundaryx1</span><span class="p">,</span>
+        <span class="n">target_h</span><span class="p">,</span>
+        <span class="n">target_w</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># Pad the `image2` patch (`crop2`) with the same offset</span>
+    <span class="n">mask2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">pad_to_bounding_box</span><span class="p">(</span>
+        <span class="n">mask_crop2</span><span class="p">,</span>
+        <span class="n">boundaryy1</span><span class="p">,</span>
+        <span class="n">boundaryx1</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_size</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_size</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># Get a patch from the first image (`image1`)</span>
+    <span class="n">mask_crop1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">crop_to_bounding_box</span><span class="p">(</span>
+        <span class="n">mask1</span><span class="p">,</span>
+        <span class="n">boundaryy1</span><span class="p">,</span>
+        <span class="n">boundaryx1</span><span class="p">,</span>
+        <span class="n">target_h</span><span class="p">,</span>
+        <span class="n">target_w</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># Pad the `image1` patch (`crop1`) with the same offset</span>
+    <span class="n">msk1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">pad_to_bounding_box</span><span class="p">(</span>
+        <span class="n">mask_crop1</span><span class="p">,</span>
+        <span class="n">boundaryy1</span><span class="p">,</span>
+        <span class="n">boundaryx1</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_size</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_size</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Modify the first image by subtracting the patch from `image1`</span>
+    <span class="c1"># (before applying the `image2` patch)</span>
+    <span class="n">mask1</span> <span class="o">-=</span> <span class="n">msk1</span>
+    <span class="c1"># Add the modified `image1` and `image2`  together to get the CutMix image</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">mask1</span> <span class="o">+</span> <span class="n">mask2</span>
+
+    <span class="k">return</span> <span class="n">image</span><span class="p">,</span> <span class="n">mask</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.pipelines.cutmix.CutMix.get_box" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_box</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lambda_value</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Given a "combination ratio <code>lamba_value</code>", define the coordinates of the bounding boxes to be cut and mixed between
+two images and masks.</p>
+<p>The coordinates of the bounding boxes ares in the format <code>(x_min,y_min,height,width)</code> and chosen such that we
+have the ratio :</p>
+<div class="arithmatex">\[
+    \frac{\text{height}\cdot \text{width}}{H \cdot W} = 1- \lambda
+\]</div>
+<p>where :</p>
+<ul>
+<li><span class="arithmatex">\(\lambda\)</span> = <code>lambda_value</code>,</li>
+<li><span class="arithmatex">\(H\)</span>, <span class="arithmatex">\(W\)</span> are the height, width of the images/masks.</li>
+</ul>
+<p>that is <span class="arithmatex">\(\text{height} = H \cdot \sqrt{1-\lambda}\)</span>, and <span class="arithmatex">\(\text{width} = W \cdot \sqrt{1-\lambda}\)</span>.</p>
+<ul>
+<li><code>x_min</code> is chosen by sampling uniformly in <span class="arithmatex">\(\mathrm{Unif}(0, W)\)</span>.</li>
+<li><code>y_min</code> is chosen by sampling uniformly in <span class="arithmatex">\(\mathrm{Unif}(0, H)\)</span></li>
+</ul>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>lambda_value</code></td>
+        <td><code>float</code></td>
+        <td><p>The combination ratio, has to be a real number in <span class="arithmatex">\((0,1)\)</span>.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Tuple[int, int, int, int]</code></td>
+      <td><p>The coordinates of the bounding boxes tu be modified.
+    Coordinates in format <code>(x_min,y_min,height,width)</code>.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/pipelines/cutmix.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@tf</span><span class="o">.</span><span class="n">function</span>
+<span class="k">def</span> <span class="nf">get_box</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lambda_value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Given a &quot;combination ratio `lamba_value`&quot;, define the coordinates of the bounding boxes to be cut and mixed between</span>
+<span class="sd">    two images and masks.</span>
+
+<span class="sd">    The coordinates of the bounding boxes ares in the format `(x_min,y_min,height,width)` and chosen such that we</span>
+<span class="sd">    have the ratio :</span>
+
+<span class="sd">    \[</span>
+<span class="sd">        \\frac{\\text{height}\cdot \\text{width}}{H \cdot W} = 1- \lambda</span>
+<span class="sd">    \]</span>
+
+<span class="sd">    where :</span>
+
+<span class="sd">    * $\lambda$ = `lambda_value`,</span>
+<span class="sd">    * $H$, $W$ are the height, width of the images/masks.</span>
+
+<span class="sd">    that is $\\text{height} = H \cdot \sqrt{1-\lambda}$, and $\\text{width} = W \cdot \sqrt{1-\lambda}$.</span>
+
+<span class="sd">    * `x_min` is chosen by sampling uniformly in $\mathrm{Unif}(0, W)$.</span>
+<span class="sd">    * `y_min` is chosen by sampling uniformly in $\mathrm{Unif}(0, H)$</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        lambda_value (float): The combination ratio, has to be a real number in $(0,1)$.</span>
+
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple[int, int, int, int]: The coordinates of the bounding boxes tu be modified.</span>
+<span class="sd">            Coordinates in format `(x_min,y_min,height,width)`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># define coordinates ratio</span>
+    <span class="n">cut_rat</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">lambda_value</span><span class="p">)</span>
+
+    <span class="c1"># define bounding box width</span>
+    <span class="n">cut_w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_size</span> <span class="o">*</span> <span class="n">cut_rat</span>
+    <span class="n">cut_w</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">cut_w</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+    <span class="c1"># define bounding box height</span>
+    <span class="n">cut_h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_size</span> <span class="o">*</span> <span class="n">cut_rat</span>
+    <span class="n">cut_h</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">cut_h</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+    <span class="c1"># define bounding box c_x</span>
+    <span class="n">cut_x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,),</span>
+        <span class="n">minval</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">maxval</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">image_size</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># define bounding box c_y</span>
+    <span class="n">cut_y</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,),</span>
+        <span class="n">minval</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">maxval</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">image_size</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">boundaryx1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">clip_by_value</span><span class="p">(</span>
+        <span class="n">cut_x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">cut_w</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_size</span><span class="p">,</span>
+    <span class="p">)</span>  <span class="c1"># x_min</span>
+    <span class="n">boundaryy1</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">clip_by_value</span><span class="p">(</span>
+        <span class="n">cut_y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">cut_h</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_size</span><span class="p">,</span>
+    <span class="p">)</span>  <span class="c1"># y_min</span>
+    <span class="n">bbx2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">clip_by_value</span><span class="p">(</span><span class="n">cut_x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">cut_w</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_size</span><span class="p">)</span>  <span class="c1"># x_max</span>
+    <span class="n">bby2</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">clip_by_value</span><span class="p">(</span><span class="n">cut_y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">cut_h</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_size</span><span class="p">)</span>  <span class="c1"># y_max</span>
+
+    <span class="n">target_h</span> <span class="o">=</span> <span class="n">bby2</span> <span class="o">-</span> <span class="n">boundaryy1</span>  <span class="c1"># y_max - y_min</span>
+    <span class="k">if</span> <span class="n">target_h</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">target_h</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">target_w</span> <span class="o">=</span> <span class="n">bbx2</span> <span class="o">-</span> <span class="n">boundaryx1</span>  <span class="c1"># x_max - x_min</span>
+    <span class="k">if</span> <span class="n">target_w</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">target_w</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">boundaryx1</span><span class="p">,</span> <span class="n">boundaryy1</span><span class="p">,</span> <span class="n">target_h</span><span class="p">,</span> <span class="n">target_w</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.pipelines.cutmix.CutMix.load_images" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">load_images</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_frame</span><span class="p">,</span> <span class="n">column_name</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Load the images as a list.</p>
+<p>Take the dataframe containing the observations and the labels and the return the
+column containing the observations as a list.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>data_frame</code></td>
+        <td><code>pd.DataFrame</code></td>
+        <td><p>Dataframe containing the dataset.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>column_name</code></td>
+        <td><code>str</code></td>
+        <td><p>The name of the column containing the observations.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>List[str]</code></td>
+      <td><p>The list of observations deduced from the dataframe.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/pipelines/cutmix.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">load_images</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_frame</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Load the images as a list.</span>
+
+<span class="sd">    Take the dataframe containing the observations and the labels and the return the</span>
+<span class="sd">    column containing the observations as a list.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data_frame (pd.DataFrame): Dataframe containing the dataset.</span>
+<span class="sd">        column_name (str): The name of the column containing the observations.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The list of observations deduced from the dataframe.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">data_frame</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.pipelines.cutmix.CutMix.parse_image_and_mask" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">parse_image_and_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Transform image and mask.</p>
+<p>Parse image and mask to go from path to a resized np.ndarray.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>filename</code></td>
+        <td><code>str</code></td>
+        <td><p>The path of the image to parse.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>mask</code></td>
+        <td><code>str</code></td>
+        <td><p>The path of the mask of the image.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Tuple[numpy.ndarray, numpy.ndarray]</code></td>
+      <td><p>A np.ndarray corresponding to the image and the corresponding mask.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/pipelines/cutmix.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@tf</span><span class="o">.</span><span class="n">function</span>
+<span class="k">def</span> <span class="nf">parse_image_and_mask</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">image</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">mask</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Transform image and mask.</span>
+
+<span class="sd">    Parse image and mask to go from path to a resized np.ndarray.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename (str): The path of the image to parse.</span>
+<span class="sd">        mask (str):  The path of the mask of the image.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A np.ndarray corresponding to the image and the corresponding mask.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">resized_dims</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">img_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="c1"># decode image</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+    <span class="c1"># Don&#39;t use tf.image.decode_image,</span>
+    <span class="c1"># or the output shape will be undefined</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">decode_jpeg</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+    <span class="c1"># This will convert to float values in [0, 1]</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">convert_image_dtype</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span>
+        <span class="n">image</span><span class="p">,</span>
+        <span class="n">resized_dims</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">ResizeMethod</span><span class="o">.</span><span class="n">NEAREST_NEIGHBOR</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+    <span class="c1"># Don&#39;t use tf.image.decode_image,</span>
+    <span class="c1"># or the output shape will be undefined</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">decode_png</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span>
+        <span class="n">mask</span><span class="p">,</span>
+        <span class="n">resized_dims</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">ResizeMethod</span><span class="o">.</span><span class="n">NEAREST_NEIGHBOR</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">image</span><span class="p">,</span> <span class="n">mask</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.pipelines.cutmix.CutMix.sample_beta_distribution" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">sample_beta_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">concentration0</span><span class="p">,</span> <span class="n">concentration1</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Sample a float from Beta distribution.</p>
+<p>This is done by sampling two random variables from two gamma distributions.</p>
+<p>If <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(Y\)</span> are two i.i.d. random variables following Gamma laws, <span class="arithmatex">\(X \sim \mathrm{Gamma}({\alpha}, \theta)\)</span>,
+and <span class="arithmatex">\(Y \simeq \mathrm{Gamma}(\beta, \theta)\)</span>, then the random variable <span class="arithmatex">\(\frac{X}{X+Y}\)</span> follows the
+<span class="arithmatex">\(\mathrm{Beta}(\alpha, \beta)\)</span> law.</p>
+<p>Note that if <span class="arithmatex">\(\alpha=\beta=1\)</span>, then <span class="arithmatex">\(\mathrm{Beta}(1,1)\)</span> is just the Uniform distribution <span class="arithmatex">\((0,1)\)</span>.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>size</code></td>
+        <td><code>int</code></td>
+        <td><p>A 1-D integer Tensor or Python array. The shape of the output samples to be drawn per
+alpha/beta-parameterized distribution.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>concentration0</code></td>
+        <td><code>List[float]</code></td>
+        <td><p>A Tensor or Python value or N-D array of type dtype. concentration0 provides the
+shape parameter(s) describing the gamma distribution(s) to sample.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>concentration1</code></td>
+        <td><code>List[float]</code></td>
+        <td><p>A Tensor or Python value or N-D array of type dtype. concentration1- provides the
+shape parameter(s) describing the gamma distribution(s) to sample.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>float</code></td>
+      <td><p>A float sampled from Beta(concentration1,concentration2) distribution.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/pipelines/cutmix.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">sample_beta_distribution</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">concentration0</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">concentration1</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Sample a float from Beta distribution.</span>
+
+<span class="sd">    This is done by sampling two random variables from two gamma distributions.</span>
+
+<span class="sd">    If $X$ and $Y$ are two i.i.d. random variables following Gamma laws, $X \sim \mathrm{Gamma}({\\alpha}, \\theta)$,</span>
+<span class="sd">    and $Y \simeq \mathrm{Gamma}(\\beta, \\theta)$, then the random variable $\\frac{X}{X+Y}$ follows the</span>
+<span class="sd">    $\mathrm{Beta}(\\alpha, \\beta)$ law.</span>
+
+<span class="sd">    Note that if $\\alpha=\\beta=1$, then $\\mathrm{Beta}(1,1)$ is just the Uniform distribution $(0,1)$.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        size (int): A 1-D integer Tensor or Python array. The shape of the output samples to be drawn per</span>
+<span class="sd">            alpha/beta-parameterized distribution.</span>
+<span class="sd">        concentration0 (List[float]): A Tensor or Python value or N-D array of type dtype. concentration0 provides the</span>
+<span class="sd">            shape parameter(s) describing the gamma distribution(s) to sample.</span>
+<span class="sd">        concentration1 (List[float]): A Tensor or Python value or N-D array of type dtype. concentration1- provides the</span>
+<span class="sd">            shape parameter(s) describing the gamma distribution(s) to sample.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float: A float sampled from Beta(concentration1,concentration2) distribution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">gamma1sample</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">gamma</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">size</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="n">concentration1</span><span class="p">)</span>
+    <span class="n">gamma2sample</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">gamma</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">size</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="n">concentration0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">gamma1sample</span> <span class="o">/</span> <span class="p">(</span><span class="n">gamma1sample</span> <span class="o">+</span> <span class="n">gamma2sample</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.pipelines.cutmix.CutMix.train_preprocess" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">train_preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Augmentation preprocess, if needed.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>image</code></td>
+        <td><code>np.ndarray</code></td>
+        <td><p>The image to augment.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>mask</code></td>
+        <td><code>np.ndarray</code></td>
+        <td><p>The corresponding mask.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Tuple[numpy.ndarray, numpy.ndarray]</code></td>
+      <td><p>The augmented pair.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/pipelines/cutmix.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">train_preprocess</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">mask</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Augmentation preprocess, if needed.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        image (np.ndarray): The image to augment.</span>
+<span class="sd">        mask (np.ndarray): The corresponding mask.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The augmented pair.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">aug</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">Compose</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">A</span><span class="o">.</span><span class="n">HorizontalFlip</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span>
+            <span class="n">A</span><span class="o">.</span><span class="n">VerticalFlip</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span>
+            <span class="n">A</span><span class="o">.</span><span class="n">RandomRotate90</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span>
+            <span class="n">A</span><span class="o">.</span><span class="n">Transpose</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span>
+        <span class="p">],</span>
+    <span class="p">)</span>
+
+    <span class="n">augmented</span> <span class="o">=</span> <span class="n">aug</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+    <span class="n">image</span> <span class="o">=</span> <span class="n">augmented</span><span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">]</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">augmented</span><span class="p">[</span><span class="s2">&quot;mask&quot;</span><span class="p">]</span>
+
+    <span class="n">image</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">image</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">image</span><span class="p">,</span> <span class="n">mask</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg>
+            Retour en haut de la page
+          </a>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Pied de page">
+      
+        
+        <a href="../classic/" class="md-footer__link md-footer__link--prev" aria-label="Précédent: Classic pipeline" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Précédent
+              </span>
+              Classic pipeline
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../../models/description/" class="md-footer__link md-footer__link--next" aria-label="Suivant: Architecture description" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Suivant
+              </span>
+              Architecture description
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.top", "search.highlight", "search.share", "search.suggest"], "translations": {"clipboard.copy": "Copier dans le presse-papier", "clipboard.copied": "Copi\u00e9 dans le presse-papier", "search.config.lang": "fr", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Rechercher", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.term.missing": "Non trouv\u00e9", "select.version.title": "S\u00e9lectionner la version"}, "search": "../../assets/javascripts/workers/search.8397ff9e.min.js", "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.1e84347e.min.js"></script>
+      
+        <script src="../../javascripts/config.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

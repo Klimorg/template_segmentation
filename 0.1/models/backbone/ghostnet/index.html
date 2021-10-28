@@ -1,0 +1,2206 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <meta name="author" content="Mathieu Klimczak">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
+    
+    
+      
+        <title>GhostNet - Documentation Semantic Segmentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.db9e7362.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <script>function __prefix(e){return new URL("../../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+      <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ghostnet-more-features-from-cheap-operations" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href="../../.." title="Documentation Semantic Segmentation" class="md-header__button md-logo" aria-label="Documentation Semantic Segmentation" data-md-component="logo">
+      
+  <img src="../../../images/logo_blanc.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Documentation Semantic Segmentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              GhostNet
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Basculer en mode sombre"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Basculer en mode sombre" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="deep-orange"  aria-label="Basculer en mode clair"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Basculer en mode clair" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Effacer" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Onglets" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../config_hydra/hydra/" class="md-tabs__link">
+      Hydra configuration
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../misc_config/docker/" class="md-tabs__link">
+        Various configuration
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../datasets/config/" class="md-tabs__link">
+        Datasets creation
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../description/" class="md-tabs__link md-tabs__link--active">
+        Semantic segmentation
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../training_loop/train/" class="md-tabs__link">
+      Training loop
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../loss/focal_loss/" class="md-tabs__link">
+      Loss
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../metrics/mean_iou/" class="md-tabs__link">
+      Metrics
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Documentation Semantic Segmentation" class="md-nav__button md-logo" aria-label="Documentation Semantic Segmentation" data-md-component="logo">
+      
+  <img src="../../../images/logo_blanc.svg" alt="logo">
+
+    </a>
+    Documentation Semantic Segmentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../config_hydra/hydra/" class="md-nav__link">
+        Hydra configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Various configuration
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Various configuration" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Various configuration
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc_config/docker/" class="md-nav__link">
+        Docker config
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc_config/make/" class="md-nav__link">
+        Makefile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc_config/requirements/" class="md-nav__link">
+        Requirements
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Datasets creation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Datasets creation" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Datasets creation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../datasets/config/" class="md-nav__link">
+        Dataset configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../datasets/utils_segmentation/" class="md-nav__link">
+        Masks creation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../datasets/make_dataset/" class="md-nav__link">
+        Train-Test-Val datasets creation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_4" type="checkbox" id="__nav_4_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_4">
+          Datasets pipelines
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Datasets pipelines" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_4">
+          <span class="md-nav__icon md-icon"></span>
+          Datasets pipelines
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../datasets/classic/" class="md-nav__link">
+        Classic pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../datasets/cutmix/" class="md-nav__link">
+        CutMix pipeline
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Semantic segmentation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Semantic segmentation" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Semantic segmentation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../description/" class="md-nav__link">
+        Architecture description
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../common_layers/" class="md-nav__link">
+        Common layers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Segmentation heads
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Segmentation heads" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Segmentation heads
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../heads/ksac/" class="md-nav__link">
+        KSAC
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../heads/fpn/" class="md-nav__link">
+        FPN
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../heads/ocnet/" class="md-nav__link">
+        OCNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../heads/jpu/" class="md-nav__link">
+        JPU
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../heads/allmlp/" class="md-nav__link">
+        SegFormer
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4" type="checkbox" id="__nav_5_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4">
+          Backbones
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Backbones" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_4">
+          <span class="md-nav__icon md-icon"></span>
+          Backbones
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_1" type="checkbox" id="__nav_5_4_1" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_1">
+          Classic CNNs backbones
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Classic CNNs backbones" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_4_1">
+          <span class="md-nav__icon md-icon"></span>
+          Classic CNNs backbones
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mobilenetv2/" class="md-nav__link">
+        MobileNetv2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          GhostNet
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        GhostNet
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.ghostnet" class="md-nav__link">
+    src.model.backbone.ghostnet
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.ghostnet.get_backbone" class="md-nav__link">
+    get_backbone()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.ghostnet.get_feature_extractor" class="md-nav__link">
+    get_feature_extractor()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.ghostnet.ghost_bottleneck_module" class="md-nav__link">
+    ghost_bottleneck_module()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.ghostnet.ghost_module" class="md-nav__link">
+    ghost_module()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.ghostnet.se_module" class="md-nav__link">
+    se_module()
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vovnet/" class="md-nav__link">
+        VoVNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resnet50/" class="md-nav__link">
+        ResNet50
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resnet50v2/" class="md-nav__link">
+        ResNet50v2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resnet101/" class="md-nav__link">
+        ResNet101
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resnet101v2/" class="md-nav__link">
+        ResNet101v2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2" type="checkbox" id="__nav_5_4_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2">
+          Attention and MLP backbones
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Attention and MLP backbones" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Attention and MLP backbones
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../convmlp/" class="md-nav__link">
+        ConvMLP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mit/" class="md-nav__link">
+        MixTransformer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mobilevit/" class="md-nav__link">
+        MobileViT
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../training_loop/train/" class="md-nav__link">
+        Training loop
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../loss/focal_loss/" class="md-nav__link">
+        Loss
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../metrics/mean_iou/" class="md-nav__link">
+        Metrics
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.ghostnet" class="md-nav__link">
+    src.model.backbone.ghostnet
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.ghostnet.get_backbone" class="md-nav__link">
+    get_backbone()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.ghostnet.get_feature_extractor" class="md-nav__link">
+    get_feature_extractor()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.ghostnet.ghost_bottleneck_module" class="md-nav__link">
+    ghost_bottleneck_module()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.ghostnet.ghost_module" class="md-nav__link">
+    ghost_module()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.ghostnet.se_module" class="md-nav__link">
+    se_module()
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="ghostnet-more-features-from-cheap-operations">GhostNet: More Features from Cheap Operations</h1>
+<div class="admonition note">
+<p class="admonition-title">Abstract</p>
+<p>Deploying convolutional neural networks (CNNs) on embedded devices is difficult due to the limited memory and computation resources. The redundancy in feature maps is an important characteristic of those successful CNNs, but has rarely been investigated in neural architecture design. This paper proposes a novel Ghost module to generate more feature maps from cheap operations. Based on a set of intrinsic feature maps, we apply a series of linear transformations with cheap cost to generate many ghost feature maps that could fully reveal information underlying intrinsic features. The proposed Ghost module can be taken as a plug-and-play component to upgrade existing convolutional neural networks. Ghost bottlenecks are designed to stack Ghost modules, and then the lightweight GhostNet can be easily established. Experiments conducted on benchmarks demonstrate that the proposed Ghost module is an impressive alternative of convolution layers in baseline models, and our GhostNet can achieve higher recognition performance (e.g. 75.7% top-1 accuracy) than MobileNetV3 with similar computational cost on the ImageNet ILSVRC-2012 classification dataset.</p>
+<p><a href="https://arxiv.org/abs/1911.11907">ArXiv link</a></p>
+</div>
+
+
+  <div class="doc doc-object doc-module">
+
+<a id="src.model.backbone.ghostnet"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="src.model.backbone.ghostnet.get_backbone" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_backbone</span><span class="p">(</span><span class="n">img_shape</span><span class="p">,</span> <span class="n">backbone_name</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Instantiate the model and use it as a backbone (feature extractor) for a semantic segmentation task.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>img_shape</code></td>
+        <td><code>List[int]</code></td>
+        <td><p>Input shape of the images/masks in the dataset.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>backbone_name</code></td>
+        <td><code>str</code></td>
+        <td><p>Name of the backbone.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Model</code></td>
+      <td><p>A <code>tf.keras</code> model.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/model/backbone/ghostnet.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_backbone</span><span class="p">(</span><span class="n">img_shape</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">backbone_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Instantiate the model and use it as a backbone (feature extractor) for a semantic segmentation task.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        img_shape (List[int]): Input shape of the images/masks in the dataset.</span>
+<span class="sd">        backbone_name (str): Name of the backbone.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A `tf.keras` model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">backbone</span> <span class="o">=</span> <span class="n">get_feature_extractor</span><span class="p">(</span>
+        <span class="n">img_shape</span><span class="o">=</span><span class="n">img_shape</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">endpoint_layers</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;concat_ghost_module_2_gbneck_module_1_2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;concat_ghost_module_2_gbneck_module_2_2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;concat_ghost_module_2_gbneck_module_3_2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;concat_ghost_module_2_gbneck_module_5_4&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">os4_output</span><span class="p">,</span> <span class="n">os8_output</span><span class="p">,</span> <span class="n">os16_output</span><span class="p">,</span> <span class="n">os32_output</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">backbone</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">layer_name</span><span class="p">)</span><span class="o">.</span><span class="n">output</span> <span class="k">for</span> <span class="n">layer_name</span> <span class="ow">in</span> <span class="n">endpoint_layers</span>
+    <span class="p">]</span>
+
+    <span class="n">height</span> <span class="o">=</span> <span class="n">img_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;os4_output OS : </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">height</span><span class="o">/</span><span class="n">os4_output</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">as_list</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;os8_output OS : </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">height</span><span class="o">/</span><span class="n">os8_output</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">as_list</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;os16_output OS : </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">height</span><span class="o">/</span><span class="n">os16_output</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">as_list</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;os32_output OS : </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">height</span><span class="o">/</span><span class="n">os32_output</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">as_list</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Model</span><span class="p">(</span>
+        <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">backbone</span><span class="o">.</span><span class="n">input</span><span class="p">],</span>
+        <span class="n">outputs</span><span class="o">=</span><span class="p">[</span><span class="n">os4_output</span><span class="p">,</span> <span class="n">os8_output</span><span class="p">,</span> <span class="n">os16_output</span><span class="p">,</span> <span class="n">os32_output</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">backbone_name</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="src.model.backbone.ghostnet.get_feature_extractor" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_feature_extractor</span><span class="p">(</span><span class="n">img_shape</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Instantiate a GhostNet model.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>img_shape</code></td>
+        <td><code>List[int]</code></td>
+        <td><p>Input shape of the images in the dataset.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Model</code></td>
+      <td><p>A <code>tf.keras</code> model.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/model/backbone/ghostnet.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_feature_extractor</span><span class="p">(</span>
+    <span class="n">img_shape</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Instantiate a GhostNet model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        img_shape (List[int]): Input shape of the images in the dataset.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A `tf.keras` model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">dwkernels</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+    <span class="n">strides</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">exps</span> <span class="o">=</span> <span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">240</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">184</span><span class="p">,</span> <span class="mi">184</span><span class="p">,</span> <span class="mi">480</span><span class="p">,</span> <span class="mi">672</span><span class="p">,</span> <span class="mi">672</span><span class="p">,</span> <span class="mi">960</span><span class="p">,</span> <span class="mi">960</span><span class="p">,</span> <span class="mi">960</span><span class="p">,</span> <span class="mi">960</span><span class="p">]</span>
+    <span class="n">outs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">112</span><span class="p">,</span> <span class="mi">112</span><span class="p">,</span> <span class="mi">160</span><span class="p">,</span> <span class="mi">160</span><span class="p">,</span> <span class="mi">160</span><span class="p">,</span> <span class="mi">160</span><span class="p">,</span> <span class="mi">160</span><span class="p">]</span>
+    <span class="n">ratios</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">16</span>
+    <span class="n">use_ses</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="kc">True</span><span class="p">,</span>
+        <span class="kc">True</span><span class="p">,</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="kc">True</span><span class="p">,</span>
+        <span class="kc">True</span><span class="p">,</span>
+        <span class="kc">True</span><span class="p">,</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="kc">True</span><span class="p">,</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="kc">True</span><span class="p">,</span>
+        <span class="kc">False</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">l2_reguls</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e-4</span><span class="p">]</span> <span class="o">*</span> <span class="mi">16</span>
+
+    <span class="n">img_input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">img_shape</span><span class="p">)</span>
+
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">Conv2D</span><span class="p">(</span>
+        <span class="n">filters</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+        <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+        <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
+        <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">kernel_initializer</span><span class="o">=</span><span class="s2">&quot;he_uniform&quot;</span><span class="p">,</span>
+    <span class="p">)(</span><span class="n">img_input</span><span class="p">)</span>
+
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ghost_bottleneck_module</span><span class="p">(</span>
+        <span class="n">fmap_in</span><span class="o">=</span><span class="n">fmap</span><span class="p">,</span>
+        <span class="n">dwkernel</span><span class="o">=</span><span class="n">dwkernels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">exp</span><span class="o">=</span><span class="n">exps</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">outs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">ratio</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">use_se</span><span class="o">=</span><span class="n">use_ses</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">l2_regul</span><span class="o">=</span><span class="n">l2_reguls</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;1&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ghost_bottleneck_module</span><span class="p">(</span>
+        <span class="n">fmap_in</span><span class="o">=</span><span class="n">fmap</span><span class="p">,</span>
+        <span class="n">dwkernel</span><span class="o">=</span><span class="n">dwkernels</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">exp</span><span class="o">=</span><span class="n">exps</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">outs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">ratio</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">use_se</span><span class="o">=</span><span class="n">use_ses</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">l2_regul</span><span class="o">=</span><span class="n">l2_reguls</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;1_2&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ghost_bottleneck_module</span><span class="p">(</span>
+        <span class="n">fmap_in</span><span class="o">=</span><span class="n">fmap</span><span class="p">,</span>
+        <span class="n">dwkernel</span><span class="o">=</span><span class="n">dwkernels</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">exp</span><span class="o">=</span><span class="n">exps</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">outs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">ratio</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">use_se</span><span class="o">=</span><span class="n">use_ses</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">l2_regul</span><span class="o">=</span><span class="n">l2_reguls</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;2_1&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ghost_bottleneck_module</span><span class="p">(</span>
+        <span class="n">fmap_in</span><span class="o">=</span><span class="n">fmap</span><span class="p">,</span>
+        <span class="n">dwkernel</span><span class="o">=</span><span class="n">dwkernels</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="n">exp</span><span class="o">=</span><span class="n">exps</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">outs</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="n">ratio</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="n">use_se</span><span class="o">=</span><span class="n">use_ses</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="n">l2_regul</span><span class="o">=</span><span class="n">l2_reguls</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;2_2&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ghost_bottleneck_module</span><span class="p">(</span>
+        <span class="n">fmap_in</span><span class="o">=</span><span class="n">fmap</span><span class="p">,</span>
+        <span class="n">dwkernel</span><span class="o">=</span><span class="n">dwkernels</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+        <span class="n">exp</span><span class="o">=</span><span class="n">exps</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">outs</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+        <span class="n">ratio</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+        <span class="n">use_se</span><span class="o">=</span><span class="n">use_ses</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+        <span class="n">l2_regul</span><span class="o">=</span><span class="n">l2_reguls</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;3_1&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ghost_bottleneck_module</span><span class="p">(</span>
+        <span class="n">fmap_in</span><span class="o">=</span><span class="n">fmap</span><span class="p">,</span>
+        <span class="n">dwkernel</span><span class="o">=</span><span class="n">dwkernels</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">exp</span><span class="o">=</span><span class="n">exps</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">outs</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">ratio</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">use_se</span><span class="o">=</span><span class="n">use_ses</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">l2_regul</span><span class="o">=</span><span class="n">l2_reguls</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;3_2&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ghost_bottleneck_module</span><span class="p">(</span>
+        <span class="n">fmap_in</span><span class="o">=</span><span class="n">fmap</span><span class="p">,</span>
+        <span class="n">dwkernel</span><span class="o">=</span><span class="n">dwkernels</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+        <span class="n">exp</span><span class="o">=</span><span class="n">exps</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">outs</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+        <span class="n">ratio</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+        <span class="n">use_se</span><span class="o">=</span><span class="n">use_ses</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+        <span class="n">l2_regul</span><span class="o">=</span><span class="n">l2_reguls</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;4_1&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ghost_bottleneck_module</span><span class="p">(</span>
+        <span class="n">fmap_in</span><span class="o">=</span><span class="n">fmap</span><span class="p">,</span>
+        <span class="n">dwkernel</span><span class="o">=</span><span class="n">dwkernels</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+        <span class="n">exp</span><span class="o">=</span><span class="n">exps</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">outs</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+        <span class="n">ratio</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+        <span class="n">use_se</span><span class="o">=</span><span class="n">use_ses</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+        <span class="n">l2_regul</span><span class="o">=</span><span class="n">l2_reguls</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;4_2&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ghost_bottleneck_module</span><span class="p">(</span>
+        <span class="n">fmap_in</span><span class="o">=</span><span class="n">fmap</span><span class="p">,</span>
+        <span class="n">dwkernel</span><span class="o">=</span><span class="n">dwkernels</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+        <span class="n">exp</span><span class="o">=</span><span class="n">exps</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">outs</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+        <span class="n">ratio</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+        <span class="n">use_se</span><span class="o">=</span><span class="n">use_ses</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+        <span class="n">l2_regul</span><span class="o">=</span><span class="n">l2_reguls</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;4_3&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ghost_bottleneck_module</span><span class="p">(</span>
+        <span class="n">fmap_in</span><span class="o">=</span><span class="n">fmap</span><span class="p">,</span>
+        <span class="n">dwkernel</span><span class="o">=</span><span class="n">dwkernels</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
+        <span class="n">exp</span><span class="o">=</span><span class="n">exps</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">outs</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
+        <span class="n">ratio</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
+        <span class="n">use_se</span><span class="o">=</span><span class="n">use_ses</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
+        <span class="n">l2_regul</span><span class="o">=</span><span class="n">l2_reguls</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;4_4&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ghost_bottleneck_module</span><span class="p">(</span>
+        <span class="n">fmap_in</span><span class="o">=</span><span class="n">fmap</span><span class="p">,</span>
+        <span class="n">dwkernel</span><span class="o">=</span><span class="n">dwkernels</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span>
+        <span class="n">exp</span><span class="o">=</span><span class="n">exps</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">outs</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span>
+        <span class="n">ratio</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span>
+        <span class="n">use_se</span><span class="o">=</span><span class="n">use_ses</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span>
+        <span class="n">l2_regul</span><span class="o">=</span><span class="n">l2_reguls</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;4_5&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ghost_bottleneck_module</span><span class="p">(</span>
+        <span class="n">fmap_in</span><span class="o">=</span><span class="n">fmap</span><span class="p">,</span>
+        <span class="n">dwkernel</span><span class="o">=</span><span class="n">dwkernels</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span>
+        <span class="n">exp</span><span class="o">=</span><span class="n">exps</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">outs</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span>
+        <span class="n">ratio</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span>
+        <span class="n">use_se</span><span class="o">=</span><span class="n">use_ses</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span>
+        <span class="n">l2_regul</span><span class="o">=</span><span class="n">l2_reguls</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;4_6&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ghost_bottleneck_module</span><span class="p">(</span>
+        <span class="n">fmap_in</span><span class="o">=</span><span class="n">fmap</span><span class="p">,</span>
+        <span class="n">dwkernel</span><span class="o">=</span><span class="n">dwkernels</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span>
+        <span class="n">exp</span><span class="o">=</span><span class="n">exps</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">outs</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span>
+        <span class="n">ratio</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span>
+        <span class="n">use_se</span><span class="o">=</span><span class="n">use_ses</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span>
+        <span class="n">l2_regul</span><span class="o">=</span><span class="n">l2_reguls</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;5_1&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ghost_bottleneck_module</span><span class="p">(</span>
+        <span class="n">fmap_in</span><span class="o">=</span><span class="n">fmap</span><span class="p">,</span>
+        <span class="n">dwkernel</span><span class="o">=</span><span class="n">dwkernels</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span>
+        <span class="n">exp</span><span class="o">=</span><span class="n">exps</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">outs</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span>
+        <span class="n">ratio</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span>
+        <span class="n">use_se</span><span class="o">=</span><span class="n">use_ses</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span>
+        <span class="n">l2_regul</span><span class="o">=</span><span class="n">l2_reguls</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;5_2&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ghost_bottleneck_module</span><span class="p">(</span>
+        <span class="n">fmap_in</span><span class="o">=</span><span class="n">fmap</span><span class="p">,</span>
+        <span class="n">dwkernel</span><span class="o">=</span><span class="n">dwkernels</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span>
+        <span class="n">exp</span><span class="o">=</span><span class="n">exps</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">outs</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span>
+        <span class="n">ratio</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span>
+        <span class="n">use_se</span><span class="o">=</span><span class="n">use_ses</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span>
+        <span class="n">l2_regul</span><span class="o">=</span><span class="n">l2_reguls</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;5_3&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ghost_bottleneck_module</span><span class="p">(</span>
+        <span class="n">fmap_in</span><span class="o">=</span><span class="n">fmap</span><span class="p">,</span>
+        <span class="n">dwkernel</span><span class="o">=</span><span class="n">dwkernels</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span>
+        <span class="n">exp</span><span class="o">=</span><span class="n">exps</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">outs</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span>
+        <span class="n">ratio</span><span class="o">=</span><span class="n">ratios</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span>
+        <span class="n">use_se</span><span class="o">=</span><span class="n">use_ses</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span>
+        <span class="n">l2_regul</span><span class="o">=</span><span class="n">l2_reguls</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;5_4&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Model</span><span class="p">(</span><span class="n">img_input</span><span class="p">,</span> <span class="n">fmap</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="src.model.backbone.ghostnet.ghost_bottleneck_module" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">ghost_bottleneck_module</span><span class="p">(</span><span class="n">fmap_in</span><span class="p">,</span> <span class="n">dwkernel</span><span class="p">,</span> <span class="n">strides</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">use_se</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">l2_regul</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Ghost Bottleneck Module, the backbone of the GhostNet model.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>fmap_in</code></td>
+        <td><code>tf.Tensor</code></td>
+        <td><p>Input feature map of the module, size = <span class="arithmatex">\((H,W,C)\)</span>.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>dwkernel</code></td>
+        <td><code>int</code></td>
+        <td><p>Number of convolution kernels in the <code>DepthwiseConv2D</code> layer.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>strides</code></td>
+        <td><code>int</code></td>
+        <td><p>Stride used in the <code>DepthwiseConv2D</code> layers.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>exp</code></td>
+        <td><code>int</code></td>
+        <td><p>Number of filters used as an expansion operation in the first <code>ghost_module</code>.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>out</code></td>
+        <td><code>int</code></td>
+        <td><p>Number of filters/channels of the output feature map.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>ratio</code></td>
+        <td><code>int</code></td>
+        <td><p>Define the ratio in the <code>ghost_module</code> between the number of filters of the Conv2D layer
+and the number of filters of the <code>DepthwiseConv2D</code> in the last <code>Concatenate</code>
+layer. <code>depth_multiplier</code> of the <code>DepthwiseConv2D</code> layer is also defined as
+<code>ratio-1</code>.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>use_se</code></td>
+        <td><code>bool</code></td>
+        <td><p>Determine whether or not use a squeeze-and-excitation module before
+the last <code>ghost_module</code> layer.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>name</code></td>
+        <td><code>str</code></td>
+        <td><p>Name of the module.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>l2_regul</code></td>
+        <td><code>float</code></td>
+        <td><p>Value of the constraint used for the
+<span class="arithmatex">\(L_2\)</span> regularization. Defaults to 1e-4.</p></td>
+        <td><code>0.0001</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Tensor</code></td>
+      <td><p>Output feature map, size = <span class="arithmatex">\((H,W,\mathrm{out})\)</span>.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/model/backbone/ghostnet.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">ghost_bottleneck_module</span><span class="p">(</span>
+    <span class="n">fmap_in</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">dwkernel</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">strides</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">exp</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">out</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">ratio</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">use_se</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">l2_regul</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-4</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Ghost Bottleneck Module, the backbone of the GhostNet model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        fmap_in (tf.Tensor): Input feature map of the module, size = $(H,W,C)$.</span>
+<span class="sd">        dwkernel (int): Number of convolution kernels in the `DepthwiseConv2D` layer.</span>
+<span class="sd">        strides (int): Stride used in the `DepthwiseConv2D` layers.</span>
+<span class="sd">        exp (int): Number of filters used as an expansion operation in the first `ghost_module`.</span>
+<span class="sd">        out (int): Number of filters/channels of the output feature map.</span>
+<span class="sd">        ratio (int): Define the ratio in the `ghost_module` between the number of filters of the Conv2D layer</span>
+<span class="sd">            and the number of filters of the `DepthwiseConv2D` in the last `Concatenate`</span>
+<span class="sd">            layer. `depth_multiplier` of the `DepthwiseConv2D` layer is also defined as</span>
+<span class="sd">            `ratio-1`.</span>
+<span class="sd">        use_se (bool): Determine whether or not use a squeeze-and-excitation module before</span>
+<span class="sd">            the last `ghost_module` layer.</span>
+<span class="sd">        name (str): Name of the module.</span>
+<span class="sd">        l2_regul (float, optional): Value of the constraint used for the</span>
+<span class="sd">            $L_2$ regularization. Defaults to 1e-4.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Output feature map, size = $(H,W,\mathrm{out})$.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fmap_shortcut</span> <span class="o">=</span> <span class="n">DepthwiseConv2D</span><span class="p">(</span>
+        <span class="n">kernel_size</span><span class="o">=</span><span class="n">dwkernel</span><span class="p">,</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">,</span>
+        <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
+        <span class="n">depth_multiplier</span><span class="o">=</span><span class="n">ratio</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">activation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">depthwise_initializer</span><span class="o">=</span><span class="s2">&quot;he_uniform&quot;</span><span class="p">,</span>
+        <span class="n">depthwise_regularizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">regularizers</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">l2</span><span class="o">=</span><span class="n">l2_regul</span><span class="p">),</span>
+        <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;depthconv_gbneck_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">)(</span><span class="n">fmap_in</span><span class="p">)</span>
+    <span class="n">fmap_shortcut</span> <span class="o">=</span> <span class="n">BatchNormalization</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;bn1_gbneck_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)(</span><span class="n">fmap_shortcut</span><span class="p">)</span>
+
+    <span class="n">fmap_shortcut</span> <span class="o">=</span> <span class="n">Conv2D</span><span class="p">(</span>
+        <span class="n">filters</span><span class="o">=</span><span class="n">out</span><span class="p">,</span>
+        <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
+        <span class="n">activation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">kernel_initializer</span><span class="o">=</span><span class="s2">&quot;he_uniform&quot;</span><span class="p">,</span>
+        <span class="n">kernel_regularizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">regularizers</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">l2</span><span class="o">=</span><span class="n">l2_regul</span><span class="p">),</span>
+        <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;conv_gbneck_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">)(</span><span class="n">fmap_shortcut</span><span class="p">)</span>
+    <span class="n">fmap_shortcut</span> <span class="o">=</span> <span class="n">BatchNormalization</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;bn2_gbneck_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)(</span><span class="n">fmap_shortcut</span><span class="p">)</span>
+
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ghost_module</span><span class="p">(</span>
+        <span class="n">fmap</span><span class="o">=</span><span class="n">fmap_in</span><span class="p">,</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">exp</span><span class="p">,</span>
+        <span class="n">ratio</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span>
+        <span class="n">convkernel</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">dwkernel</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+        <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;1_gbneck_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">BatchNormalization</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;bn3_gbneck_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)(</span><span class="n">fmap</span><span class="p">)</span>
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ReLU</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;relu_gbneck_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)(</span><span class="n">fmap</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">strides</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">fmap</span> <span class="o">=</span> <span class="n">DepthwiseConv2D</span><span class="p">(</span>
+            <span class="n">kernel_size</span><span class="o">=</span><span class="n">dwkernel</span><span class="p">,</span>
+            <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">,</span>
+            <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
+            <span class="n">depth_multiplier</span><span class="o">=</span><span class="n">ratio</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="n">activation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">depthwise_initializer</span><span class="o">=</span><span class="s2">&quot;he_uniform&quot;</span><span class="p">,</span>
+            <span class="n">depthwise_regularizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">regularizers</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">l2</span><span class="o">=</span><span class="n">l2_regul</span><span class="p">),</span>
+            <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;depthconv_s2_gbneck_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">)(</span><span class="n">fmap</span><span class="p">)</span>
+        <span class="n">fmap</span> <span class="o">=</span> <span class="n">BatchNormalization</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;bn4_gbneck_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)(</span><span class="n">fmap</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">use_se</span><span class="p">:</span>
+        <span class="n">fmap</span> <span class="o">=</span> <span class="n">se_module</span><span class="p">(</span>
+            <span class="n">fmap_in</span><span class="o">=</span><span class="n">fmap</span><span class="p">,</span>
+            <span class="n">filters</span><span class="o">=</span><span class="n">exp</span><span class="p">,</span>
+            <span class="n">ratio</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;gbneck_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ghost_module</span><span class="p">(</span>
+        <span class="n">fmap</span><span class="o">=</span><span class="n">fmap</span><span class="p">,</span>
+        <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">,</span>
+        <span class="n">ratio</span><span class="o">=</span><span class="n">ratio</span><span class="p">,</span>
+        <span class="n">convkernel</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">dwkernel</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+        <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;2_gbneck_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">BatchNormalization</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;bn5_gbneck_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)(</span><span class="n">fmap</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Add</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;add_gbneck_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)([</span><span class="n">fmap_shortcut</span><span class="p">,</span> <span class="n">fmap</span><span class="p">])</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="src.model.backbone.ghostnet.ghost_module" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">ghost_module</span><span class="p">(</span><span class="n">fmap</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">convkernel</span><span class="p">,</span> <span class="n">dwkernel</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">l2_regul</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Primary module of the GhostNet architecture.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>fmap</code></td>
+        <td><code>tf.Tensor</code></td>
+        <td><p>Input feature map of the module, size = <span class="arithmatex">\((H,W,C)\)</span>.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>out</code></td>
+        <td><code>int</code></td>
+        <td><p>Number of channels of the output feature map.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>ratio</code></td>
+        <td><code>int</code></td>
+        <td><p>Define the ratio between the number of filters of the Conv2D layer
+and the number of filters of the <code>DepthwiseConv2D</code> in the last <code>Concatenate</code>
+layer. <code>depth_multiplier</code> of the <code>DepthwiseConv2D</code> layer is also defined as
+<code>ratio-1</code>.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>convkernel</code></td>
+        <td><code>Tuple[int, int]</code></td>
+        <td><p>Number of convolution kernels in the <code>Conv2D</code> layer.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>dwkernel</code></td>
+        <td><code>Tuple[int, int]</code></td>
+        <td><p>Number of convolution kernels in the <code>DepthwiseConv2D</code> layer.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>name</code></td>
+        <td><code>str</code></td>
+        <td><p>Name of the module.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>l2_regul</code></td>
+        <td><code>float</code></td>
+        <td><p>Value of the constraint used for the
+<span class="arithmatex">\(L_2\)</span> regularization. Defaults to 1e-4.</p></td>
+        <td><code>0.0001</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Tensor</code></td>
+      <td><p>Output feature map, size = <span class="arithmatex">\((H,W,\mathrm{out})\)</span></p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/model/backbone/ghostnet.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">ghost_module</span><span class="p">(</span>
+    <span class="n">fmap</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">out</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">ratio</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">convkernel</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+    <span class="n">dwkernel</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">l2_regul</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-4</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Primary module of the GhostNet architecture.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        fmap (tf.Tensor): Input feature map of the module, size = $(H,W,C)$.</span>
+<span class="sd">        out (int): Number of channels of the output feature map.</span>
+<span class="sd">        ratio (int): Define the ratio between the number of filters of the Conv2D layer</span>
+<span class="sd">            and the number of filters of the `DepthwiseConv2D` in the last `Concatenate`</span>
+<span class="sd">            layer. `depth_multiplier` of the `DepthwiseConv2D` layer is also defined as</span>
+<span class="sd">            `ratio-1`.</span>
+<span class="sd">        convkernel (Tuple[int, int]): Number of convolution kernels in the `Conv2D` layer.</span>
+<span class="sd">        dwkernel (Tuple[int, int]): Number of convolution kernels in the `DepthwiseConv2D` layer.</span>
+<span class="sd">        name (str): Name of the module.</span>
+<span class="sd">        l2_regul (float, optional): Value of the constraint used for the</span>
+<span class="sd">            $L_2$ regularization. Defaults to 1e-4.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Output feature map, size = $(H,W,\mathrm{out})$</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">filters</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">out</span> <span class="o">/</span> <span class="n">ratio</span><span class="p">))</span>
+    <span class="n">channels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">out</span> <span class="o">-</span> <span class="n">filters</span><span class="p">)</span>
+
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">Conv2D</span><span class="p">(</span>
+        <span class="n">filters</span><span class="o">=</span><span class="n">filters</span><span class="p">,</span>
+        <span class="n">kernel_size</span><span class="o">=</span><span class="n">convkernel</span><span class="p">,</span>
+        <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
+        <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">kernel_initializer</span><span class="o">=</span><span class="s2">&quot;he_uniform&quot;</span><span class="p">,</span>
+        <span class="n">kernel_regularizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">regularizers</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">l2</span><span class="o">=</span><span class="n">l2_regul</span><span class="p">),</span>
+        <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;conv_ghost_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">)(</span><span class="n">fmap</span><span class="p">)</span>
+
+    <span class="n">dwfmap</span> <span class="o">=</span> <span class="n">DepthwiseConv2D</span><span class="p">(</span>
+        <span class="n">kernel_size</span><span class="o">=</span><span class="n">dwkernel</span><span class="p">,</span>
+        <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
+        <span class="n">depth_multiplier</span><span class="o">=</span><span class="n">ratio</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">depthwise_initializer</span><span class="o">=</span><span class="s2">&quot;he_uniform&quot;</span><span class="p">,</span>
+        <span class="n">depthwise_regularizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">regularizers</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">l2</span><span class="o">=</span><span class="n">l2_regul</span><span class="p">),</span>
+        <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;depthconv_ghost_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">)(</span><span class="n">fmap</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Concatenate</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;concat_ghost_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)(</span>
+        <span class="p">[</span><span class="n">fmap</span><span class="p">,</span> <span class="n">dwfmap</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:</span><span class="n">channels</span><span class="p">]],</span>
+    <span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="src.model.backbone.ghostnet.se_module" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">se_module</span><span class="p">(</span><span class="n">fmap_in</span><span class="p">,</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">l2_regul</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Squeeze-and-Excitation Module.</p>
+<div class="admonition architecture">
+<p class="admonition-title">Architecture</p>
+<p><img alt="architecture" src="../images/se_module.svg" /></p>
+<p>Source : <a href="https://arxiv.org/abs/1709.01507">ArXiv link</a></p>
+</div>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>fmap_in</code></td>
+        <td><code>tf.Tensor</code></td>
+        <td><p>Input feature map of the module, size = <span class="arithmatex">\((H,W,C)\)</span>.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>ratio</code></td>
+        <td><code>int</code></td>
+        <td><p>Define the ratio of filters used in the squeeze operation of the modle (the first Conv2D).</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>filters</code></td>
+        <td><code>int</code></td>
+        <td><p>Numbers of filters used in the excitation operation of the module (the second Conv2D).</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>name</code></td>
+        <td><code>str</code></td>
+        <td><p>Name of the module.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>l2_regul</code></td>
+        <td><code>float</code></td>
+        <td><p>Value of the constraint used for the
+<span class="arithmatex">\(L_2\)</span> regularization. Defaults to 1e-4.</p></td>
+        <td><code>0.0001</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Tensor</code></td>
+      <td><p>Output feature map, size = <span class="arithmatex">\((H,W,C)\)</span>.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/model/backbone/ghostnet.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">se_module</span><span class="p">(</span>
+    <span class="n">fmap_in</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
+    <span class="n">ratio</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">filters</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">l2_regul</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-4</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Squeeze-and-Excitation Module.</span>
+
+<span class="sd">    Architecture:</span>
+<span class="sd">        ![architecture](./images/se_module.svg)</span>
+
+<span class="sd">        Source : [ArXiv link](https://arxiv.org/abs/1709.01507)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        fmap_in (tf.Tensor): Input feature map of the module, size = $(H,W,C)$.</span>
+<span class="sd">        ratio (int): Define the ratio of filters used in the squeeze operation of the modle (the first Conv2D).</span>
+<span class="sd">        filters (int): Numbers of filters used in the excitation operation of the module (the second Conv2D).</span>
+<span class="sd">        name (str): Name of the module.</span>
+<span class="sd">        l2_regul (float, optional): Value of the constraint used for the</span>
+<span class="sd">            $L_2$ regularization. Defaults to 1e-4.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Output feature map, size = $(H,W,C)$.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">channels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fmap_in</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">GlobalAveragePooling2D</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;gap_se_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)(</span><span class="n">fmap_in</span><span class="p">)</span>
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">Reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">channels</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;reshape_se_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)(</span><span class="n">fmap</span><span class="p">)</span>
+
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">Conv2D</span><span class="p">(</span>
+        <span class="n">filters</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">filters</span> <span class="o">/</span> <span class="n">ratio</span><span class="p">),</span>
+        <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
+        <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">kernel_initializer</span><span class="o">=</span><span class="s2">&quot;he_uniform&quot;</span><span class="p">,</span>
+        <span class="n">kernel_regularizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">regularizers</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">l2</span><span class="o">=</span><span class="n">l2_regul</span><span class="p">),</span>
+        <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;conv1_se_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">)(</span><span class="n">fmap</span><span class="p">)</span>
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">ReLU</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;relu_se_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)(</span><span class="n">fmap</span><span class="p">)</span>
+    <span class="n">fmap</span> <span class="o">=</span> <span class="n">Conv2D</span><span class="p">(</span>
+        <span class="n">filters</span><span class="o">=</span><span class="n">filters</span><span class="p">,</span>
+        <span class="n">kernel_size</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
+        <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">kernel_initializer</span><span class="o">=</span><span class="s2">&quot;he_uniform&quot;</span><span class="p">,</span>
+        <span class="n">kernel_regularizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">regularizers</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">l2</span><span class="o">=</span><span class="n">l2_regul</span><span class="p">),</span>
+        <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;conv2_se_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">)(</span><span class="n">fmap</span><span class="p">)</span>
+
+    <span class="n">excitation</span> <span class="o">=</span> <span class="n">Activation</span><span class="p">(</span><span class="s2">&quot;sigmoid&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;sigmoid_se_module_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)(</span><span class="n">fmap</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fmap_in</span> <span class="o">*</span> <span class="n">excitation</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg>
+            Retour en haut de la page
+          </a>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Pied de page">
+      
+        
+        <a href="../mobilenetv2/" class="md-footer__link md-footer__link--prev" aria-label="Précédent: MobileNetv2" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Précédent
+              </span>
+              MobileNetv2
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../vovnet/" class="md-footer__link md-footer__link--next" aria-label="Suivant: VoVNet" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Suivant
+              </span>
+              VoVNet
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.tabs", "navigation.top", "search.highlight", "search.share", "search.suggest"], "translations": {"clipboard.copy": "Copier dans le presse-papier", "clipboard.copied": "Copi\u00e9 dans le presse-papier", "search.config.lang": "fr", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Rechercher", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.term.missing": "Non trouv\u00e9", "select.version.title": "S\u00e9lectionner la version"}, "search": "../../../assets/javascripts/workers/search.8397ff9e.min.js", "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.1e84347e.min.js"></script>
+      
+        <script src="../../../javascripts/config.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

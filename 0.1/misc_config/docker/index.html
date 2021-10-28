@@ -1,0 +1,1317 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <meta name="author" content="Mathieu Klimczak">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
+    
+    
+      
+        <title>Docker config - Documentation Semantic Segmentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.db9e7362.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+      <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dockerfile-configuration" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href="../.." title="Documentation Semantic Segmentation" class="md-header__button md-logo" aria-label="Documentation Semantic Segmentation" data-md-component="logo">
+      
+  <img src="../../images/logo_blanc.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Documentation Semantic Segmentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Docker config
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Basculer en mode sombre"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Basculer en mode sombre" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="deep-orange"  aria-label="Basculer en mode clair"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Basculer en mode clair" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Effacer" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Onglets" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../config_hydra/hydra/" class="md-tabs__link">
+      Hydra configuration
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="./" class="md-tabs__link md-tabs__link--active">
+        Various configuration
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../datasets/config/" class="md-tabs__link">
+        Datasets creation
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../models/description/" class="md-tabs__link">
+        Semantic segmentation
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../training_loop/train/" class="md-tabs__link">
+      Training loop
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../loss/focal_loss/" class="md-tabs__link">
+      Loss
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../metrics/mean_iou/" class="md-tabs__link">
+      Metrics
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Documentation Semantic Segmentation" class="md-nav__button md-logo" aria-label="Documentation Semantic Segmentation" data-md-component="logo">
+      
+  <img src="../../images/logo_blanc.svg" alt="logo">
+
+    </a>
+    Documentation Semantic Segmentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../config_hydra/hydra/" class="md-nav__link">
+        Hydra configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Various configuration
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Various configuration" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Various configuration
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Docker config
+      </a>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../make/" class="md-nav__link">
+        Makefile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../requirements/" class="md-nav__link">
+        Requirements
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Datasets creation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Datasets creation" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Datasets creation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/config/" class="md-nav__link">
+        Dataset configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/utils_segmentation/" class="md-nav__link">
+        Masks creation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/make_dataset/" class="md-nav__link">
+        Train-Test-Val datasets creation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_4" type="checkbox" id="__nav_4_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_4">
+          Datasets pipelines
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Datasets pipelines" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_4">
+          <span class="md-nav__icon md-icon"></span>
+          Datasets pipelines
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/classic/" class="md-nav__link">
+        Classic pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/cutmix/" class="md-nav__link">
+        CutMix pipeline
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Semantic segmentation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Semantic segmentation" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Semantic segmentation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/description/" class="md-nav__link">
+        Architecture description
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/common_layers/" class="md-nav__link">
+        Common layers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Segmentation heads
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Segmentation heads" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Segmentation heads
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/ksac/" class="md-nav__link">
+        KSAC
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/fpn/" class="md-nav__link">
+        FPN
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/ocnet/" class="md-nav__link">
+        OCNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/jpu/" class="md-nav__link">
+        JPU
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/allmlp/" class="md-nav__link">
+        SegFormer
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4" type="checkbox" id="__nav_5_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4">
+          Backbones
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Backbones" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_4">
+          <span class="md-nav__icon md-icon"></span>
+          Backbones
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_1" type="checkbox" id="__nav_5_4_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_1">
+          Classic CNNs backbones
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Classic CNNs backbones" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_4_1">
+          <span class="md-nav__icon md-icon"></span>
+          Classic CNNs backbones
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/mobilenetv2/" class="md-nav__link">
+        MobileNetv2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/ghostnet/" class="md-nav__link">
+        GhostNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/vovnet/" class="md-nav__link">
+        VoVNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/resnet50/" class="md-nav__link">
+        ResNet50
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/resnet50v2/" class="md-nav__link">
+        ResNet50v2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/resnet101/" class="md-nav__link">
+        ResNet101
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/resnet101v2/" class="md-nav__link">
+        ResNet101v2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2" type="checkbox" id="__nav_5_4_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2">
+          Attention and MLP backbones
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Attention and MLP backbones" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Attention and MLP backbones
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/convmlp/" class="md-nav__link">
+        ConvMLP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/mit/" class="md-nav__link">
+        MixTransformer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/mobilevit/" class="md-nav__link">
+        MobileViT
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../training_loop/train/" class="md-nav__link">
+        Training loop
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../loss/focal_loss/" class="md-nav__link">
+        Loss
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../metrics/mean_iou/" class="md-nav__link">
+        Metrics
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="dockerfile-configuration">Dockerfile configuration</h1>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="c"># FROM nvcr.io/nvidia/tensorflow:21.02-tf2-py3</span>
+<span class="c"># FROM nvcr.io/nvidia/tensorflow:21.09-tf2-py3</span>
+<span class="k">FROM</span> <span class="s">nvcr.io/nvidia/tensorflow:21.06-tf2-py3</span>
+<span class="k">COPY</span> requirements.txt .
+<span class="k">COPY</span> requirements-dev.txt .
+
+<span class="k">ARG</span> <span class="nv">USERNAME</span><span class="o">=</span>vorph
+<span class="k">ARG</span> <span class="nv">USER_UID</span><span class="o">=</span><span class="m">1000</span>
+<span class="k">ARG</span> <span class="nv">USER_GID</span><span class="o">=</span><span class="m">1000</span>
+
+
+<span class="k">RUN</span> groupadd -g <span class="nv">$USER_GID</span> -o <span class="nv">$USERNAME</span>
+<span class="k">RUN</span> useradd -m -u <span class="nv">$USER_UID</span> -g <span class="nv">$USER_GID</span> -o -s /bin/bash <span class="nv">$USERNAME</span>
+
+<span class="k">USER</span><span class="s"> $USERNAME</span>
+
+<span class="k">ENV</span> PATH <span class="s2">&quot;</span><span class="nv">$PATH</span><span class="s2">:/home/vorph/.local/bin&quot;</span>
+
+<span class="k">RUN</span> /usr/bin/python -m pip install --upgrade pip
+<span class="k">ENV</span> PATH <span class="s2">&quot;</span><span class="nv">$PATH</span><span class="s2">:/usr/lib/python3.8/dist-packages&quot;</span>
+
+<span class="k">RUN</span> /bin/bash -c <span class="s2">&quot;pip install -r requirements.txt&quot;</span>
+
+<span class="k">RUN</span> /bin/bash -c <span class="s2">&quot;pip install -r requirements-dev.txt&quot;</span>
+
+<span class="c"># 5000 pour mlflow</span>
+<span class="k">EXPOSE</span><span class="s"> 5000</span>
+
+<span class="c"># 6006 pour tensorboard</span>
+<span class="k">EXPOSE</span><span class="s"> 6006</span>
+
+<span class="c"># 8001 pour mkdocs</span>
+<span class="k">EXPOSE</span><span class="s"> 8001</span>
+</code></pre></div>
+</td></tr></table>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="err">//</span> <span class="err">For</span> <span class="kc">f</span><span class="err">orma</span><span class="kc">t</span> <span class="err">de</span><span class="kc">ta</span><span class="err">ils</span><span class="p">,</span> <span class="err">see</span> <span class="err">h</span><span class="kc">tt</span><span class="err">ps</span><span class="p">:</span><span class="err">//aka.ms/devco</span><span class="kc">nta</span><span class="err">i</span><span class="kc">ner</span><span class="err">.jso</span><span class="kc">n</span><span class="err">.</span> <span class="err">For</span> <span class="err">co</span><span class="kc">nf</span><span class="err">ig</span> <span class="err">op</span><span class="kc">t</span><span class="err">io</span><span class="kc">ns</span><span class="p">,</span> <span class="err">see</span> <span class="kc">t</span><span class="err">he</span> <span class="err">README</span> <span class="err">a</span><span class="kc">t</span><span class="p">:</span>
+<span class="err">//</span> <span class="err">h</span><span class="kc">tt</span><span class="err">ps</span><span class="p">:</span><span class="err">//gi</span><span class="kc">t</span><span class="err">hub.com/microso</span><span class="kc">ft</span><span class="err">/vscode</span><span class="mi">-</span><span class="err">dev</span><span class="mi">-</span><span class="err">co</span><span class="kc">nta</span><span class="err">i</span><span class="kc">ners</span><span class="err">/</span><span class="kc">tree</span><span class="err">/v</span><span class="mf">0.158.0</span><span class="err">/co</span><span class="kc">nta</span><span class="err">i</span><span class="kc">ners</span><span class="err">/docker</span><span class="mf">-e</span><span class="err">xis</span><span class="kc">t</span><span class="err">i</span><span class="kc">n</span><span class="err">g</span><span class="mi">-</span><span class="err">docker</span><span class="kc">f</span><span class="err">ile</span>
+<span class="p">{</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;AI_segmentation_project&quot;</span><span class="p">,</span>
+    <span class="err">//</span> <span class="err">Se</span><span class="kc">ts</span> <span class="kc">t</span><span class="err">he</span> <span class="err">ru</span><span class="kc">n</span> <span class="err">co</span><span class="kc">nte</span><span class="err">x</span><span class="kc">t</span> <span class="kc">t</span><span class="err">o</span> <span class="err">o</span><span class="kc">ne</span> <span class="err">level</span> <span class="err">up</span> <span class="err">i</span><span class="kc">nstea</span><span class="err">d</span> <span class="err">o</span><span class="kc">f</span> <span class="kc">t</span><span class="err">he</span> <span class="err">.devco</span><span class="kc">nta</span><span class="err">i</span><span class="kc">ner</span> <span class="kc">f</span><span class="err">older.</span>
+    <span class="nt">&quot;context&quot;</span><span class="p">:</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span>
+    <span class="err">//</span> <span class="err">Upda</span><span class="kc">te</span> <span class="kc">t</span><span class="err">he</span> <span class="err">&#39;dockerFile&#39;</span> <span class="err">proper</span><span class="kc">t</span><span class="err">y</span> <span class="err">i</span><span class="kc">f</span> <span class="err">you</span> <span class="err">are</span><span class="kc">n</span><span class="err">&#39;</span><span class="kc">t</span> <span class="err">usi</span><span class="kc">n</span><span class="err">g</span> <span class="kc">t</span><span class="err">he</span> <span class="err">s</span><span class="kc">tan</span><span class="err">dard</span> <span class="err">&#39;Docker</span><span class="kc">f</span><span class="err">ile&#39;</span> <span class="kc">f</span><span class="err">ile</span><span class="kc">na</span><span class="err">me.</span>
+    <span class="nt">&quot;dockerFile&quot;</span><span class="p">:</span> <span class="s2">&quot;../Dockerfile&quot;</span><span class="p">,</span>
+    <span class="err">//</span> <span class="err">Se</span><span class="kc">t</span> <span class="err">*de</span><span class="kc">fault</span><span class="err">*</span> <span class="err">co</span><span class="kc">nta</span><span class="err">i</span><span class="kc">ner</span> <span class="err">speci</span><span class="kc">f</span><span class="err">ic</span> <span class="err">se</span><span class="kc">tt</span><span class="err">i</span><span class="kc">n</span><span class="err">gs.jso</span><span class="kc">n</span> <span class="err">values</span> <span class="err">o</span><span class="kc">n</span> <span class="err">co</span><span class="kc">nta</span><span class="err">i</span><span class="kc">ner</span> <span class="err">crea</span><span class="kc">te</span><span class="err">.</span>
+    <span class="nt">&quot;settings&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;editor.rulers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">88</span><span class="p">,</span><span class="mi">120</span><span class="p">],</span>
+        <span class="nt">&quot;editor.fontSize&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+        <span class="nt">&quot;editor.bracketPairColorization.enabled&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nt">&quot;workbench.colorTheme&quot;</span><span class="p">:</span> <span class="s2">&quot;One Dark Pro&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;workbench.colorCustomizations&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;editorRuler.foreground&quot;</span><span class="p">:</span> <span class="s2">&quot;#750917&quot;</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;terminal.integrated.shell.linux&quot;</span><span class="p">:</span> <span class="s2">&quot;/bin/bash&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="err">//</span> <span class="err">Add</span> <span class="kc">t</span><span class="err">he</span> <span class="err">IDs</span> <span class="err">o</span><span class="kc">f</span> <span class="err">ex</span><span class="kc">tens</span><span class="err">io</span><span class="kc">ns</span> <span class="err">you</span> <span class="err">wa</span><span class="kc">nt</span> <span class="err">i</span><span class="kc">nstalle</span><span class="err">d</span> <span class="err">whe</span><span class="kc">n</span> <span class="kc">t</span><span class="err">he</span> <span class="err">co</span><span class="kc">nta</span><span class="err">i</span><span class="kc">ner</span> <span class="err">is</span> <span class="err">crea</span><span class="kc">te</span><span class="err">d.</span>
+    <span class="nt">&quot;extensions&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;ms-python.python&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;eamodio.gitlens&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;esbenp.prettier-vscode&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ms-azuretools.vscode-docker&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;njpwerner.autodocstring&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mechatroner.rainbow-csv&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;shardulm94.trailing-spaces&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;visualstudioexptteam.vscodeintellicode&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;redhat.vscode-yaml&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;zhuangtongfa.material-theme&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;coenraads.bracket-pair-colorizer-2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;emmanuelbeziat.vscode-great-icons&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;zainchen.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;yzhang.markdown-all-in-one&quot;</span>
+    <span class="p">],</span>
+    <span class="err">//Use</span> <span class="err">&#39;</span><span class="kc">f</span><span class="err">orwardPor</span><span class="kc">ts</span><span class="err">&#39;</span> <span class="kc">t</span><span class="err">o</span> <span class="err">make</span> <span class="err">a</span> <span class="err">lis</span><span class="kc">t</span> <span class="err">o</span><span class="kc">f</span> <span class="err">por</span><span class="kc">ts</span> <span class="err">i</span><span class="kc">ns</span><span class="err">ide</span> <span class="kc">t</span><span class="err">he</span> <span class="err">co</span><span class="kc">nta</span><span class="err">i</span><span class="kc">ner</span> <span class="err">available</span> <span class="err">locally.</span>
+    <span class="nt">&quot;forwardPorts&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5000</span><span class="p">,</span><span class="mi">8001</span><span class="p">,</span><span class="mi">6006</span><span class="p">],</span>
+    <span class="err">//</span> <span class="err">U</span><span class="kc">n</span><span class="err">comme</span><span class="kc">nt</span> <span class="kc">t</span><span class="err">he</span> <span class="kc">ne</span><span class="err">x</span><span class="kc">t</span> <span class="err">li</span><span class="kc">ne</span> <span class="kc">t</span><span class="err">o</span> <span class="err">ru</span><span class="kc">n</span> <span class="err">comma</span><span class="kc">n</span><span class="err">ds</span> <span class="err">a</span><span class="kc">fter</span> <span class="kc">t</span><span class="err">he</span> <span class="err">co</span><span class="kc">nta</span><span class="err">i</span><span class="kc">ner</span> <span class="err">is</span> <span class="err">crea</span><span class="kc">te</span><span class="err">d</span> <span class="mi">-</span> <span class="kc">f</span><span class="err">or</span> <span class="err">example</span> <span class="err">i</span><span class="kc">nstall</span><span class="err">i</span><span class="kc">n</span><span class="err">g</span> <span class="err">curl.</span>
+    <span class="err">//</span> <span class="nt">&quot;postCreateCommand&quot;</span><span class="p">:</span> <span class="s2">&quot;apt-get update &amp;&amp; apt-get install -y curl&quot;</span><span class="p">,</span>
+    <span class="err">//</span> <span class="err">U</span><span class="kc">n</span><span class="err">comme</span><span class="kc">nt</span> <span class="err">whe</span><span class="kc">n</span> <span class="err">usi</span><span class="kc">n</span><span class="err">g</span> <span class="err">a</span> <span class="err">p</span><span class="kc">tra</span><span class="err">ce</span><span class="mi">-</span><span class="err">based</span> <span class="err">debugger</span> <span class="err">like</span> <span class="err">C++</span><span class="p">,</span> <span class="err">Go</span><span class="p">,</span> <span class="err">a</span><span class="kc">n</span><span class="err">d</span> <span class="err">Rus</span><span class="kc">t</span>
+    <span class="nt">&quot;runArgs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;-it&quot;</span><span class="p">,</span> <span class="s2">&quot;--rm&quot;</span><span class="p">,</span> <span class="s2">&quot;-P&quot;</span><span class="p">,</span> <span class="s2">&quot;--runtime=nvidia&quot;</span><span class="p">],</span>
+    <span class="err">//</span> <span class="err">U</span><span class="kc">n</span><span class="err">comme</span><span class="kc">nt</span> <span class="kc">t</span><span class="err">o</span> <span class="err">use</span> <span class="kc">t</span><span class="err">he</span> <span class="err">Docker</span> <span class="err">CLI</span> <span class="kc">fr</span><span class="err">om</span> <span class="err">i</span><span class="kc">ns</span><span class="err">ide</span> <span class="kc">t</span><span class="err">he</span> <span class="err">co</span><span class="kc">nta</span><span class="err">i</span><span class="kc">ner</span><span class="err">.</span> <span class="err">See</span> <span class="err">h</span><span class="kc">tt</span><span class="err">ps</span><span class="p">:</span><span class="err">//aka.ms/vscode</span><span class="mi">-</span><span class="err">remo</span><span class="kc">te</span><span class="err">/samples/docker</span><span class="mi">-</span><span class="kc">fr</span><span class="err">om</span><span class="mi">-</span><span class="err">docker.</span>
+    <span class="nt">&quot;mounts&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;type=bind,source=/media/vorph/datas/template_segmentation,target=/media/vorph/datas/template_segmentation&quot;</span> <span class="p">],</span>
+    <span class="err">//</span> <span class="err">U</span><span class="kc">n</span><span class="err">comme</span><span class="kc">nt</span> <span class="kc">t</span><span class="err">o</span> <span class="err">co</span><span class="kc">nne</span><span class="err">c</span><span class="kc">t</span> <span class="err">as</span> <span class="err">a</span> <span class="kc">n</span><span class="err">o</span><span class="kc">n</span><span class="mi">-</span><span class="err">roo</span><span class="kc">t</span> <span class="err">user</span> <span class="err">i</span><span class="kc">f</span> <span class="err">you&#39;ve</span> <span class="err">added</span> <span class="err">o</span><span class="kc">ne</span><span class="err">.</span> <span class="err">See</span> <span class="err">h</span><span class="kc">tt</span><span class="err">ps</span><span class="p">:</span><span class="err">//aka.ms/vscode</span><span class="mi">-</span><span class="err">remo</span><span class="kc">te</span><span class="err">/co</span><span class="kc">nta</span><span class="err">i</span><span class="kc">ners</span><span class="err">/</span><span class="kc">n</span><span class="err">o</span><span class="kc">n</span><span class="mi">-</span><span class="err">roo</span><span class="kc">t</span><span class="err">.</span>
+    <span class="err">//</span><span class="nt">&quot;remoteUser&quot;</span><span class="p">:</span> <span class="s2">&quot;vorph&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+</td></tr></table>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg>
+            Retour en haut de la page
+          </a>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Pied de page">
+      
+        
+        <a href="../../config_hydra/hydra/" class="md-footer__link md-footer__link--prev" aria-label="Précédent: Hydra configuration" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Précédent
+              </span>
+              Hydra configuration
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../make/" class="md-footer__link md-footer__link--next" aria-label="Suivant: Makefile" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Suivant
+              </span>
+              Makefile
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.top", "search.highlight", "search.share", "search.suggest"], "translations": {"clipboard.copy": "Copier dans le presse-papier", "clipboard.copied": "Copi\u00e9 dans le presse-papier", "search.config.lang": "fr", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Rechercher", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.term.missing": "Non trouv\u00e9", "select.version.title": "S\u00e9lectionner la version"}, "search": "../../assets/javascripts/workers/search.8397ff9e.min.js", "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.1e84347e.min.js"></script>
+      
+        <script src="../../javascripts/config.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
