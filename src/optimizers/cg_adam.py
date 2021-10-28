@@ -22,5 +22,4 @@ class GCAdam(tf.keras.optimizers.Adam):
 
     def get_config(self):
 
-        config = super().get_config()
-        return config
+        return super().get_config()

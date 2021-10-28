@@ -245,10 +245,6 @@ class StochasticDepth(tf.keras.layers.Layer):
             return (inputs / keep_prob) * random_tensor
         return inputs
 
-    # def cast_inputs(self, inputs):
-    #     # Casts to float16, the policy's lowest-precision dtype
-    #     return self._mixed_precision_policy.cast_to_lowest(inputs)
-
     def get_config(self) -> Dict[str, Any]:
 
         config = super().get_config()

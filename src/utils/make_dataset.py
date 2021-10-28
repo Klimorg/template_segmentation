@@ -3,7 +3,6 @@ import random
 from pathlib import Path
 from typing import List, Optional, Tuple
 
-import typer
 from loguru import logger
 from omegaconf import OmegaConf
 from sklearn.model_selection import train_test_split
@@ -13,7 +12,16 @@ from src.utils.utils import get_items_list, set_seed
 reproducibility_params = OmegaConf.load("configs/params.yaml")
 datasets = OmegaConf.load("configs/datasets/datasets.yaml")
 
-app = typer.Typer()
+observations_list = List[Path]
+labels_list = List[Path]
+Datasets = Tuple[
+    observations_list,
+    labels_list,
+    observations_list,
+    labels_list,
+    observations_list,
+    labels_list,
+]
 
 
 def save_as_csv(filenames: List[Path], labels: List[Path], destination: Path) -> None:
@@ -31,18 +39,6 @@ def save_as_csv(filenames: List[Path], labels: List[Path], destination: Path) ->
         writer = csv.writer(saved_csv, delimiter=",")
         writer.writerow(header)
         writer.writerows(zip(filenames, labels))
-
-
-observations_list = List[Path]
-labels_list = List[Path]
-Datasets = Tuple[
-    observations_list,
-    labels_list,
-    observations_list,
-    labels_list,
-    observations_list,
-    labels_list,
-]
 
 
 def create_train_val_test_datasets(
@@ -107,8 +103,7 @@ def create_train_val_test_datasets(
     )
 
 
-@app.command()
-def main() -> None:
+def generate_datasets() -> None:
     """Main function."""
     images_paths = get_items_list(
         directory=datasets.raw_dataset.images,
@@ -139,4 +134,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    app()
+    generate_datasets()

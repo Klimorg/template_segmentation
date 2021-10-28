@@ -27,6 +27,8 @@ class SegmentationMasks(object):
         object: The base class of the class hierarchy, used only to enforce WPS306.
         See https://wemake-python-stylegui.de/en/latest/pages/usage/violations/consistency.html#consistency.
 
+    **Main function** : `generate_masks()`
+
     """
 
     def __init__(self):

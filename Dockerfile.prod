@@ -15,7 +15,6 @@ ENV PATH "$PATH:/home/$USERNAME/.local/bin"
 RUN /usr/bin/python -m pip install --upgrade pip
 ENV PATH "$PATH:/usr/lib/python3.8/dist-packages"
 
-
 WORKDIR /home/$USERNAME
 
 COPY requirements.txt .
@@ -27,7 +26,7 @@ COPY makefile .
 COPY setup.py .
 
 RUN /bin/bash -c "pip install -r requirements.txt --no-cache-dir"
-RUN /bin/bash -c "python -m pip install -e . --no-cache-dir"
+RUN /bin/bash -c "python -m pip install . --no-cache-dir"
 
 
 # 5000 pour mlflow

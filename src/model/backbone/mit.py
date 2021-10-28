@@ -478,8 +478,21 @@ def get_feature_extractor(
 ) -> tf.keras.Model:
     """Instantiate a MiT model.
 
+    Args:
+        img_shape (List[int]): [description]
+        patch_size (List[int]): [description]
+        strides (List[int]): [description]
+        emb_dims (List[int]): [description]
+        num_heads (List[int]): [description]
+        mlp_ratios (List[int]): [description]
+        proj_drop_prob (float): [description]
+        attn_drop_prob (float): [description]
+        stochastic_depth_rate (float): [description]
+        attn_reduction_ratios (List[int]): [description]
+        depths (List[int]): [description]
+
     Returns:
-        A `tf.keras` model.
+        A tf.keras.Model
     """
 
     dpr = [rates for rates in np.linspace(0, stochastic_depth_rate, np.sum(depths))]

@@ -1,6 +1,5 @@
 from typing import Any, Dict, List
 
-import numpy as np
 import tensorflow as tf
 from loguru import logger
 from tensorflow.keras import Model
@@ -400,40 +399,3 @@ def get_backbone(
         outputs=[os4_output, os8_output, os16_output, os32_output],
         name=backbone_name,
     )
-
-
-if __name__ == "__main__":
-    fmap = np.random.rand(1, 256, 256, 3)
-
-    # MobileVit-XXS
-    # expansion_rate = [2, 2]
-    # filters = [16, 16, 24, 24, 24, 48, 48, 64, 64, 80, 80, 320]
-    # emb_dim = [64, 80, 96]
-    # repetitions = [2, 4, 3]
-    # num_heads = 2
-
-    # MobileVit-XS
-    # expansion_rate = [4, 2]
-    # filters = [16, 16, 48, 48, 48, 64, 64, 80, 80, 96, 96, 384]
-    # emb_dim = [96, 120, 144]
-    # repetitions = [2, 4, 3]
-    # num_heads = 2
-
-    # MobileVit-S
-    expansion_rate = [4, 2]
-    filters = [16, 16, 64, 64, 64, 96, 96, 128, 128, 160, 160, 640]
-    emb_dim = [144, 192, 240]
-    repetitions = [2, 4, 3]
-    num_heads = 2
-
-    model = get_backbone(
-        img_shape=(256, 256, 3),
-        expansion_rate=expansion_rate,
-        filters=filters,
-        emb_dim=emb_dim,
-        repetitions=repetitions,
-        num_heads=num_heads,
-        backbone_name="MobileViT-S",
-    )
-    out = model(fmap)
-    model.summary()
