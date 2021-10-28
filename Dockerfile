@@ -1,5 +1,3 @@
-# FROM nvcr.io/nvidia/tensorflow:21.02-tf2-py3
-# FROM nvcr.io/nvidia/tensorflow:21.09-tf2-py3
 FROM nvcr.io/nvidia/tensorflow:21.06-tf2-py3
 COPY requirements.txt .
 COPY requirements-dev.txt .

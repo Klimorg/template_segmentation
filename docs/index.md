@@ -1,7 +1,11 @@
-# Welcome to the semantic segmentation documentation of ECCO project
+# Welcome to the semantic segmentation documentation project
 
 
 ## How to use this project
+
+!!! danger "Attention"
+
+    install Docker and nvidia container toolkit.
 
 This project can be used in 2 ways.
 
