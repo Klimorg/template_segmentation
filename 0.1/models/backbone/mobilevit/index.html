@@ -1313,7 +1313,7 @@
 
 <h2 id="src.model.backbone.mobilevit.MobileViT2D" class="doc doc-heading">
         <code>
-MobileViT2D            (<span title="tensorflow.python.keras.engine.base_layer.Layer">Layer</span>)
+MobileViT2D            (<span title="keras.engine.base_layer.Layer">Layer</span>)
         </code>
 
 
@@ -1479,19 +1479,45 @@ method to support masking.</p>
       <tr>
         <td><code>inputs</code></td>
         <td></td>
-        <td><p>Input tensor, or list/tuple of input tensors.</p></td>
+        <td><p>Input tensor, or dict/list/tuple of input tensors.
+The first positional <code>inputs</code> argument is subject to special rules:
+- <code>inputs</code> must be explicitly passed. A layer cannot have zero
+  arguments, and <code>inputs</code> cannot be provided via the default value
+  of a keyword argument.
+- NumPy array or Python scalar values in <code>inputs</code> get cast as tensors.
+- Keras mask metadata is only collected from <code>inputs</code>.
+- Layers are built (<code>build(input_shape)</code> method)
+  using shape info from <code>inputs</code> only.
+- <code>input_spec</code> compatibility is only checked against <code>inputs</code>.
+- Mixed precision input casting is only applied to <code>inputs</code>.
+  If a layer has tensor arguments in <code>*args</code> or <code>**kwargs</code>, their
+  casting behavior in mixed precision should be handled manually.
+- The SavedModel input specification is generated using <code>inputs</code> only.
+- Integration with various ecosystem packages like TFMOT, TFLite,
+  TF.js, etc is only supported for <code>inputs</code> and not for tensors in
+  positional and keyword arguments.</p></td>
         <td><em>required</em></td>
       </tr>
       <tr>
         <td><code>*args</code></td>
         <td></td>
-        <td><p>Additional positional arguments. Currently unused.</p></td>
+        <td><p>Additional positional arguments. May contain tensors, although
+this is not recommended, for the reasons above.</p></td>
         <td><em>required</em></td>
       </tr>
       <tr>
         <td><code>**kwargs</code></td>
         <td></td>
-        <td><p>Additional keyword arguments. Currently unused.</p></td>
+        <td><p>Additional keyword arguments. May contain tensors, although
+this is not recommended, for the reasons above.
+The following optional keyword arguments are reserved:
+- <code>training</code>: Boolean scalar tensor of Python boolean indicating
+  whether the <code>call</code> is meant for training or inference.
+- <code>mask</code>: Boolean input mask. If the layer's <code>call()</code> method takes a
+  <code>mask</code> argument, its default value will be set to the mask generated
+  for <code>inputs</code> by the previous layer (if <code>input</code> did come from a layer
+  that generated a corresponding mask, i.e. if it came from a Keras
+  layer with masking support).</p></td>
         <td><em>required</em></td>
       </tr>
   </tbody>
@@ -1684,7 +1710,7 @@ if they want to modify it.</p>
 
 <h2 id="src.model.backbone.mobilevit.Transformer" class="doc doc-heading">
         <code>
-Transformer            (<span title="tensorflow.python.keras.engine.base_layer.Layer">Layer</span>)
+Transformer            (<span title="keras.engine.base_layer.Layer">Layer</span>)
         </code>
 
 
@@ -1813,19 +1839,45 @@ method to support masking.</p>
       <tr>
         <td><code>inputs</code></td>
         <td></td>
-        <td><p>Input tensor, or list/tuple of input tensors.</p></td>
+        <td><p>Input tensor, or dict/list/tuple of input tensors.
+The first positional <code>inputs</code> argument is subject to special rules:
+- <code>inputs</code> must be explicitly passed. A layer cannot have zero
+  arguments, and <code>inputs</code> cannot be provided via the default value
+  of a keyword argument.
+- NumPy array or Python scalar values in <code>inputs</code> get cast as tensors.
+- Keras mask metadata is only collected from <code>inputs</code>.
+- Layers are built (<code>build(input_shape)</code> method)
+  using shape info from <code>inputs</code> only.
+- <code>input_spec</code> compatibility is only checked against <code>inputs</code>.
+- Mixed precision input casting is only applied to <code>inputs</code>.
+  If a layer has tensor arguments in <code>*args</code> or <code>**kwargs</code>, their
+  casting behavior in mixed precision should be handled manually.
+- The SavedModel input specification is generated using <code>inputs</code> only.
+- Integration with various ecosystem packages like TFMOT, TFLite,
+  TF.js, etc is only supported for <code>inputs</code> and not for tensors in
+  positional and keyword arguments.</p></td>
         <td><em>required</em></td>
       </tr>
       <tr>
         <td><code>*args</code></td>
         <td></td>
-        <td><p>Additional positional arguments. Currently unused.</p></td>
+        <td><p>Additional positional arguments. May contain tensors, although
+this is not recommended, for the reasons above.</p></td>
         <td><em>required</em></td>
       </tr>
       <tr>
         <td><code>**kwargs</code></td>
         <td></td>
-        <td><p>Additional keyword arguments. Currently unused.</p></td>
+        <td><p>Additional keyword arguments. May contain tensors, although
+this is not recommended, for the reasons above.
+The following optional keyword arguments are reserved:
+- <code>training</code>: Boolean scalar tensor of Python boolean indicating
+  whether the <code>call</code> is meant for training or inference.
+- <code>mask</code>: Boolean input mask. If the layer's <code>call()</code> method takes a
+  <code>mask</code> argument, its default value will be set to the mask generated
+  for <code>inputs</code> by the previous layer (if <code>input</code> did come from a layer
+  that generated a corresponding mask, i.e. if it came from a Keras
+  layer with masking support).</p></td>
         <td><em>required</em></td>
       </tr>
   </tbody>
