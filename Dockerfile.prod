@@ -25,7 +25,6 @@ COPY configs/ configs/.
 COPY makefile .
 COPY setup.py .
 
-RUN /bin/bash -c "pip install -r requirements.txt --no-cache-dir"
 RUN /bin/bash -c "python -m pip install . --no-cache-dir"
 
 

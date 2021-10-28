@@ -1,15 +1,11 @@
-# Welcome to the semantic segmentation documentation of ECCO project
+# Welcome to the semantic segmentation documentation project
 
 
 ## How to use this project
 
 !!! danger "Attention"
 
-    If you want to this project, be sure to have installed :
-
-    * [Docker](https://docs.docker.com/engine/install/ubuntu/),
-    * [Nvidia Container Toolkit](https://github.com/NVIDIA/nvidia-docker) to allow containers to have access to GPUs.
-
+    install Docker and nvidia container toolkit.
 
 This project can be used in 2 ways.
 
