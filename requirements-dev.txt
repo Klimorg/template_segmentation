@@ -6,7 +6,7 @@ flake8==3.9.0
 isort==5.9.3
 mypy==0.910
 # requirements writing
-pipreqs==0.4.10
+pipreqs==0.4.11
 # precommit action
 pre-commit==2.15.0
 # unit tests
