@@ -1,0 +1,2444 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <meta name="author" content="Mathieu Klimczak">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
+    
+    
+      
+        <title>MobileViT - Documentation Semantic Segmentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.db9e7362.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <script>function __prefix(e){return new URL("../../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+      <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#mobilevit-light-weight-general-purpose-and-mobile-friendly-vision-transformer" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href="../../.." title="Documentation Semantic Segmentation" class="md-header__button md-logo" aria-label="Documentation Semantic Segmentation" data-md-component="logo">
+      
+  <img src="../../../images/logo_blanc.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Documentation Semantic Segmentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              MobileViT
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Basculer en mode sombre"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Basculer en mode sombre" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="deep-orange"  aria-label="Basculer en mode clair"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Basculer en mode clair" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Effacer" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Onglets" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../config_hydra/hydra/" class="md-tabs__link">
+      Hydra configuration
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../misc_config/docker/" class="md-tabs__link">
+        Various configuration
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../datasets/config/" class="md-tabs__link">
+        Datasets creation
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../description/" class="md-tabs__link md-tabs__link--active">
+        Semantic segmentation
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../training_loop/train/" class="md-tabs__link">
+      Training loop
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../loss/focal_loss/" class="md-tabs__link">
+      Loss
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../metrics/mean_iou/" class="md-tabs__link">
+      Metrics
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Documentation Semantic Segmentation" class="md-nav__button md-logo" aria-label="Documentation Semantic Segmentation" data-md-component="logo">
+      
+  <img src="../../../images/logo_blanc.svg" alt="logo">
+
+    </a>
+    Documentation Semantic Segmentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../config_hydra/hydra/" class="md-nav__link">
+        Hydra configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Various configuration
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Various configuration" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Various configuration
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc_config/docker/" class="md-nav__link">
+        Docker config
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc_config/make/" class="md-nav__link">
+        Makefile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../misc_config/requirements/" class="md-nav__link">
+        Requirements
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Datasets creation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Datasets creation" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Datasets creation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../datasets/config/" class="md-nav__link">
+        Dataset configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../datasets/utils_segmentation/" class="md-nav__link">
+        Masks creation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../datasets/make_dataset/" class="md-nav__link">
+        Train-Test-Val datasets creation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_4" type="checkbox" id="__nav_4_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_4">
+          Datasets pipelines
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Datasets pipelines" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_4">
+          <span class="md-nav__icon md-icon"></span>
+          Datasets pipelines
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../datasets/classic/" class="md-nav__link">
+        Classic pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../datasets/cutmix/" class="md-nav__link">
+        CutMix pipeline
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Semantic segmentation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Semantic segmentation" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Semantic segmentation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../description/" class="md-nav__link">
+        Architecture description
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../common_layers/" class="md-nav__link">
+        Common layers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Segmentation heads
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Segmentation heads" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Segmentation heads
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../heads/ksac/" class="md-nav__link">
+        KSAC
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../heads/fpn/" class="md-nav__link">
+        FPN
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../heads/ocnet/" class="md-nav__link">
+        OCNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../heads/jpu/" class="md-nav__link">
+        JPU
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../heads/allmlp/" class="md-nav__link">
+        SegFormer
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4" type="checkbox" id="__nav_5_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4">
+          Backbones
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Backbones" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_4">
+          <span class="md-nav__icon md-icon"></span>
+          Backbones
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_1" type="checkbox" id="__nav_5_4_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_1">
+          Classic CNNs backbones
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Classic CNNs backbones" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_4_1">
+          <span class="md-nav__icon md-icon"></span>
+          Classic CNNs backbones
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mobilenetv2/" class="md-nav__link">
+        MobileNetv2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ghostnet/" class="md-nav__link">
+        GhostNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vovnet/" class="md-nav__link">
+        VoVNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resnet50/" class="md-nav__link">
+        ResNet50
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resnet50v2/" class="md-nav__link">
+        ResNet50v2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resnet101/" class="md-nav__link">
+        ResNet101
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resnet101v2/" class="md-nav__link">
+        ResNet101v2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2" type="checkbox" id="__nav_5_4_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2">
+          Attention and MLP backbones
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Attention and MLP backbones" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Attention and MLP backbones
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../convmlp/" class="md-nav__link">
+        ConvMLP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mit/" class="md-nav__link">
+        MixTransformer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          MobileViT
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        MobileViT
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit" class="md-nav__link">
+    src.model.backbone.mobilevit
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.MobileViT2D" class="md-nav__link">
+    MobileViT2D
+  </a>
+  
+    <nav class="md-nav" aria-label="MobileViT2D">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.MobileViT2D.build" class="md-nav__link">
+    build()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.MobileViT2D.call" class="md-nav__link">
+    call()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.MobileViT2D.from_config" class="md-nav__link">
+    from_config()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.MobileViT2D.get_config" class="md-nav__link">
+    get_config()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.Transformer" class="md-nav__link">
+    Transformer
+  </a>
+  
+    <nav class="md-nav" aria-label="Transformer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.Transformer.build" class="md-nav__link">
+    build()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.Transformer.call" class="md-nav__link">
+    call()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.Transformer.from_config" class="md-nav__link">
+    from_config()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.Transformer.get_config" class="md-nav__link">
+    get_config()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.get_backbone" class="md-nav__link">
+    get_backbone()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#various-configurations-available-as-backbones" class="md-nav__link">
+    Various configurations available as backbones
+  </a>
+  
+    <nav class="md-nav" aria-label="Various configurations available as backbones">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mobilevit-s" class="md-nav__link">
+    MobileViT-S
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mobilevit-xs" class="md-nav__link">
+    MobileViT-XS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mobilevit-xxs" class="md-nav__link">
+    MobileViT-XXS
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../training_loop/train/" class="md-nav__link">
+        Training loop
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../loss/focal_loss/" class="md-nav__link">
+        Loss
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../metrics/mean_iou/" class="md-nav__link">
+        Metrics
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit" class="md-nav__link">
+    src.model.backbone.mobilevit
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.MobileViT2D" class="md-nav__link">
+    MobileViT2D
+  </a>
+  
+    <nav class="md-nav" aria-label="MobileViT2D">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.MobileViT2D.build" class="md-nav__link">
+    build()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.MobileViT2D.call" class="md-nav__link">
+    call()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.MobileViT2D.from_config" class="md-nav__link">
+    from_config()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.MobileViT2D.get_config" class="md-nav__link">
+    get_config()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.Transformer" class="md-nav__link">
+    Transformer
+  </a>
+  
+    <nav class="md-nav" aria-label="Transformer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.Transformer.build" class="md-nav__link">
+    build()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.Transformer.call" class="md-nav__link">
+    call()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.Transformer.from_config" class="md-nav__link">
+    from_config()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.Transformer.get_config" class="md-nav__link">
+    get_config()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.model.backbone.mobilevit.get_backbone" class="md-nav__link">
+    get_backbone()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#various-configurations-available-as-backbones" class="md-nav__link">
+    Various configurations available as backbones
+  </a>
+  
+    <nav class="md-nav" aria-label="Various configurations available as backbones">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mobilevit-s" class="md-nav__link">
+    MobileViT-S
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mobilevit-xs" class="md-nav__link">
+    MobileViT-XS
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mobilevit-xxs" class="md-nav__link">
+    MobileViT-XXS
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="mobilevit-light-weight-general-purpose-and-mobile-friendly-vision-transformer">MobileViT: Light-weight, General-purpose, and Mobile-friendly Vision Transformer</h1>
+<div class="admonition note">
+<p class="admonition-title">Abstract</p>
+<p>Light-weight convolutional neural networks (CNNs) are the de-facto for mobile vision tasks. Their spatial inductive biases allow them to learn representations with fewer parameters across different vision tasks. However, these networks are spatially local.</p>
+<p>To learn global representations, self-attention-based vision trans-formers (ViTs) have been adopted. Unlike CNNs, ViTs are heavy-weight. In this paper, we ask the following question: is it possible to combine the strengths of CNNs and ViTs to build a light-weight and low latency network for mobile vision tasks?</p>
+<p>Towards this end, we introduce MobileViT, a light-weight and general-purpose vision transformer for mobile devices. MobileViT presents a different perspective for the global processing of information with transformers, i.e., transformers as convolutions. Our results show that MobileViT significantly outperforms CNN- and ViT-based networks across different tasks and datasets. On the ImageNet-1k dataset, MobileViT achieves top-1 accuracy of 78.4% with about 6 million parameters, which is 3.2% and 6.2% more accurate than MobileNetv3 (CNN-based) and DeIT (ViT-based) for a similar number of parameters. On the MS-COCO object detection task, MobileViT is 5.7% more accurate than MobileNetv3 for a similar number of parameters.</p>
+<p><a href="https://arxiv.org/abs/2110.02178">ArXiv link</a></p>
+</div>
+<p><img alt="screen" src="../images/mobilevit.svg" /></p>
+<p><img alt="screen" src="../images/mobilevit_config.svg" /></p>
+
+
+  <div class="doc doc-object doc-module">
+
+<a id="src.model.backbone.mobilevit"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="src.model.backbone.mobilevit.MobileViT2D" class="doc doc-heading">
+        <code>
+MobileViT2D            (<span title="keras.engine.base_layer.Layer">Layer</span>)
+        </code>
+
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.model.backbone.mobilevit.MobileViT2D.build" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Creates the variables of the layer (optional, for subclass implementers).</p>
+<p>This is a method that implementers of subclasses of <code>Layer</code> or <code>Model</code>
+can override if they need a state-creation step in-between
+layer instantiation and layer call.</p>
+<p>This is typically used to create the weights of <code>Layer</code> subclasses.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>input_shape</code></td>
+        <td></td>
+        <td><p>Instance of <code>TensorShape</code>, or list of instances of
+<code>TensorShape</code> if the layer expects a list of inputs
+(one instance per input).</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/model/backbone/mobilevit.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="n">_</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">input_shape</span>
+    <span class="n">num_patches</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">height</span> <span class="o">*</span> <span class="n">width</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch_size</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">unfold</span> <span class="o">=</span> <span class="n">Reshape</span><span class="p">(</span>
+        <span class="n">target_shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patch_size</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">num_patches</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">fold</span> <span class="o">=</span> <span class="n">Reshape</span><span class="p">(</span><span class="n">target_shape</span><span class="o">=</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">))</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">conv3x3_1</span> <span class="o">=</span> <span class="n">Conv2D</span><span class="p">(</span>
+        <span class="n">filters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">,</span>
+        <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">strides</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
+        <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">kernel_initializer</span><span class="o">=</span><span class="s2">&quot;he_uniform&quot;</span><span class="p">,</span>
+        <span class="n">kernel_regularizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">regularizers</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">l2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">l2_regul</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">conv3x3_2</span> <span class="o">=</span> <span class="n">Conv2D</span><span class="p">(</span>
+        <span class="n">filters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">,</span>
+        <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">strides</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
+        <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">kernel_initializer</span><span class="o">=</span><span class="s2">&quot;he_uniform&quot;</span><span class="p">,</span>
+        <span class="n">kernel_regularizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">regularizers</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">l2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">l2_regul</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">conv1x1_1</span> <span class="o">=</span> <span class="n">Conv2D</span><span class="p">(</span>
+        <span class="n">filters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">,</span>
+        <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">strides</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
+        <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">kernel_initializer</span><span class="o">=</span><span class="s2">&quot;he_uniform&quot;</span><span class="p">,</span>
+        <span class="n">kernel_regularizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">regularizers</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">l2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">l2_regul</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">conv1x1_2</span> <span class="o">=</span> <span class="n">Conv2D</span><span class="p">(</span>
+        <span class="n">filters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">,</span>
+        <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">strides</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
+        <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">kernel_initializer</span><span class="o">=</span><span class="s2">&quot;he_uniform&quot;</span><span class="p">,</span>
+        <span class="n">kernel_regularizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">regularizers</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">l2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">l2_regul</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">concat</span> <span class="o">=</span> <span class="n">Concatenate</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">transformer_block</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Transformer</span><span class="p">(</span>
+            <span class="n">fc1_units</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">expansion_rate</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb_dim</span><span class="p">,</span>
+            <span class="n">fc2_units</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">,</span>
+            <span class="n">num_heads</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span>
+            <span class="n">emb_dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">emb_dim</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">repetitions</span><span class="p">)</span>
+    <span class="p">]</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.model.backbone.mobilevit.MobileViT2D.call" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>This is where the layer's logic lives.</p>
+<p>Note here that <code>call()</code> method in <code>tf.keras</code> is little bit different
+from <code>keras</code> API. In <code>keras</code> API, you can pass support masking for
+layers as additional arguments. Whereas <code>tf.keras</code> has <code>compute_mask()</code>
+method to support masking.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>inputs</code></td>
+        <td></td>
+        <td><p>Input tensor, or dict/list/tuple of input tensors.
+The first positional <code>inputs</code> argument is subject to special rules:
+- <code>inputs</code> must be explicitly passed. A layer cannot have zero
+  arguments, and <code>inputs</code> cannot be provided via the default value
+  of a keyword argument.
+- NumPy array or Python scalar values in <code>inputs</code> get cast as tensors.
+- Keras mask metadata is only collected from <code>inputs</code>.
+- Layers are built (<code>build(input_shape)</code> method)
+  using shape info from <code>inputs</code> only.
+- <code>input_spec</code> compatibility is only checked against <code>inputs</code>.
+- Mixed precision input casting is only applied to <code>inputs</code>.
+  If a layer has tensor arguments in <code>*args</code> or <code>**kwargs</code>, their
+  casting behavior in mixed precision should be handled manually.
+- The SavedModel input specification is generated using <code>inputs</code> only.
+- Integration with various ecosystem packages like TFMOT, TFLite,
+  TF.js, etc is only supported for <code>inputs</code> and not for tensors in
+  positional and keyword arguments.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>*args</code></td>
+        <td></td>
+        <td><p>Additional positional arguments. May contain tensors, although
+this is not recommended, for the reasons above.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>**kwargs</code></td>
+        <td></td>
+        <td><p>Additional keyword arguments. May contain tensors, although
+this is not recommended, for the reasons above.
+The following optional keyword arguments are reserved:
+- <code>training</code>: Boolean scalar tensor of Python boolean indicating
+  whether the <code>call</code> is meant for training or inference.
+- <code>mask</code>: Boolean input mask. If the layer's <code>call()</code> method takes a
+  <code>mask</code> argument, its default value will be set to the mask generated
+  for <code>inputs</code> by the previous layer (if <code>input</code> did come from a layer
+  that generated a corresponding mask, i.e. if it came from a Keras
+  layer with masking support).</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Tensor</code></td>
+      <td><p>A tensor or list/tuple of tensors.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/model/backbone/mobilevit.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+
+    <span class="n">fmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv3x3_1</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+    <span class="n">fmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv1x1_1</span><span class="p">(</span><span class="n">fmap</span><span class="p">)</span>
+
+    <span class="n">fmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unfold</span><span class="p">(</span><span class="n">fmap</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformer_block</span><span class="p">:</span>
+        <span class="n">fmap</span> <span class="o">=</span> <span class="n">block</span><span class="p">(</span><span class="n">fmap</span><span class="p">)</span>
+
+    <span class="n">fmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fold</span><span class="p">(</span><span class="n">fmap</span><span class="p">)</span>
+
+    <span class="n">fmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv1x1_2</span><span class="p">(</span><span class="n">fmap</span><span class="p">)</span>
+    <span class="n">fmap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">fmap</span><span class="p">,</span> <span class="n">inputs</span><span class="p">])</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv3x3_2</span><span class="p">(</span><span class="n">fmap</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.model.backbone.mobilevit.MobileViT2D.from_config" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">from_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Creates a layer from its config.</p>
+<p>This method is the reverse of <code>get_config</code>,
+capable of instantiating the same layer from the config
+dictionary. It does not handle layer connectivity
+(handled by Network), nor weights (handled by <code>set_weights</code>).</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>config</code></td>
+        <td></td>
+        <td><p>A Python dictionary, typically the
+output of get_config.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td><p>A layer instance.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/model/backbone/mobilevit.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">from_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.model.backbone.mobilevit.MobileViT2D.get_config" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Returns the config of the layer.</p>
+<p>A layer config is a Python dictionary (serializable)
+containing the configuration of a layer.
+The same layer can be reinstantiated later
+(without its trained weights) from this configuration.</p>
+<p>The config of a layer does not include connectivity
+information, nor the layer class name. These are handled
+by <code>Network</code> (one layer of abstraction above).</p>
+<p>Note that <code>get_config()</code> does not guarantee to return a fresh copy of dict
+every time it is called. The callers should make a copy of the returned dict
+if they want to modify it.</p>
+
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Dict[str, Any]</code></td>
+      <td><p>Python dictionary.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/model/backbone/mobilevit.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_config</span><span class="p">()</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;expansion_rate&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">expansion_rate</span><span class="p">,</span>
+            <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">,</span>
+            <span class="s2">&quot;patch_size&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch_size</span><span class="p">,</span>
+            <span class="s2">&quot;num_heads&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span>
+            <span class="s2">&quot;emb_dim&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb_dim</span><span class="p">,</span>
+            <span class="s2">&quot;repetitions&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">repetitions</span><span class="p">,</span>
+            <span class="s2">&quot;l2_regul&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">l2_regul</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">config</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="src.model.backbone.mobilevit.Transformer" class="doc doc-heading">
+        <code>
+Transformer            (<span title="keras.engine.base_layer.Layer">Layer</span>)
+        </code>
+
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.model.backbone.mobilevit.Transformer.build" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Creates the variables of the layer (optional, for subclass implementers).</p>
+<p>This is a method that implementers of subclasses of <code>Layer</code> or <code>Model</code>
+can override if they need a state-creation step in-between
+layer instantiation and layer call.</p>
+<p>This is typically used to create the weights of <code>Layer</code> subclasses.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>input_shape</code></td>
+        <td></td>
+        <td><p>Instance of <code>TensorShape</code>, or list of instances of
+<code>TensorShape</code> if the layer expects a list of inputs
+(one instance per input).</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/model/backbone/mobilevit.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span> <span class="o">=</span> <span class="n">LayerNormalization</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">norm2</span> <span class="o">=</span> <span class="n">LayerNormalization</span><span class="p">()</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">mhsa</span> <span class="o">=</span> <span class="n">MultiHeadAttention</span><span class="p">(</span>
+        <span class="n">num_heads</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span>
+        <span class="n">key_dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">emb_dim</span><span class="p">,</span>
+        <span class="n">use_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">kernel_initializer</span><span class="o">=</span><span class="s2">&quot;he_uniform&quot;</span><span class="p">,</span>
+        <span class="n">kernel_regularizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">regularizers</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">l2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">l2_regul</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc1_units</span><span class="p">,</span>
+        <span class="n">kernel_initializer</span><span class="o">=</span><span class="s2">&quot;he_uniform&quot;</span><span class="p">,</span>
+        <span class="n">kernel_regularizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">regularizers</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">l2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">l2_regul</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span> <span class="o">=</span> <span class="n">Dense</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc2_units</span><span class="p">,</span>
+        <span class="n">kernel_initializer</span><span class="o">=</span><span class="s2">&quot;he_uniform&quot;</span><span class="p">,</span>
+        <span class="n">kernel_regularizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">regularizers</span><span class="o">.</span><span class="n">l2</span><span class="p">(</span><span class="n">l2</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">l2_regul</span><span class="p">),</span>
+    <span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.model.backbone.mobilevit.Transformer.call" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>This is where the layer's logic lives.</p>
+<p>Note here that <code>call()</code> method in <code>tf.keras</code> is little bit different
+from <code>keras</code> API. In <code>keras</code> API, you can pass support masking for
+layers as additional arguments. Whereas <code>tf.keras</code> has <code>compute_mask()</code>
+method to support masking.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>inputs</code></td>
+        <td></td>
+        <td><p>Input tensor, or dict/list/tuple of input tensors.
+The first positional <code>inputs</code> argument is subject to special rules:
+- <code>inputs</code> must be explicitly passed. A layer cannot have zero
+  arguments, and <code>inputs</code> cannot be provided via the default value
+  of a keyword argument.
+- NumPy array or Python scalar values in <code>inputs</code> get cast as tensors.
+- Keras mask metadata is only collected from <code>inputs</code>.
+- Layers are built (<code>build(input_shape)</code> method)
+  using shape info from <code>inputs</code> only.
+- <code>input_spec</code> compatibility is only checked against <code>inputs</code>.
+- Mixed precision input casting is only applied to <code>inputs</code>.
+  If a layer has tensor arguments in <code>*args</code> or <code>**kwargs</code>, their
+  casting behavior in mixed precision should be handled manually.
+- The SavedModel input specification is generated using <code>inputs</code> only.
+- Integration with various ecosystem packages like TFMOT, TFLite,
+  TF.js, etc is only supported for <code>inputs</code> and not for tensors in
+  positional and keyword arguments.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>*args</code></td>
+        <td></td>
+        <td><p>Additional positional arguments. May contain tensors, although
+this is not recommended, for the reasons above.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>**kwargs</code></td>
+        <td></td>
+        <td><p>Additional keyword arguments. May contain tensors, although
+this is not recommended, for the reasons above.
+The following optional keyword arguments are reserved:
+- <code>training</code>: Boolean scalar tensor of Python boolean indicating
+  whether the <code>call</code> is meant for training or inference.
+- <code>mask</code>: Boolean input mask. If the layer's <code>call()</code> method takes a
+  <code>mask</code> argument, its default value will be set to the mask generated
+  for <code>inputs</code> by the previous layer (if <code>input</code> did come from a layer
+  that generated a corresponding mask, i.e. if it came from a Keras
+  layer with masking support).</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Tensor</code></td>
+      <td><p>A tensor or list/tuple of tensors.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/model/backbone/mobilevit.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+
+    <span class="n">mhsa_in</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+    <span class="n">mhsa_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mhsa</span><span class="p">(</span><span class="n">mhsa_in</span><span class="p">,</span> <span class="n">mhsa_in</span><span class="p">)</span>
+    <span class="n">mhsa_out</span> <span class="o">=</span> <span class="n">inputs</span> <span class="o">+</span> <span class="n">mhsa_out</span>
+
+    <span class="n">fc_in</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm2</span><span class="p">(</span><span class="n">mhsa_out</span><span class="p">)</span>
+    <span class="n">fc_in</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span><span class="p">(</span><span class="n">fc_in</span><span class="p">)</span>
+    <span class="n">fc_in</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">fc_in</span><span class="p">)</span>
+    <span class="n">fc_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span><span class="p">(</span><span class="n">fc_in</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mhsa_out</span> <span class="o">+</span> <span class="n">fc_out</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.model.backbone.mobilevit.Transformer.from_config" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">from_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Creates a layer from its config.</p>
+<p>This method is the reverse of <code>get_config</code>,
+capable of instantiating the same layer from the config
+dictionary. It does not handle layer connectivity
+(handled by Network), nor weights (handled by <code>set_weights</code>).</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>config</code></td>
+        <td></td>
+        <td><p>A Python dictionary, typically the
+output of get_config.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td><p>A layer instance.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/model/backbone/mobilevit.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">from_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.model.backbone.mobilevit.Transformer.get_config" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Returns the config of the layer.</p>
+<p>A layer config is a Python dictionary (serializable)
+containing the configuration of a layer.
+The same layer can be reinstantiated later
+(without its trained weights) from this configuration.</p>
+<p>The config of a layer does not include connectivity
+information, nor the layer class name. These are handled
+by <code>Network</code> (one layer of abstraction above).</p>
+<p>Note that <code>get_config()</code> does not guarantee to return a fresh copy of dict
+every time it is called. The callers should make a copy of the returned dict
+if they want to modify it.</p>
+
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Dict[str, Any]</code></td>
+      <td><p>Python dictionary.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/model/backbone/mobilevit.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_config</span><span class="p">()</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;fc1_units&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc1_units</span><span class="p">,</span>
+            <span class="s2">&quot;fc2_units&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc2_units</span><span class="p">,</span>
+            <span class="s2">&quot;num_heads&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span>
+            <span class="s2">&quot;emb_dim&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">emb_dim</span><span class="p">,</span>
+            <span class="s2">&quot;l2_regul&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">l2_regul</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">config</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="src.model.backbone.mobilevit.get_backbone" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_backbone</span><span class="p">(</span><span class="n">img_shape</span><span class="p">,</span> <span class="n">expansion_rate</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">emb_dim</span><span class="p">,</span> <span class="n">repetitions</span><span class="p">,</span> <span class="n">num_heads</span><span class="p">,</span> <span class="n">backbone_name</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Instantiate the model and use it as a backbone (feature extractor) for a semantic segmentation task.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>img_shape</code></td>
+        <td><code>List[int]</code></td>
+        <td><p>[description]</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>expansion_rate</code></td>
+        <td><code>List[int]</code></td>
+        <td><p>[description]</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>filters</code></td>
+        <td><code>List[int]</code></td>
+        <td><p>[description]</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>emb_dim</code></td>
+        <td><code>List[int]</code></td>
+        <td><p>[description]</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>repetitions</code></td>
+        <td><code>List[int]</code></td>
+        <td><p>[description]</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>num_heads</code></td>
+        <td><code>int</code></td>
+        <td><p>[description]</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>backbone_name</code></td>
+        <td><code>str</code></td>
+        <td><p>[description]</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Model</code></td>
+      <td><p>A <code>tf.keras</code> model.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/model/backbone/mobilevit.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_backbone</span><span class="p">(</span>
+    <span class="n">img_shape</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">expansion_rate</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">filters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">emb_dim</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">repetitions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">num_heads</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">backbone_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Instantiate the model and use it as a backbone (feature extractor) for a semantic segmentation task.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        img_shape (List[int]): [description]</span>
+<span class="sd">        expansion_rate (List[int]): [description]</span>
+<span class="sd">        filters (List[int]): [description]</span>
+<span class="sd">        emb_dim (List[int]): [description]</span>
+<span class="sd">        repetitions (List[int]): [description]</span>
+<span class="sd">        num_heads (int): [description]</span>
+<span class="sd">        backbone_name (str): [description]</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A `tf.keras` model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">backbone</span> <span class="o">=</span> <span class="n">get_feature_extractor</span><span class="p">(</span>
+        <span class="n">img_shape</span><span class="o">=</span><span class="n">img_shape</span><span class="p">,</span>
+        <span class="n">expansion_rate</span><span class="o">=</span><span class="n">expansion_rate</span><span class="p">,</span>
+        <span class="n">filters</span><span class="o">=</span><span class="n">filters</span><span class="p">,</span>
+        <span class="n">emb_dim</span><span class="o">=</span><span class="n">emb_dim</span><span class="p">,</span>
+        <span class="n">repetitions</span><span class="o">=</span><span class="n">repetitions</span><span class="p">,</span>
+        <span class="n">num_heads</span><span class="o">=</span><span class="n">num_heads</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">endpoint_layers</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;ivrb3&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MobileViT2D_block2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MobileViT2D_block3&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;conv_output&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">os4_output</span><span class="p">,</span> <span class="n">os8_output</span><span class="p">,</span> <span class="n">os16_output</span><span class="p">,</span> <span class="n">os32_output</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">backbone</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">layer_name</span><span class="p">)</span><span class="o">.</span><span class="n">output</span> <span class="k">for</span> <span class="n">layer_name</span> <span class="ow">in</span> <span class="n">endpoint_layers</span>
+    <span class="p">]</span>
+
+    <span class="n">height</span> <span class="o">=</span> <span class="n">img_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;os4_output OS : </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">height</span><span class="o">/</span><span class="n">os4_output</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">as_list</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;os8_output OS : </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">height</span><span class="o">/</span><span class="n">os8_output</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">as_list</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;os16_output OS : </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">height</span><span class="o">/</span><span class="n">os16_output</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">as_list</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;os32_output OS : </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">height</span><span class="o">/</span><span class="n">os32_output</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">as_list</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Model</span><span class="p">(</span>
+        <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">backbone</span><span class="o">.</span><span class="n">input</span><span class="p">],</span>
+        <span class="n">outputs</span><span class="o">=</span><span class="p">[</span><span class="n">os4_output</span><span class="p">,</span> <span class="n">os8_output</span><span class="p">,</span> <span class="n">os16_output</span><span class="p">,</span> <span class="n">os32_output</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">backbone_name</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+<h2 id="various-configurations-available-as-backbones">Various configurations available as backbones</h2>
+<h3 id="mobilevit-s">MobileViT-S</h3>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">model.backbone.mobilevit.get_backbone</span>
+<span class="nt">img_shape</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${datasets.params.img_shape}</span>
+<span class="nt">expansion_rate</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">4</span><span class="p p-Indicator">,</span> <span class="nv">2</span><span class="p p-Indicator">]</span>
+<span class="nt">filters</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">16</span><span class="p p-Indicator">,</span> <span class="nv">16</span><span class="p p-Indicator">,</span> <span class="nv">64</span><span class="p p-Indicator">,</span> <span class="nv">64</span><span class="p p-Indicator">,</span> <span class="nv">64</span><span class="p p-Indicator">,</span> <span class="nv">96</span><span class="p p-Indicator">,</span> <span class="nv">96</span><span class="p p-Indicator">,</span> <span class="nv">128</span><span class="p p-Indicator">,</span> <span class="nv">128</span><span class="p p-Indicator">,</span> <span class="nv">160</span><span class="p p-Indicator">,</span> <span class="nv">160</span><span class="p p-Indicator">,</span> <span class="nv">640</span><span class="p p-Indicator">]</span>
+<span class="nt">emb_dim</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">144</span><span class="p p-Indicator">,</span> <span class="nv">192</span><span class="p p-Indicator">,</span> <span class="nv">240</span><span class="p p-Indicator">]</span>
+<span class="nt">repetitions</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">4</span><span class="p p-Indicator">,</span> <span class="nv">3</span><span class="p p-Indicator">]</span>
+<span class="nt">num_heads</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="nt">backbone_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">MobileViT-S</span>
+</code></pre></div>
+</td></tr></table>
+<h3 id="mobilevit-xs">MobileViT-XS</h3>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">model.backbone.mobilevit.get_backbone</span>
+<span class="nt">img_shape</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${datasets.params.img_shape}</span>
+<span class="nt">expansion_rate</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">4</span><span class="p p-Indicator">,</span> <span class="nv">2</span><span class="p p-Indicator">]</span>
+<span class="nt">filters</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">16</span><span class="p p-Indicator">,</span><span class="nv">16</span><span class="p p-Indicator">,</span> <span class="nv">48</span><span class="p p-Indicator">,</span> <span class="nv">48</span><span class="p p-Indicator">,</span> <span class="nv">48</span><span class="p p-Indicator">,</span> <span class="nv">64</span><span class="p p-Indicator">,</span> <span class="nv">64</span><span class="p p-Indicator">,</span> <span class="nv">80</span><span class="p p-Indicator">,</span> <span class="nv">80</span><span class="p p-Indicator">,</span> <span class="nv">96</span><span class="p p-Indicator">,</span> <span class="nv">96</span><span class="p p-Indicator">,</span> <span class="nv">384</span><span class="p p-Indicator">]</span>
+<span class="nt">emb_dim</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">96</span><span class="p p-Indicator">,</span> <span class="nv">120</span><span class="p p-Indicator">,</span> <span class="nv">144</span><span class="p p-Indicator">]</span>
+<span class="nt">repetitions</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">4</span><span class="p p-Indicator">,</span> <span class="nv">3</span><span class="p p-Indicator">]</span>
+<span class="nt">num_heads</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="nt">backbone_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">MobileViT-XS</span>
+</code></pre></div>
+</td></tr></table>
+<h3 id="mobilevit-xxs">MobileViT-XXS</h3>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nt">_target_</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">model.backbone.mobilevit.get_backbone</span>
+<span class="nt">img_shape</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${datasets.params.img_shape}</span>
+<span class="nt">expansion_rate</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">2</span><span class="p p-Indicator">]</span>
+<span class="nt">filters</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">16</span><span class="p p-Indicator">,</span> <span class="nv">16</span><span class="p p-Indicator">,</span> <span class="nv">24</span><span class="p p-Indicator">,</span> <span class="nv">24</span><span class="p p-Indicator">,</span> <span class="nv">24</span><span class="p p-Indicator">,</span> <span class="nv">48</span><span class="p p-Indicator">,</span> <span class="nv">48</span><span class="p p-Indicator">,</span> <span class="nv">64</span><span class="p p-Indicator">,</span> <span class="nv">64</span><span class="p p-Indicator">,</span> <span class="nv">80</span><span class="p p-Indicator">,</span> <span class="nv">80</span><span class="p p-Indicator">,</span> <span class="nv">320</span><span class="p p-Indicator">]</span>
+<span class="nt">emb_dim</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">64</span><span class="p p-Indicator">,</span> <span class="nv">80</span><span class="p p-Indicator">,</span> <span class="nv">96</span><span class="p p-Indicator">]</span>
+<span class="nt">repetitions</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">2</span><span class="p p-Indicator">,</span> <span class="nv">4</span><span class="p p-Indicator">,</span> <span class="nv">3</span><span class="p p-Indicator">]</span>
+<span class="nt">num_heads</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="nt">backbone_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">MobileViT-XXS</span>
+</code></pre></div>
+</td></tr></table>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg>
+            Retour en haut de la page
+          </a>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Pied de page">
+      
+        
+        <a href="../mit/" class="md-footer__link md-footer__link--prev" aria-label="Précédent: MixTransformer" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Précédent
+              </span>
+              MixTransformer
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../../../training_loop/train/" class="md-footer__link md-footer__link--next" aria-label="Suivant: Training loop" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Suivant
+              </span>
+              Training loop
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.tabs", "navigation.top", "search.highlight", "search.share", "search.suggest"], "translations": {"clipboard.copy": "Copier dans le presse-papier", "clipboard.copied": "Copi\u00e9 dans le presse-papier", "search.config.lang": "fr", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Rechercher", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.term.missing": "Non trouv\u00e9", "select.version.title": "S\u00e9lectionner la version"}, "search": "../../../assets/javascripts/workers/search.8397ff9e.min.js", "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.1e84347e.min.js"></script>
+      
+        <script src="../../../javascripts/config.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
