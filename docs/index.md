@@ -14,16 +14,30 @@ This project can be used in 2 ways.
     This project has only been tested with Python 3.8.
 ### First Choice
 
-A Docker image has been provided, see the [Various configuration page](misc_config/docker.md) for further details about the writing of the Dockerfile. The base image from this Dockerfile is a TensorFlow image provided by [NVidia](https://ngc.nvidia.com/catalog/containers/nvidia:tensorflow/tags), this has the advantage to not bother you with the (quite difficult) installation of TensorFlow, CUDA, CuDNN, and other optimization softwares needed to make TensorFlow compatible with GPUs.
+#### I **DO WANT** to modify what's in the `src` directory
+
+A Dockerfile `Derckerfile` for "development mode" image has been provided, see the [Various configuration page](misc_config/docker.md) for further details about the writing of the Dockerfile. The base image from this Dockerfile is a TensorFlow image provided by [NVidia](https://ngc.nvidia.com/catalog/containers/nvidia:tensorflow/tags), this has the advantage to not bother you with the (quite difficult) installation of TensorFlow, CUDA, CuDNN, and other optimization softwares needed to make TensorFlow compatible with GPUs.
 
 The shell commands needed to build and run the Docker container can be found below, they are also the provided in the [makefile](misc_config/make.md).
 
 ```shell
 build_docker:
-    docker build --build-arg USER_UID=$$(id -u) --build-arg USER_GID=$$(id -g) --rm -f Dockerfile -t segmentation_project:v1 .
+    docker build \
+    --build-arg USER_UID=$$(id -u) \
+    --build-arg USER_GID=$$(id -g) \
+    --rm -f Dockerfile \
+    -t segmentation_project:v1 .
 
 run_docker:
-    docker run --gpus all --shm-size=2g --ulimit memlock=-1 --ulimit stack=67108864 -it --rm -P --mount type=bind,source=$(PWD),target=/media/vorph/Datas/template_segmentation -e TF_FORCE_GPU_ALLOW_GROWTH=true -e XLA_FLAGS='--xla_gpu_autotune_level=2' segmentation_project:v1
+    docker run \
+    --gpus all \
+    --shm-size=2g \
+    --ulimit memlock=-1 \
+    --ulimit stack=67108864 \
+    -it --rm -P \
+    --mount type=bind,source=$(PWD),target=/media/vorph/Datas/template_segmentation \
+    -e TF_FORCE_GPU_ALLOW_GROWTH=true \
+    -e XLA_FLAGS='--xla_gpu_autotune_level=2' segmentation_project:v1
 ```
 Note that the container rely on mounting a volume, you can see that in the `run_docker` command : `--mount type=bind,source=$(PWD),target=/media/vorph/Datas/template_segmentation`, depending on where the project is installed, you will have to :
 
@@ -31,6 +45,42 @@ Note that the container rely on mounting a volume, you can see that in the `run_
 * or to modify the address of the mounted volume to make it correspond to where you have installed it.
 
 Once you've done it, ie building and running the container, you have various [`requirements` files](misc_config/requirements.md) provided depending of what you want to do. we'll cover these requirements files later.
+
+#### I **DO NOT WANT** to modify what's in the `src` directory
+
+A Dockerfile `Derckerfile.prod` for "production mode" image has been provided, see the [Various configuration page](misc_config/docker.md) for further details about the writing of the Dockerfile. The base image from this Dockerfile is a TensorFlow image provided by [NVidia](https://ngc.nvidia.com/catalog/containers/nvidia:tensorflow/tags), this has the advantage to not bother you with the (quite difficult) installation of TensorFlow, CUDA, CuDNN, and other optimization softwares needed to make TensorFlow compatible with GPUs.
+
+The shell commands needed to build and run the Docker container can be found below, they are also the provided in the [makefile](misc_config/make.md).
+
+```shell
+build_prod:
+    docker build \
+    --build-arg USER_UID=$$(id -u) \
+    --build-arg USER_GID=$$(id -g) \
+    --rm \
+    -f Dockerfile.prod \
+    -t segmentation_project:v1_prod .
+
+run_prod:
+    docker run --gpus all \
+    --shm-size=2g \
+    --ulimit memlock=-1 \
+    --ulimit stack=67108864 \
+    -it \
+    --rm \
+    -P \
+    --mount type=bind,source=$(PWD)/configs/,target=/home/vorph/configs/ \
+    --mount type=bind,source=$(PWD)/datas/,target=/home/vorph/datas/ \
+    --mount type=bind,source=$(PWD)/hydra/,target=/home/vorph/hydra/ \
+    --mount type=bind,source=$(PWD)/mlruns/,target=/home/vorph/mlruns/ \
+    -e TF_FORCE_GPU_ALLOW_GROWTH=true \
+    -e TF_ENABLE_ONEDNN_OPTS=true \
+    -e XLA_FLAGS='--xla_gpu_autotune_level=2' \
+    segmentation_project:v1_prod
+```
+Note that the container rely on mounting the following volumes :
+
+
 
 ### Second Choice
 
