@@ -100,7 +100,6 @@ class MobileViT2D(tf.keras.layers.Layer):
     def __init__(
         self,
         expansion_rate: int,
-        # fc_units: int,
         filters: int,
         patch_size: int = 2,
         num_heads: int = 8,
@@ -225,7 +224,20 @@ def get_feature_extractor(
     emb_dim: List[int],
     repetitions: List[int],
     num_heads: int,
-):
+) -> tf.keras.Model:
+    """Instantiate of MobileViT model.
+
+    Args:
+        img_shape (List[int]): Input shape of the images in the dataset.
+        expansion_rate (List[int]): Expansion rates used in `InvertedResidualBottleneck2D` and in `Transformer` modules.
+        filters (List[int]): Number of filters used in `InvertedResidualBottleneck2D` and in `MobileVit2D` modules.
+        emb_dim (List[int]): The dimension of the embedding, ie the number of units in the linear projection for the `MultiHeadAttention` module.
+        repetitions (List[int]): Number of `Transformer` blocks in the `MobileVit2D` modules.
+        num_heads (int): Number of heads for the `MultiHeadAttention` module.
+
+    Returns:
+        A `tf.keras` model.
+    """
 
     # Input block
     img_input = Input(img_shape)
@@ -356,13 +368,13 @@ def get_backbone(
     """Instantiate the model and use it as a backbone (feature extractor) for a semantic segmentation task.
 
     Args:
-        img_shape (List[int]): [description]
-        expansion_rate (List[int]): [description]
-        filters (List[int]): [description]
-        emb_dim (List[int]): [description]
-        repetitions (List[int]): [description]
-        num_heads (int): [description]
-        backbone_name (str): [description]
+        img_shape (List[int]): Input shape of the images in the dataset.
+        expansion_rate (List[int]): Expansion rates used in `InvertedResidualBottleneck2D` and in `Transformer` modules.
+        filters (List[int]): Number of filters used in `InvertedResidualBottleneck2D` and in `MobileVit2D` modules.
+        emb_dim (List[int]): The dimension of the embedding, ie the number of units in the linear projection for the `MultiHeadAttention` module.
+        repetitions (List[int]): Number of `Transformer` blocks in the `MobileVit2D` modules.
+        num_heads (int): Number of heads for the `MultiHeadAttention` module.
+        backbone_name (str): The name of the backbone.
 
     Returns:
         A `tf.keras` model.

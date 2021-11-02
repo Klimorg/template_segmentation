@@ -445,7 +445,20 @@ def get_feature_extractor(
     num_blocks: List[int],
     units: List[int],
     mlp_ratios: List[int],
-):
+) -> tf.keras.Model:
+    """Instantiate a ConvMLP model.
+
+    Args:
+        img_shape (List[int]): Input shape of the images in the dataset.
+        channels (int): Number of filters used in the `ConvTokenizer` module.
+        n_conv_blocks (int): Number of conv blocks `Conv2D-Bn-ReLU x3` ins the `ConvStage` module.
+        num_blocks (List[int]): Number of `ConvMLPStage` blocks used at each level (ie each `BasicStage`).
+        units (List[int]): Number of units in the `Dense` layers of each `BasicStage`.
+        mlp_ratios (List[int]): Expansion factor in the hidden `Dense` layers of each `BasicStage`.
+
+    Returns:
+        A `tf.keras` model.
+    """
 
     img_input = Input(img_shape)
 
@@ -494,13 +507,13 @@ def get_backbone(
     """Instantiate the model and use it as a backbone (feature extractor) for a semantic segmentation task.
 
     Args:
-        img_shape (List[int]): [description]
-        channels (int): [description]
-        n_conv_blocks (int): [description]
-        num_blocks (List[int]): [description]
-        units (List[int]): [description]
-        mlp_ratios (List[int]): [description]
-        backbone_name (str): [description]
+        img_shape (List[int]): Input shape of the images in the dataset.
+        channels (int): Number of filters used in the `ConvTokenizer` module.
+        n_conv_blocks (int): Number of conv blocks `Conv2D-Bn-ReLU x3` ins the `ConvStage` module.
+        num_blocks (List[int]): Number of `ConvMLPStage` blocks used at each level (ie each `BasicStage`).
+        units (List[int]): Number of units in the `Dense` layers of each `BasicStage`.
+        mlp_ratios (List[int]): Expansion factor in the hidden `Dense` layers of each `BasicStage`.
+        backbone_name (str): The name of the backbone
 
     Returns:
         A `tf.keras` model.
@@ -536,24 +549,3 @@ def get_backbone(
         outputs=[os4_output, os8_output, os16_output, os32_output],
         name=backbone_name,
     )
-
-
-if __name__ == "__main__":
-
-    # convmlp-xs
-    channels = 64
-    n_conv_blocks = 2
-    num_blocks = [2, 2, 2]
-    units = [128, 128, 256, 512]
-    mlp_ratios = [2, 2, 2]
-
-    mod = get_backbone(
-        img_shape=(224, 224, 3),
-        channels=channels,
-        n_conv_blocks=n_conv_blocks,
-        num_blocks=num_blocks,
-        units=units,
-        mlp_ratios=mlp_ratios,
-        backbone_name="convmlp-xs",
-    )
-    mod.summary()
