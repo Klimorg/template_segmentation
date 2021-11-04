@@ -1,6 +1,6 @@
 FROM nvcr.io/nvidia/tensorflow:21.06-tf2-py3
 
-ARG USERNAME=vorph
+ARG USERNAME=lambda
 ARG USER_UID=1000
 ARG USER_GID=1000
 

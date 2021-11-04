@@ -4,8 +4,10 @@
 ## How to use this project
 
 !!! danger "Attention"
+    Before using this project, be sure :
 
-    install Docker and nvidia container toolkit.
+    1. To have Docker installed,
+    2. To have Nvidia Container Toolkit installed.
 
 This project can be used in 2 ways.
 
@@ -16,7 +18,7 @@ This project can be used in 2 ways.
 
 #### I **DO WANT** to modify what's in the `src` directory
 
-A Dockerfile `Derckerfile` for "development mode" image has been provided, see the [Various configuration page](misc_config/docker.md) for further details about the writing of the Dockerfile. The base image from this Dockerfile is a TensorFlow image provided by [NVidia](https://ngc.nvidia.com/catalog/containers/nvidia:tensorflow/tags), this has the advantage to not bother you with the (quite difficult) installation of TensorFlow, CUDA, CuDNN, and other optimization softwares needed to make TensorFlow compatible with GPUs.
+A Dockerfile `Dockerfile` for "development mode" image has been provided, see the [Various configuration page](misc_config/docker.md) for further details about the writing of the Dockerfile. The base image from this Dockerfile is a TensorFlow image provided by [NVidia](https://ngc.nvidia.com/catalog/containers/nvidia:tensorflow/tags), this has the advantage to not bother you with the (quite difficult) installation of TensorFlow, CUDA, CuDNN, and other optimization softwares needed to make TensorFlow compatible with GPUs.
 
 The shell commands needed to build and run the Docker container can be found below, they are also the provided in the [makefile](misc_config/make.md).
 
@@ -48,7 +50,7 @@ Once you've done it, ie building and running the container, you have various [`r
 
 #### I **DO NOT WANT** to modify what's in the `src` directory
 
-A Dockerfile `Derckerfile.prod` for "production mode" image has been provided, see the [Various configuration page](misc_config/docker.md) for further details about the writing of the Dockerfile. The base image from this Dockerfile is a TensorFlow image provided by [NVidia](https://ngc.nvidia.com/catalog/containers/nvidia:tensorflow/tags), this has the advantage to not bother you with the (quite difficult) installation of TensorFlow, CUDA, CuDNN, and other optimization softwares needed to make TensorFlow compatible with GPUs.
+A Dockerfile `Dockerfile.prod` for "production mode" image has been provided, see the [Various configuration page](misc_config/docker.md) for further details about the writing of the Dockerfile. The base image from this Dockerfile is a TensorFlow image provided by [NVidia](https://ngc.nvidia.com/catalog/containers/nvidia:tensorflow/tags), this has the advantage to not bother you with the (quite difficult) installation of TensorFlow, CUDA, CuDNN, and other optimization softwares needed to make TensorFlow compatible with GPUs.
 
 The shell commands needed to build and run the Docker container can be found below, they are also the provided in the [makefile](misc_config/make.md).
 
