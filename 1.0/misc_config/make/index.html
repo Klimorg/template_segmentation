@@ -1,0 +1,1502 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <meta name="author" content="Mathieu Klimczak">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
+    
+    
+      
+        <title>Makefile - Documentation Semantic Segmentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.db9e7362.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+      <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#makefile-configuration" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href="../.." title="Documentation Semantic Segmentation" class="md-header__button md-logo" aria-label="Documentation Semantic Segmentation" data-md-component="logo">
+      
+  <img src="../../images/logo_blanc.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Documentation Semantic Segmentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Makefile
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Basculer en mode sombre"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Basculer en mode sombre" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="deep-orange"  aria-label="Basculer en mode clair"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Basculer en mode clair" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Effacer" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Onglets" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../config_hydra/hydra/" class="md-tabs__link">
+      Hydra configuration
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../docker/" class="md-tabs__link md-tabs__link--active">
+        Various configuration
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../datasets/config/" class="md-tabs__link">
+        Datasets creation
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../models/description/" class="md-tabs__link">
+        Semantic segmentation
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../training_loop/train/" class="md-tabs__link">
+      Training loop
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../loss/focal_loss/" class="md-tabs__link">
+      Loss
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../metrics/mean_iou/" class="md-tabs__link">
+      Metrics
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Documentation Semantic Segmentation" class="md-nav__button md-logo" aria-label="Documentation Semantic Segmentation" data-md-component="logo">
+      
+  <img src="../../images/logo_blanc.svg" alt="logo">
+
+    </a>
+    Documentation Semantic Segmentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../config_hydra/hydra/" class="md-nav__link">
+        Hydra configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Various configuration
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Various configuration" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Various configuration
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docker/" class="md-nav__link">
+        Docker config
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Makefile
+      </a>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../requirements/" class="md-nav__link">
+        Requirements
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Datasets creation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Datasets creation" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Datasets creation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/config/" class="md-nav__link">
+        Dataset configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/utils_segmentation/" class="md-nav__link">
+        Masks creation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/make_dataset/" class="md-nav__link">
+        Train-Test-Val datasets creation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_4" type="checkbox" id="__nav_4_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_4">
+          Datasets pipelines
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Datasets pipelines" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_4">
+          <span class="md-nav__icon md-icon"></span>
+          Datasets pipelines
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/classic/" class="md-nav__link">
+        Classic pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../datasets/cutmix/" class="md-nav__link">
+        CutMix pipeline
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Semantic segmentation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Semantic segmentation" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Semantic segmentation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/description/" class="md-nav__link">
+        Architecture description
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/common_layers/" class="md-nav__link">
+        Common layers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Segmentation heads
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Segmentation heads" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Segmentation heads
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/ksac/" class="md-nav__link">
+        KSAC
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/fpn/" class="md-nav__link">
+        FPN
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/ocnet/" class="md-nav__link">
+        OCNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/jpu/" class="md-nav__link">
+        JPU
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/allmlp/" class="md-nav__link">
+        SegFormer
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4" type="checkbox" id="__nav_5_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4">
+          Backbones
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Backbones" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_4">
+          <span class="md-nav__icon md-icon"></span>
+          Backbones
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_1" type="checkbox" id="__nav_5_4_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_1">
+          Classic CNNs backbones
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Classic CNNs backbones" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_4_1">
+          <span class="md-nav__icon md-icon"></span>
+          Classic CNNs backbones
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/mobilenetv2/" class="md-nav__link">
+        MobileNetv2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/ghostnet/" class="md-nav__link">
+        GhostNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/vovnet/" class="md-nav__link">
+        VoVNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/resnet50/" class="md-nav__link">
+        ResNet50
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/resnet50v2/" class="md-nav__link">
+        ResNet50v2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/resnet101/" class="md-nav__link">
+        ResNet101
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/resnet101v2/" class="md-nav__link">
+        ResNet101v2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2" type="checkbox" id="__nav_5_4_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2">
+          Attention and MLP backbones
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Attention and MLP backbones" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Attention and MLP backbones
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/convmlp/" class="md-nav__link">
+        ConvMLP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/mit/" class="md-nav__link">
+        MixTransformer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/mobilevit/" class="md-nav__link">
+        MobileViT
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../training_loop/train/" class="md-nav__link">
+        Training loop
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../loss/focal_loss/" class="md-nav__link">
+        Loss
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../metrics/mean_iou/" class="md-nav__link">
+        Metrics
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="makefile-configuration">Makefile configuration</h1>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">  1</span>
+<span class="normal">  2</span>
+<span class="normal">  3</span>
+<span class="normal">  4</span>
+<span class="normal">  5</span>
+<span class="normal">  6</span>
+<span class="normal">  7</span>
+<span class="normal">  8</span>
+<span class="normal">  9</span>
+<span class="normal"> 10</span>
+<span class="normal"> 11</span>
+<span class="normal"> 12</span>
+<span class="normal"> 13</span>
+<span class="normal"> 14</span>
+<span class="normal"> 15</span>
+<span class="normal"> 16</span>
+<span class="normal"> 17</span>
+<span class="normal"> 18</span>
+<span class="normal"> 19</span>
+<span class="normal"> 20</span>
+<span class="normal"> 21</span>
+<span class="normal"> 22</span>
+<span class="normal"> 23</span>
+<span class="normal"> 24</span>
+<span class="normal"> 25</span>
+<span class="normal"> 26</span>
+<span class="normal"> 27</span>
+<span class="normal"> 28</span>
+<span class="normal"> 29</span>
+<span class="normal"> 30</span>
+<span class="normal"> 31</span>
+<span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="c"># Makefile</span>
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">help</span>
+<span class="nf">help</span><span class="o">:</span>
+    @echo <span class="s2">&quot;Commands:&quot;</span>
+    @echo <span class="s2">&quot;segmentation_masks    : generate the labels, ie segmentation masks, from the VGG json files.&quot;</span>
+    @echo <span class="s2">&quot;prepared_dataset      : create train, test, &amp; validation datasets from raw datas in raw_dataset directory.&quot;</span>
+    @echo <span class="s2">&quot;train                 : launch training loop for a given set of parameters from configs/params.yaml.&quot;</span>
+    @echo <span class="s2">&quot;install               : installs project requirements.&quot;</span>
+    @echo <span class="s2">&quot;install-dev           : installs development requirements.&quot;</span>
+    @echo <span class="s2">&quot;install-docs          : installs docs requirements.&quot;</span>
+    @echo <span class="s2">&quot;clean                 : cleans all unecessary files.&quot;</span>
+    @echo <span class="s2">&quot;clean_tracking        : cleans tracking directories : hydra &amp; mlruns.&quot;</span>
+    @echo <span class="s2">&quot;build_docker          : build the &quot;</span>developper<span class="s2">&quot; mode docker image of the project.&quot;</span>
+    @echo <span class="s2">&quot;run_docker            : run the docker container in &quot;</span>developper mode<span class="s2">&quot; to train inside it.&quot;</span>
+    @echo <span class="s2">&quot;build_prod            : build the &quot;</span>production mode<span class="s2">&quot; docker image of the project.&quot;</span>
+    @echo <span class="s2">&quot;run_prod              : run the docker container in &quot;</span>production mode<span class="s2">&quot; to train inside it.&quot;</span>
+    @echo <span class="s2">&quot;mlflow                : launch mlflow ui for monitoring training experiments.&quot;</span>
+    @echo <span class="s2">&quot;tensorboard           : launch tensorboard ui for monitoring training experiments.&quot;</span>
+    @echo <span class="s2">&quot;docs                  : serve generated documentation from mkdocs.&quot;</span>
+    @echo <span class="s2">&quot;mypy                  : run mypy in the src folder for type hinting checking.&quot;</span>
+    @echo <span class="s2">&quot;cc_report             : run radon in the src folder for code complexity report.&quot;</span>
+    @echo <span class="s2">&quot;raw_report            : run radon in the src folder for raw report.&quot;</span>
+    @echo <span class="s2">&quot;mi_report             : run radon in the src folder for maintainability index report.&quot;</span>
+    @echo <span class="s2">&quot;hal_report            : run radon in the src folder for hal report.&quot;</span>
+    @echo <span class="s2">&quot;install_precommit     : installs precommit.&quot;</span>
+    @echo <span class="s2">&quot;check_precommit       : check precommit.&quot;</span>
+
+
+<span class="c"># Datas and training</span>
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">segmentation_masks</span>
+<span class="nf">segmentation_masks</span><span class="o">:</span>
+    python src/utils/make_masks.py
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">prepared_dataset</span>
+<span class="nf">prepared_dataset</span><span class="o">:</span>
+    python src/utils/make_dataset.py
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">train</span>
+<span class="nf">train</span><span class="o">:</span>
+    python src/train.py
+
+<span class="c"># Installation</span>
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">install</span>
+<span class="nf">install</span><span class="o">:</span>
+    python -m pip install -e . --no-cache-dir
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">install</span>-<span class="n">dev</span>
+<span class="nf">install-dev</span><span class="o">:</span>
+    python -m pip install -e <span class="s2">&quot;.[dev]&quot;</span> --no-cache-dir
+    pre-commit install
+    pre-commit autoupdate
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">install</span>-<span class="n">docs</span>
+<span class="nf">install-docs</span><span class="o">:</span>
+    python -m pip install -e <span class="s2">&quot;.[docs]&quot;</span> --no-cache-dir
+
+<span class="c"># Cleaning</span>
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">clean</span>
+<span class="nf">clean</span><span class="o">:</span>
+    bash shell/clean_pycache.sh ../template_segmentation
+    find . -type f -name <span class="s2">&quot;*.DS_Store&quot;</span> -ls -delete
+    find . <span class="p">|</span> grep -E <span class="s2">&quot;(__pycache__|\.pyc|\.pyo)&quot;</span> <span class="p">|</span> xargs rm -rf
+    find . <span class="p">|</span> grep -E <span class="s2">&quot;.pytest_cache&quot;</span> <span class="p">|</span> xargs rm -rf
+    find . <span class="p">|</span> grep -E <span class="s2">&quot;.mypy_cache&quot;</span> <span class="p">|</span> xargs rm -rf
+    find . <span class="p">|</span> grep -E <span class="s2">&quot;.ipynb_checkpoints&quot;</span> <span class="p">|</span> xargs rm -rf
+    find . <span class="p">|</span> grep -E <span class="s2">&quot;htmlcov/*&quot;</span> <span class="p">|</span> xargs rm -rf
+    rm -f .coverage
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">clean_tracking</span>
+<span class="nf">clean_tracking</span><span class="o">:</span>
+    find . <span class="p">|</span> grep -E <span class="s2">&quot;mlruns/*&quot;</span> <span class="p">|</span> xargs rm -rf
+    find . <span class="p">|</span> grep -E <span class="s2">&quot;hydra/*&quot;</span> <span class="p">|</span> xargs rm -rf
+
+<span class="c"># Docker</span>
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">build_docker</span>
+<span class="nf">build_docker</span><span class="o">:</span>
+    docker build <span class="se">\</span>
+    --build-arg <span class="nv">USER_UID</span><span class="o">=</span><span class="nv">$$</span><span class="o">(</span>id -u<span class="o">)</span> <span class="se">\</span>
+    --build-arg <span class="nv">USER_GID</span><span class="o">=</span><span class="nv">$$</span><span class="o">(</span>id -g<span class="o">)</span> <span class="se">\</span>
+    --rm <span class="se">\</span>
+    -f Dockerfile <span class="se">\</span>
+    -t segmentation_project:v1 .
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">run_docker</span>
+<span class="nf">run_docker</span><span class="o">:</span>
+    docker run --gpus all <span class="se">\</span>
+    --shm-size<span class="o">=</span>2g <span class="se">\</span>
+    --ulimit <span class="nv">memlock</span><span class="o">=</span>-1 <span class="se">\</span>
+    --ulimit <span class="nv">stack</span><span class="o">=</span><span class="m">67108864</span> <span class="se">\</span>
+    -it <span class="se">\</span>
+    --rm <span class="se">\</span>
+    -P <span class="se">\</span>
+    --mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="k">$(</span>PWD<span class="k">)</span>,target<span class="o">=</span>/media/vorph/Datas/template_segmentation <span class="se">\</span>
+    -e <span class="nv">TF_FORCE_GPU_ALLOW_GROWTH</span><span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
+    -e <span class="nv">TF_ENABLE_ONEDNN_OPTS</span><span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
+    -e <span class="nv">XLA_FLAGS</span><span class="o">=</span><span class="s1">&#39;--xla_gpu_autotune_level=2&#39;</span> <span class="se">\</span>
+    segmentation_project:v1
+
+<span class="c"># Docker</span>
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">build_prod</span>
+<span class="nf">build_prod</span><span class="o">:</span>
+    docker build <span class="se">\</span>
+    --build-arg <span class="nv">USER_UID</span><span class="o">=</span><span class="nv">$$</span><span class="o">(</span>id -u<span class="o">)</span> <span class="se">\</span>
+    --build-arg <span class="nv">USER_GID</span><span class="o">=</span><span class="nv">$$</span><span class="o">(</span>id -g<span class="o">)</span> <span class="se">\</span>
+    --rm <span class="se">\</span>
+    -f Dockerfile.prod <span class="se">\</span>
+    -t segmentation_project:v1_prod .
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">run_prod</span>
+<span class="nf">run_prod</span><span class="o">:</span>
+    docker run --gpus all <span class="se">\</span>
+    --shm-size<span class="o">=</span>2g <span class="se">\</span>
+    --ulimit <span class="nv">memlock</span><span class="o">=</span>-1 <span class="se">\</span>
+    --ulimit <span class="nv">stack</span><span class="o">=</span><span class="m">67108864</span> <span class="se">\</span>
+    -it <span class="se">\</span>
+    --rm <span class="se">\</span>
+    -P <span class="se">\</span>
+    --mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="k">$(</span>PWD<span class="k">)</span>/configs/,target<span class="o">=</span>/home/vorph/configs/ <span class="se">\</span>
+    --mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="k">$(</span>PWD<span class="k">)</span>/datas/,target<span class="o">=</span>/home/vorph/datas/ <span class="se">\</span>
+    --mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="k">$(</span>PWD<span class="k">)</span>/hydra/,target<span class="o">=</span>/home/vorph/hydra/ <span class="se">\</span>
+    --mount <span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="k">$(</span>PWD<span class="k">)</span>/mlruns/,target<span class="o">=</span>/home/vorph/mlruns/ <span class="se">\</span>
+    -e <span class="nv">TF_FORCE_GPU_ALLOW_GROWTH</span><span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
+    -e <span class="nv">TF_ENABLE_ONEDNN_OPTS</span><span class="o">=</span><span class="nb">true</span> <span class="se">\</span>
+    -e <span class="nv">XLA_FLAGS</span><span class="o">=</span><span class="s1">&#39;--xla_gpu_autotune_level=2&#39;</span> <span class="se">\</span>
+    segmentation_project:v1_prod
+
+
+<span class="c"># https://stackoverflow.com/questions/43133670/getting-docker-container-id-in-makefile-to-use-in-another-command</span>
+<span class="c"># I ran into the same problem and realised that makefiles take output from shell variables with the use of $$.</span>
+
+<span class="c"># Experiments monitoring</span>
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">mlflow</span>
+<span class="nf">mlflow</span><span class="o">:</span>
+    mlflow server -h <span class="m">0</span>.0.0.0 -p <span class="m">5000</span> --backend-store-uri <span class="k">$(</span>PWD<span class="k">)</span>/mlruns/
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">tensorboard</span>
+<span class="nf">tensorboard</span><span class="o">:</span>
+    tensorboard --logdir <span class="k">$(</span>PWD<span class="k">)</span>/mlruns/
+
+<span class="c"># Documentation</span>
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">docs</span>
+<span class="nf">docs</span><span class="o">:</span>
+    mkdocs serve
+
+<span class="c"># Reporting</span>
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">mypy</span>
+<span class="nf">mypy</span><span class="o">:</span>
+    mypy --show-error-codes src/
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">cc_report</span>
+<span class="nf">cc_report</span><span class="o">:</span>
+    radon cc src/
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">raw_report</span>
+<span class="nf">raw_report</span><span class="o">:</span>
+    radon raw --summary src/
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">mi_report</span>
+<span class="nf">mi_report</span><span class="o">:</span>
+    radon mi src/
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">hal_report</span>
+<span class="nf">hal_report</span><span class="o">:</span>
+    radon hal src/
+
+<span class="c"># Precommit</span>
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">install_precommit</span>
+<span class="nf">install_precommit</span><span class="o">:</span>
+    pre-commit install
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">check_precommit</span>
+<span class="nf">check_precommit</span><span class="o">:</span>
+    pre-commit run --all
+</code></pre></div>
+</td></tr></table>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg>
+            Retour en haut de la page
+          </a>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Pied de page">
+      
+        
+        <a href="../docker/" class="md-footer__link md-footer__link--prev" aria-label="Précédent: Docker config" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Précédent
+              </span>
+              Docker config
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../requirements/" class="md-footer__link md-footer__link--next" aria-label="Suivant: Requirements" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Suivant
+              </span>
+              Requirements
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.top", "search.highlight", "search.share", "search.suggest"], "translations": {"clipboard.copy": "Copier dans le presse-papier", "clipboard.copied": "Copi\u00e9 dans le presse-papier", "search.config.lang": "fr", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Rechercher", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.term.missing": "Non trouv\u00e9", "select.version.title": "S\u00e9lectionner la version"}, "search": "../../assets/javascripts/workers/search.8397ff9e.min.js", "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.1e84347e.min.js"></script>
+      
+        <script src="../../javascripts/config.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

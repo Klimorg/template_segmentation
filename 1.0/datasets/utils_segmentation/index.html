@@ -1,0 +1,2067 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <meta name="author" content="Mathieu Klimczak">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
+    
+    
+      
+        <title>Masks creation - Documentation Semantic Segmentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.db9e7362.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+      <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#masks-creation" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href="../.." title="Documentation Semantic Segmentation" class="md-header__button md-logo" aria-label="Documentation Semantic Segmentation" data-md-component="logo">
+      
+  <img src="../../images/logo_blanc.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Documentation Semantic Segmentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Masks creation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Basculer en mode sombre"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Basculer en mode sombre" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="deep-orange"  aria-label="Basculer en mode clair"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Basculer en mode clair" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Effacer" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Onglets" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../config_hydra/hydra/" class="md-tabs__link">
+      Hydra configuration
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../misc_config/docker/" class="md-tabs__link">
+        Various configuration
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../config/" class="md-tabs__link md-tabs__link--active">
+        Datasets creation
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../models/description/" class="md-tabs__link">
+        Semantic segmentation
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../training_loop/train/" class="md-tabs__link">
+      Training loop
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../loss/focal_loss/" class="md-tabs__link">
+      Loss
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../metrics/mean_iou/" class="md-tabs__link">
+      Metrics
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Documentation Semantic Segmentation" class="md-nav__button md-logo" aria-label="Documentation Semantic Segmentation" data-md-component="logo">
+      
+  <img src="../../images/logo_blanc.svg" alt="logo">
+
+    </a>
+    Documentation Semantic Segmentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../config_hydra/hydra/" class="md-nav__link">
+        Hydra configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Various configuration
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Various configuration" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Various configuration
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../misc_config/docker/" class="md-nav__link">
+        Docker config
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../misc_config/make/" class="md-nav__link">
+        Makefile
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../misc_config/requirements/" class="md-nav__link">
+        Requirements
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Datasets creation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Datasets creation" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Datasets creation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config/" class="md-nav__link">
+        Dataset configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Masks creation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Masks creation
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#src.utils.make_masks" class="md-nav__link">
+    src.utils.make_masks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.utils.make_masks.SegmentationMasks" class="md-nav__link">
+    SegmentationMasks
+  </a>
+  
+    <nav class="md-nav" aria-label="SegmentationMasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.utils.make_masks.SegmentationMasks.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.utils.make_masks.SegmentationMasks.crop" class="md-nav__link">
+    crop()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.utils.make_masks.SegmentationMasks.generate_masks" class="md-nav__link">
+    generate_masks()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.utils.make_masks.SegmentationMasks.get_data" class="md-nav__link">
+    get_data()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.utils.make_masks.SegmentationMasks.get_masks_from_json" class="md-nav__link">
+    get_masks_from_json()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.utils.make_masks.SegmentationMasks.get_polygon_masks" class="md-nav__link">
+    get_polygon_masks()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.utils.make_masks.SegmentationMasks.tile" class="md-nav__link">
+    tile()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../make_dataset/" class="md-nav__link">
+        Train-Test-Val datasets creation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_4" type="checkbox" id="__nav_4_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_4">
+          Datasets pipelines
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Datasets pipelines" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_4">
+          <span class="md-nav__icon md-icon"></span>
+          Datasets pipelines
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../classic/" class="md-nav__link">
+        Classic pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cutmix/" class="md-nav__link">
+        CutMix pipeline
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Semantic segmentation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Semantic segmentation" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Semantic segmentation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/description/" class="md-nav__link">
+        Architecture description
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/common_layers/" class="md-nav__link">
+        Common layers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3">
+          Segmentation heads
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Segmentation heads" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          Segmentation heads
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/ksac/" class="md-nav__link">
+        KSAC
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/fpn/" class="md-nav__link">
+        FPN
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/ocnet/" class="md-nav__link">
+        OCNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/jpu/" class="md-nav__link">
+        JPU
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/heads/allmlp/" class="md-nav__link">
+        SegFormer
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4" type="checkbox" id="__nav_5_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4">
+          Backbones
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Backbones" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_4">
+          <span class="md-nav__icon md-icon"></span>
+          Backbones
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_1" type="checkbox" id="__nav_5_4_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_1">
+          Classic CNNs backbones
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Classic CNNs backbones" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_4_1">
+          <span class="md-nav__icon md-icon"></span>
+          Classic CNNs backbones
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/mobilenetv2/" class="md-nav__link">
+        MobileNetv2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/ghostnet/" class="md-nav__link">
+        GhostNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/vovnet/" class="md-nav__link">
+        VoVNet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/resnet50/" class="md-nav__link">
+        ResNet50
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/resnet50v2/" class="md-nav__link">
+        ResNet50v2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/resnet101/" class="md-nav__link">
+        ResNet101
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/resnet101v2/" class="md-nav__link">
+        ResNet101v2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4_2" type="checkbox" id="__nav_5_4_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4_2">
+          Attention and MLP backbones
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Attention and MLP backbones" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Attention and MLP backbones
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/convmlp/" class="md-nav__link">
+        ConvMLP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/mit/" class="md-nav__link">
+        MixTransformer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/backbone/mobilevit/" class="md-nav__link">
+        MobileViT
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../training_loop/train/" class="md-nav__link">
+        Training loop
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../loss/focal_loss/" class="md-nav__link">
+        Loss
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../metrics/mean_iou/" class="md-nav__link">
+        Metrics
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#src.utils.make_masks" class="md-nav__link">
+    src.utils.make_masks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#src.utils.make_masks.SegmentationMasks" class="md-nav__link">
+    SegmentationMasks
+  </a>
+  
+    <nav class="md-nav" aria-label="SegmentationMasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.utils.make_masks.SegmentationMasks.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.utils.make_masks.SegmentationMasks.crop" class="md-nav__link">
+    crop()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.utils.make_masks.SegmentationMasks.generate_masks" class="md-nav__link">
+    generate_masks()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.utils.make_masks.SegmentationMasks.get_data" class="md-nav__link">
+    get_data()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.utils.make_masks.SegmentationMasks.get_masks_from_json" class="md-nav__link">
+    get_masks_from_json()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.utils.make_masks.SegmentationMasks.get_polygon_masks" class="md-nav__link">
+    get_polygon_masks()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.utils.make_masks.SegmentationMasks.tile" class="md-nav__link">
+    tile()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="masks-creation">Masks creation</h1>
+
+
+  <div class="doc doc-object doc-module">
+
+<a id="src.utils.make_masks"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="src.utils.make_masks.SegmentationMasks" class="doc doc-heading">
+        <code>
+SegmentationMasks        </code>
+
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Description of Segmentation.</p>
+<p>Class used to generate semantic segmentation masks, and apply various operations on them.</p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>segmentation_config</code></td>
+        <td><code>Dict[str, Any]</code></td>
+        <td><p>The loaded yaml file containing the configuration parameters for the datasets.</p></td>
+      </tr>
+  </tbody>
+</table>      <div class="admonition inheritance">
+<p class="admonition-title">Inheritance</p>
+<p>object: The base class of the class hierarchy, used only to enforce WPS306.
+See https://wemake-python-stylegui.de/en/latest/pages/usage/violations/consistency.html#consistency.</p>
+</div>
+<p><strong>Main function</strong> : <code>generate_masks()</code></p>
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.utils.make_masks.SegmentationMasks.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-special"><code>special</code></small>
+  </span>
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Initialization of the class.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>src/utils/make_masks.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Initialization of the class.&quot;&quot;&quot;</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">segmentation_config</span> <span class="o">=</span> <span class="n">OmegaConf</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;configs/datasets/datasets.yaml&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.utils.make_masks.SegmentationMasks.crop" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">crop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_path</span><span class="p">,</span> <span class="n">mask_path</span><span class="p">,</span> <span class="n">stride</span><span class="p">,</span> <span class="n">overlap</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Given a image and a segmentation mask, generate tiles from them by cropping.</p>
+<p>Given an image and a segmentation mask, resize them and them decompose them in tiles
+of size <span class="arithmatex">\(H=W=\)</span><code>stride</code>.</p>
+<p>The first iteration of the loop creates non overlapping tiles, then we restart the cropping processus but this time
+at the coordinates (<code>overlap</code>, <code>overlap</code>) of the resized original images and masks, the second loop starts at
+(2*<code>overlap</code>, 2*<code>overlap</code>), etc. Then save all the tiles in <code>.jpg</code> format for the images and <code>.png</code> format for the masks.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>image_path</code></td>
+        <td><code>Path</code></td>
+        <td><p>The path of the image to open to start the tilling processus.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>mask_path</code></td>
+        <td><code>Path</code></td>
+        <td><p>The path of the mask to open to start the tilling processus.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>stride</code></td>
+        <td><code>int</code></td>
+        <td><p>Height, width of the cropped image, mask.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>overlap</code></td>
+        <td><code>int</code></td>
+        <td><p>How much pixels you want to overlap between each iteration.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/utils/make_masks.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">crop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">mask_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">stride</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">overlap</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Given a image and a segmentation mask, generate tiles from them by cropping.</span>
+
+<span class="sd">    Given an image and a segmentation mask, resize them and them decompose them in tiles</span>
+<span class="sd">    of size $H=W=$`stride`.</span>
+
+<span class="sd">    The first iteration of the loop creates non overlapping tiles, then we restart the cropping processus but this time</span>
+<span class="sd">    at the coordinates (`overlap`, `overlap`) of the resized original images and masks, the second loop starts at</span>
+<span class="sd">    (2*`overlap`, 2*`overlap`), etc. Then save all the tiles in `.jpg` format for the images and `.png` format for the masks.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        image_path (Path): The path of the image to open to start the tilling processus.</span>
+<span class="sd">        mask_path (Path): The path of the mask to open to start the tilling processus.</span>
+<span class="sd">        stride (int): Height, width of the cropped image, mask.</span>
+<span class="sd">        overlap (int): How much pixels you want to overlap between each iteration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">1024</span><span class="p">))</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">mask_path</span><span class="p">)</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">1024</span><span class="p">),</span> <span class="n">resample</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">NEAREST</span><span class="p">)</span>
+
+    <span class="n">image_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
+    <span class="n">mask_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">mask_path</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
+
+    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="n">overlap</span> <span class="o">=</span> <span class="n">height</span> <span class="o">//</span> <span class="n">overlap</span>
+
+    <span class="k">for</span> <span class="n">mult</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">overlap</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+
+        <span class="n">grid</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="n">product</span><span class="p">(</span>
+                <span class="nb">range</span><span class="p">(</span><span class="n">mult</span> <span class="o">*</span> <span class="n">overlap</span><span class="p">,</span> <span class="n">height</span> <span class="o">-</span> <span class="n">height</span> <span class="o">%</span> <span class="n">stride</span><span class="p">,</span> <span class="n">stride</span><span class="p">),</span>
+                <span class="nb">range</span><span class="p">(</span><span class="n">mult</span> <span class="o">*</span> <span class="n">overlap</span><span class="p">,</span> <span class="n">width</span> <span class="o">-</span> <span class="n">width</span> <span class="o">%</span> <span class="n">stride</span><span class="p">,</span> <span class="n">stride</span><span class="p">),</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">idy</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">grid</span><span class="p">:</span>
+            <span class="n">box</span> <span class="o">=</span> <span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">idy</span><span class="p">,</span> <span class="n">idx</span> <span class="o">+</span> <span class="n">stride</span><span class="p">,</span> <span class="n">idy</span> <span class="o">+</span> <span class="n">stride</span><span class="p">)</span>
+
+            <span class="n">dir_out_image</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">segmentation_config</span><span class="o">.</span><span class="n">raw_dataset</span><span class="o">.</span><span class="n">images</span><span class="p">)</span>
+            <span class="n">dir_out_mask</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">segmentation_config</span><span class="o">.</span><span class="n">raw_dataset</span><span class="o">.</span><span class="n">masks</span><span class="p">)</span>
+
+            <span class="n">image_name_cropped</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">image_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">idy</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">idx</span><span class="si">}{</span><span class="s1">&#39;.jpg&#39;</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">mask_name_cropped</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">mask_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">idy</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">idx</span><span class="si">}{</span><span class="s1">&#39;.png&#39;</span><span class="si">}</span><span class="s2">&quot;</span>
+
+            <span class="n">image_out</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dir_out_image</span><span class="p">)</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">image_name_cropped</span><span class="p">)</span>
+            <span class="n">mask_out</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dir_out_mask</span><span class="p">)</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="n">mask_name_cropped</span><span class="p">)</span>
+
+            <span class="n">image</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span><span class="n">box</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">image_out</span><span class="p">)</span>
+            <span class="n">mask</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span><span class="n">box</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">mask_out</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Done for </span><span class="si">{</span><span class="n">image_name</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">mask_name</span><span class="si">}</span><span class="s2"> with start at </span><span class="si">{</span><span class="n">mult</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.utils.make_masks.SegmentationMasks.generate_masks" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">generate_masks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Main function, list all json files in VGG format containig segmentation informations and generates masks.</p>
+<ol>
+<li>List json files.</li>
+<li>For each of them, generate segmentation masks.</li>
+<li>Then apply tilling processus on all the generated masks and images.</li>
+</ol>
+
+        <details class="quote">
+          <summary>Source code in <code>src/utils/make_masks.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">generate_masks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Main function, list all json files in VGG format containig segmentation informations and generates masks.</span>
+
+<span class="sd">    1. List json files.</span>
+<span class="sd">    2. For each of them, generate segmentation masks.</span>
+<span class="sd">    1. Then apply tilling processus on all the generated masks and images.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">json_files</span> <span class="o">=</span> <span class="n">get_items_list</span><span class="p">(</span>
+        <span class="n">directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">segmentation_config</span><span class="o">.</span><span class="n">raw_datas</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span>
+        <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;.json&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">json_files</span><span class="p">)</span><span class="si">}</span><span class="s2"> json files.&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">json_file</span> <span class="ow">in</span> <span class="n">json_files</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_masks_from_json</span><span class="p">(</span><span class="n">json_file</span><span class="o">=</span><span class="n">json_file</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">tile</span><span class="p">()</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.utils.make_masks.SegmentationMasks.get_data" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_name</span><span class="p">,</span> <span class="n">coordinates_and_labels</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Return the coordinates of polygons vertices and corresponding labels.</p>
+<p>Given an <code>image_name</code>, parse the <code>segmentation_datas</code> contained in the VGG json file <code>all_coordinates_and_labels</code>
+and return them in 3 lists :</p>
+<ul>
+<li>Two lists of vertices.</li>
+<li>One list of labels.</li>
+</ul>
+<p>The first two lists correspond to the lists of vertices of the polygons defining the segmentation regions. For each
+of them, an element is a list containing the coordinates (<span class="arithmatex">\(x\)</span> or <span class="arithmatex">\(y\)</span>) of the vertices of a polygon. I.e. if <code>X_coordinates</code>
+and <code>Y_coordinates</code> look like the following.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="n">X_coordinates</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">9</span><span class="p">]]</span>
+<span class="n">Y_coordinates</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">15</span><span class="p">]]</span>
+</code></pre></div>
+</td></tr></table>
+<p>That means we have two poygons inthe given image, each of them having three vertices (ie two triangles), the
+vertices of the first triangles being : <span class="arithmatex">\((0,0)\)</span>, <span class="arithmatex">\((4,1)\)</span>, and <span class="arithmatex">\((6,2)\)</span>.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>image_name</code></td>
+        <td><code>str</code></td>
+        <td><p>The name of the image for which we parse the VGG json file to collect polygons coordinates an
+labels.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>coordinates_and_labels</code></td>
+        <td><code>JsonDict</code></td>
+        <td><p>The loaded VGG json file to parse.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Tuple[List[PolygonVertices], List[PolygonVertices], List[str]]</code></td>
+      <td><p>The lists of polygon vertices and labels of the given image.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/utils/make_masks.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">image_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">coordinates_and_labels</span><span class="p">:</span> <span class="n">JsonDict</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">PolygonVertices</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">PolygonVertices</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;Return the coordinates of polygons vertices and corresponding labels.</span>
+
+<span class="sd">    Given an `image_name`, parse the `segmentation_datas` contained in the VGG json file `all_coordinates_and_labels`</span>
+<span class="sd">    and return them in 3 lists :</span>
+
+<span class="sd">    * Two lists of vertices.</span>
+<span class="sd">    * One list of labels.</span>
+
+<span class="sd">    The first two lists correspond to the lists of vertices of the polygons defining the segmentation regions. For each</span>
+<span class="sd">    of them, an element is a list containing the coordinates ($x$ or $y$) of the vertices of a polygon. I.e. if `X_coordinates`</span>
+<span class="sd">    and `Y_coordinates` look like the following.</span>
+
+<span class="sd">    ```python</span>
+<span class="sd">    X_coordinates = [[0,4,6], [12,3,9]]</span>
+<span class="sd">    Y_coordinates = [[0,1,2], [10,12,15]]</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    That means we have two poygons inthe given image, each of them having three vertices (ie two triangles), the</span>
+<span class="sd">    vertices of the first triangles being : $(0,0)$, $(4,1)$, and $(6,2)$.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        image_name (str): The name of the image for which we parse the VGG json file to collect polygons coordinates an</span>
+<span class="sd">            labels.</span>
+<span class="sd">        coordinates_and_labels (JsonDict, optional): The loaded VGG json file to parse.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple[List[PolygonVertices], List[PolygonVertices], List[str]]: The lists of polygon vertices and labels of the given image.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">X_coordinates</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">Y_coordinates</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># pre-allocate lists to fill in a for loop</span>
+
+    <span class="n">segmentation_datas</span> <span class="o">=</span> <span class="n">coordinates_and_labels</span><span class="p">[</span><span class="n">image_name</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">polygon</span> <span class="ow">in</span> <span class="n">segmentation_datas</span><span class="p">[</span><span class="s2">&quot;regions&quot;</span><span class="p">]:</span>
+        <span class="c1"># cycle through each polygon of the given image</span>
+        <span class="c1"># get the x and y points from the dictionary</span>
+        <span class="n">X_coordinates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">segmentation_datas</span><span class="p">[</span><span class="s2">&quot;regions&quot;</span><span class="p">][</span><span class="n">polygon</span><span class="p">][</span><span class="s2">&quot;shape_attributes&quot;</span><span class="p">][</span>
+                <span class="s2">&quot;all_points_x&quot;</span>
+            <span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">Y_coordinates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">segmentation_datas</span><span class="p">[</span><span class="s2">&quot;regions&quot;</span><span class="p">][</span><span class="n">polygon</span><span class="p">][</span><span class="s2">&quot;shape_attributes&quot;</span><span class="p">][</span>
+                <span class="s2">&quot;all_points_y&quot;</span>
+            <span class="p">],</span>
+        <span class="p">)</span>
+        <span class="c1"># get the labels corresponding to the polygons</span>
+        <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">segmentation_datas</span><span class="p">[</span><span class="s2">&quot;regions&quot;</span><span class="p">][</span><span class="n">polygon</span><span class="p">][</span><span class="s2">&quot;region_attributes&quot;</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_coordinates</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">Y_coordinates</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">Y_coordinates</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span><span class="si">}</span><span class="s2"> segmentation masks for </span><span class="si">{</span><span class="n">image_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">Y_coordinates</span><span class="p">,</span>
+        <span class="n">X_coordinates</span><span class="p">,</span>
+        <span class="n">labels</span><span class="p">,</span>
+    <span class="p">)</span>  <span class="c1"># image coordinates are flipped relative to json coordinates</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.utils.make_masks.SegmentationMasks.get_masks_from_json" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_masks_from_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json_file</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Given a json file containing segmentation masks information in VGG format, generate the masks.</p>
+<p>Open the json file <code>json_file</code> to retreive the coordinates and labels of the segmentation masks and the
+associated images. Then loop over each images and applys <code>get_data</code> and <code>get_polygon_masks</code> to obtain for
+each image a <span class="arithmatex">\((P,H,W)\)</span> numpy array where <span class="arithmatex">\(P\)</span> is the number of segmentation polygons and <span class="arithmatex">\(H,W\)</span> the height and width.</p>
+<p>Apply <code>np.max</code> on each <span class="arithmatex">\((P,H,W)\)</span> array to get a unique segmentation mask of size <span class="arithmatex">\((H,W)\)</span>, then save it in <code>.png</code>
+format.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>json_file</code></td>
+        <td><code>[type]</code></td>
+        <td><p>Json file containing segmentation masks information in VGG format.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>save</code></td>
+        <td><code>bool</code></td>
+        <td><p>Determine if you want to save in <code>.png</code> format the generated mask. Defaults to True.</p></td>
+        <td><code>True</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/utils/make_masks.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_masks_from_json</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">json_file</span><span class="p">,</span>
+    <span class="n">save</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Given a json file containing segmentation masks information in VGG format, generate the masks.</span>
+
+<span class="sd">    Open the json file `json_file` to retreive the coordinates and labels of the segmentation masks and the</span>
+<span class="sd">    associated images. Then loop over each images and applys `get_data` and `get_polygon_masks` to obtain for</span>
+<span class="sd">    each image a $(P,H,W)$ numpy array where $P$ is the number of segmentation polygons and $H,W$ the height and width.</span>
+
+<span class="sd">    Apply `np.max` on each $(P,H,W)$ array to get a unique segmentation mask of size $(H,W)$, then save it in `.png`</span>
+<span class="sd">    format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        json_file ([type]): Json file containing segmentation masks information in VGG format.</span>
+<span class="sd">        save (bool, optional): Determine if you want to save in `.png` format the generated mask. Defaults to True.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">masks</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">json_file</span> <span class="o">=</span> <span class="n">json_file</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">vgg_json</span><span class="p">:</span>
+        <span class="n">coordinates_and_labels</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">vgg_json</span><span class="p">)</span>
+        <span class="n">image_names_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">coordinates_and_labels</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+    <span class="k">for</span> <span class="n">image_name</span> <span class="ow">in</span> <span class="n">image_names_list</span><span class="p">:</span>
+
+        <span class="n">X_coordinates</span><span class="p">,</span> <span class="n">Y_coordinates</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span>
+            <span class="n">image_name</span><span class="p">,</span>
+            <span class="n">coordinates_and_labels</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">polygon_masks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_polygon_masks</span><span class="p">(</span>
+            <span class="n">X_coordinates</span><span class="p">,</span>
+            <span class="n">Y_coordinates</span><span class="p">,</span>
+            <span class="n">labels</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">segmentation_config</span><span class="o">.</span><span class="n">metadatas</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">segmentation_config</span><span class="o">.</span><span class="n">metadatas</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">segmentation_config</span><span class="o">.</span><span class="n">class_dict</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">polygon_masks</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Made polygon masks of shape </span><span class="si">{</span><span class="n">mask</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="n">segmentation_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">save</span><span class="p">:</span>
+            <span class="n">image_name_stem</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">image_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
+            <span class="n">address</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">segmentation_config</span><span class="o">.</span><span class="n">raw_datas</span><span class="o">.</span><span class="n">masks</span><span class="p">)</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">image_name_stem</span><span class="si">}</span><span class="s2">_mask.png&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">segmentation_mask</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">segmentation_mask</span><span class="p">)</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">)</span>
+            <span class="n">segmentation_mask</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
+
+        <span class="n">masks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">segmentation_mask</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_names_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">masks</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.utils.make_masks.SegmentationMasks.get_polygon_masks" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_polygon_masks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X_coordinates</span><span class="p">,</span> <span class="n">Y_coordinates</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">img_height</span><span class="p">,</span> <span class="n">img_width</span><span class="p">,</span> <span class="n">classes</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Transforms triplets (Y_coordinates,X_coordinates,labels) into numpy arrays.</p>
+<p>given a triplet (Y_coordinates,X_coordinates,labels) for a given image, transforms it into a <span class="arithmatex">\((P,H,W)\)</span> numpy array
+where <span class="arithmatex">\(P\)</span> is the number of segmentation polygons and <span class="arithmatex">\(H,W\)</span> the height and width.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>X_coordinates</code></td>
+        <td><code>PolygonVertices</code></td>
+        <td><p>x-axis coordinates of the polygon vertices.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>Y_coordinates</code></td>
+        <td><code>PolygonVertices</code></td>
+        <td><p>y-axis coordinates of the polygon vertices.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>labels</code></td>
+        <td><code>List[str]</code></td>
+        <td><p>Labels corresponding to the polygons.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>img_height</code></td>
+        <td><code>int</code></td>
+        <td><p>Height of the image.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>img_width</code></td>
+        <td><code>int</code></td>
+        <td><p>Width of the image.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>class_dict</code></td>
+        <td><code>Dict[str, int]</code></td>
+        <td><p>Man-made dictionnary to convert the labels of the VGG json file (str) into integers.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>List[np.ndarray]</code></td>
+      <td><p><span class="arithmatex">\((P,H,W)\)</span> numpy array containing the polygons.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>src/utils/make_masks.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_polygon_masks</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">X_coordinates</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PolygonVertices</span><span class="p">],</span>
+    <span class="n">Y_coordinates</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PolygonVertices</span><span class="p">],</span>
+    <span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">img_height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">img_width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">classes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Transforms triplets (Y_coordinates,X_coordinates,labels) into numpy arrays.</span>
+
+<span class="sd">    given a triplet (Y_coordinates,X_coordinates,labels) for a given image, transforms it into a $(P,H,W)$ numpy array</span>
+<span class="sd">    where $P$ is the number of segmentation polygons and $H,W$ the height and width.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        X_coordinates (PolygonVertices): x-axis coordinates of the polygon vertices.</span>
+<span class="sd">        Y_coordinates (PolygonVertices): y-axis coordinates of the polygon vertices.</span>
+<span class="sd">        labels (List[str]): Labels corresponding to the polygons.</span>
+<span class="sd">        img_height (int): Height of the image.</span>
+<span class="sd">        img_width (int): Width of the image.</span>
+<span class="sd">        class_dict (Dict[str, int]): Man-made dictionnary to convert the labels of the VGG json file (str) into integers.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[np.ndarray]: $(P,H,W)$ numpy array containing the polygons.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">masks</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X_coordinates</span><span class="p">,</span> <span class="n">Y_coordinates</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">img_height</span><span class="p">,</span> <span class="n">img_width</span><span class="p">))</span>
+        <span class="c1"># the ImageDraw.Draw().polygon function we will use to create the mask</span>
+        <span class="c1"># requires the x&#39;s and y&#39;s are interweaved, which is what the following</span>
+        <span class="c1"># one-liner does</span>
+        <span class="n">polygon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,),</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="c1"># create a mask image of the right size and infill according to the polygon</span>
+        <span class="k">if</span> <span class="n">img_height</span> <span class="o">&gt;</span> <span class="n">img_width</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">img_height</span><span class="p">,</span> <span class="n">img_width</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">img_width</span> <span class="o">&gt;</span> <span class="n">img_height</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">img_width</span><span class="p">,</span> <span class="n">img_height</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;L&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">img_height</span><span class="p">,</span> <span class="n">img_width</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">img</span><span class="p">)</span><span class="o">.</span><span class="n">polygon</span><span class="p">(</span><span class="n">polygon</span><span class="p">,</span> <span class="n">outline</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># turn into a numpy array</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rot90</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="p">)))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">mask</span><span class="p">[</span><span class="n">m</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">classes</span><span class="p">[</span><span class="n">label</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">mask</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">T</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">classes</span><span class="p">[</span><span class="n">label</span><span class="p">]</span>
+
+        <span class="n">masks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">masks</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="src.utils.make_masks.SegmentationMasks.tile" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">tile</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Apply tilling processus on a list of images, masks.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>src/utils/make_masks.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">tile</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Apply tilling processus on a list of images, masks.&quot;&quot;&quot;</span>
+
+    <span class="n">stride</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">segmentation_config</span><span class="o">.</span><span class="n">raw_dataset</span><span class="o">.</span><span class="n">crop_size</span>
+    <span class="n">overlap</span> <span class="o">=</span> <span class="mi">128</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Searching for images and corresponding masks.&quot;</span><span class="p">)</span>
+    <span class="n">images_paths</span> <span class="o">=</span> <span class="n">get_items_list</span><span class="p">(</span>
+        <span class="n">directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">segmentation_config</span><span class="o">.</span><span class="n">raw_datas</span><span class="o">.</span><span class="n">images</span><span class="p">,</span>
+        <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;.jpg&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">masks_paths</span> <span class="o">=</span> <span class="n">get_items_list</span><span class="p">(</span>
+        <span class="n">directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">segmentation_config</span><span class="o">.</span><span class="n">raw_datas</span><span class="o">.</span><span class="n">masks</span><span class="p">,</span>
+        <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;.png&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">images_paths</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">masks_paths</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Looping through images and masks for cropping.&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">image_path</span><span class="p">,</span> <span class="n">mask_path</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">images_paths</span><span class="p">,</span> <span class="n">masks_paths</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">mask_path</span><span class="p">,</span> <span class="n">stride</span><span class="p">,</span> <span class="n">overlap</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" data-md-state="hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"/></svg>
+            Retour en haut de la page
+          </a>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Pied de page">
+      
+        
+        <a href="../config/" class="md-footer__link md-footer__link--prev" aria-label="Précédent: Dataset configuration" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Précédent
+              </span>
+              Dataset configuration
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../make_dataset/" class="md-footer__link md-footer__link--next" aria-label="Suivant: Train-Test-Val datasets creation" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Suivant
+              </span>
+              Train-Test-Val datasets creation
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.top", "search.highlight", "search.share", "search.suggest"], "translations": {"clipboard.copy": "Copier dans le presse-papier", "clipboard.copied": "Copi\u00e9 dans le presse-papier", "search.config.lang": "fr", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Rechercher", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.term.missing": "Non trouv\u00e9", "select.version.title": "S\u00e9lectionner la version"}, "search": "../../assets/javascripts/workers/search.8397ff9e.min.js", "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.1e84347e.min.js"></script>
+      
+        <script src="../../javascripts/config.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
