@@ -479,17 +479,17 @@ def get_feature_extractor(
     """Instantiate a MiT model.
 
     Args:
-        img_shape (List[int]): [description]
-        patch_size (List[int]): [description]
-        strides (List[int]): [description]
-        emb_dims (List[int]): [description]
-        num_heads (List[int]): [description]
-        mlp_ratios (List[int]): [description]
-        proj_drop_prob (float): [description]
-        attn_drop_prob (float): [description]
-        stochastic_depth_rate (float): [description]
-        attn_reduction_ratios (List[int]): [description]
-        depths (List[int]): [description]
+        img_shape (List[int]): Input shape of the images in the dataset.
+        patch_size (List[int]): The size of the patch used to decompose the feature map.
+        strides (List[int]): The strides used in the `OverlapPatchEmbed` modules.
+        emb_dims (List[int]): The dimension of the embedding, ie the number of units in the linera project for the attention mechanism.
+        num_heads (List[int]): The number of heads used for the atttention mechanism.
+        mlp_ratios (List[int]): Expansion factor in the hidden `Dense` layers of each `Mlp`.
+        proj_drop_prob (float): Dropout probability.
+        attn_drop_prob (float): Dropout probability.
+        stochastic_depth_rate (float): Probability of dropping a skip connection.
+        attn_reduction_ratios (List[int]): Reduction ratios used  in the attantion mechanism.
+        depths (List[int]): The depth of each stage, ie the number of `FFNAttentionBlock`in each stage.
 
     Returns:
         A tf.keras.Model
@@ -607,18 +607,18 @@ def get_backbone(
     """Instantiate the model and use it as a backbone (feature extractor) for a semantic segmentation task.
 
     Args:
-        img_shape (List[int]): [description]
-        patch_size (List[int]): [description]
-        strides (List[int]): [description]
-        emb_dims (List[int]): [description]
-        num_heads (List[int]): [description]
-        mlp_ratios (List[int]): [description]
-        proj_drop_prob (float): [description]
-        attn_drop_prob (float): [description]
-        stochastic_depth_rate (float): [description]
-        attn_reduction_ratios (List[int]): [description]
-        depths (List[int]): [description]
-        backbone_name (str): [description]
+        img_shape (List[int]): Input shape of the images in the dataset.
+        patch_size (List[int]): The size of the patch used to decompose the feature map.
+        strides (List[int]): The strides used in the `OverlapPatchEmbed` modules.
+        emb_dims (List[int]): The dimension of the embedding, ie the number of units in the linear projection for the attention mechanism.
+        num_heads (List[int]): The number of heads used for the atttention mechanism.
+        mlp_ratios (List[int]): Expansion factor in the hidden `Dense` layers of each `Mlp`.
+        proj_drop_prob (float): Dropout probability.
+        attn_drop_prob (float): Dropout probability.
+        stochastic_depth_rate (float): Probability of dropping a skip connection.
+        attn_reduction_ratios (List[int]): Reduction ratios used  in the attantion mechanism.
+        depths (List[int]): The depth of each stage, ie the number of `FFNAttentionBlock`in each stage.
+        backbone_name (str): The name of the backbone.
 
     Returns:
         A `tf.keras` model.
@@ -660,98 +660,3 @@ def get_backbone(
         outputs=[os4_output, os8_output, os16_output, os32_output],
         name=backbone_name,
     )
-
-
-if __name__ == "__main__":
-
-    fmap = np.random.rand(1, 256, 256, 3)
-
-    # B0 3.4
-    patch_size = [7, 3, 3, 3]  # K
-    strides = [4, 2, 2, 2]  # S
-    emb_dims = [32, 64, 160, 256]  # C
-    attn_reduction_ratios = [8, 4, 2, 1]  # R
-    num_heads = [1, 2, 5, 8]  # N
-    mlp_ratios = [8, 8, 4, 4]  # E
-    depths = [2, 2, 2, 2]  # L
-    proj_drop_prob = 0
-    attn_drop_prob = 0
-    stochastic_depth_rate = 0
-
-    # B1 13.4
-    # patch_size = [7, 3, 3, 3]  # K
-    # strides = [4, 2, 2, 2]  # S
-    # emb_dims = [64, 128, 320, 512]  # C
-    # attn_reduction_ratios = [8, 4, 2, 1]  # R
-    # num_heads = [1, 2, 5, 8]  # N
-    # mlp_ratios = [8, 8, 4, 4]  # E
-    # depths = [2, 2, 2, 2]  # L
-    # proj_drop_prob = 0
-    # attn_drop_prob = 0
-    # stochastic_depth_rate = 0
-
-    # B2 24.2
-    # patch_size = [7, 3, 3, 3]  # K
-    # strides = [4, 2, 2, 2]  # S
-    # emb_dims = [64, 128, 320, 512]  # C
-    # attn_reduction_ratios = [8, 4, 2, 1]  # R
-    # num_heads = [1, 2, 5, 8]  # N
-    # mlp_ratios = [8, 8, 4, 4]  # E
-    # depths = [3, 3, 6, 3]  # L
-    # proj_drop_prob = 0
-    # attn_drop_prob = 0
-    # stochastic_depth_rate = 0
-
-    # B3 44.0
-    # patch_size = [7, 3, 3, 3]  # K
-    # strides = [4, 2, 2, 2]  # S
-    # emb_dims = [64, 128, 320, 512]  # C
-    # attn_reduction_ratios = [8, 4, 2, 1]  # R
-    # num_heads = [1, 2, 5, 8]  # N
-    # mlp_ratios = [8, 8, 4, 4]  # E
-    # depths = [3, 3, 18, 3]  # L
-    # proj_drop_prob = 0
-    # attn_drop_prob = 0
-    # stochastic_depth_rate = 0
-
-    # B4 60.8
-    # patch_size = [7, 3, 3, 3]  # K
-    # strides = [4, 2, 2, 2]  # S
-    # emb_dims = [64, 128, 320, 512]  # C
-    # attn_reduction_ratios = [8, 4, 2, 1]  # R
-    # num_heads = [1, 2, 5, 8]  # N
-    # mlp_ratios = [8, 8, 4, 4]  # E
-    # depths = [3, 8, 27, 3]  # L
-    # proj_drop_prob = 0
-    # attn_drop_prob = 0
-    # stochastic_depth_rate = 0
-
-    # B5 81.4
-    # patch_size = [7, 3, 3, 3]  # K
-    # strides = [4, 2, 2, 2]  # S
-    # emb_dims = [64, 128, 320, 512]  # C
-    # attn_reduction_ratios = [8, 4, 2, 1]  # R
-    # num_heads = [1, 2, 5, 8]  # N
-    # mlp_ratios = [8, 4, 4, 4]  # E
-    # depths = [3, 6, 40, 3]  # L
-    # proj_drop_prob = 0
-    # attn_drop_prob = 0
-    # stochastic_depth_rate = 0
-
-    model = get_backbone(
-        img_shape=[256, 256, 3],
-        patch_size=patch_size,
-        strides=strides,
-        emb_dims=emb_dims,
-        num_heads=num_heads,
-        mlp_ratios=mlp_ratios,
-        proj_drop_prob=proj_drop_prob,
-        attn_drop_prob=attn_drop_prob,
-        stochastic_depth_rate=stochastic_depth_rate,
-        attn_reduction_ratios=attn_reduction_ratios,
-        depths=depths,
-        backbone_name="test",
-    )
-    outs = model(fmap)
-    print(f"{[out.shape.as_list() for out in outs]}")
-    model.summary()

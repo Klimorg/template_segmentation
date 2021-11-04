@@ -136,6 +136,15 @@ class Tensorize(object):
         image: np.ndarray,
         mask: np.ndarray,
     ) -> Tuple[np.ndarray, np.ndarray]:
+        """Apply augmentation (roations, transposition, flips), if needed.
+
+        Args:
+            image (np.ndarray): A numpy array representing an image of the dataset.
+            mask (np.ndarray): A numpy array representing a mask of the dataset.
+
+        Returns:
+            An augmented pair (image, mask).
+        """
 
         image, mask = tf.numpy_function(
             func=self.train_preprocess,

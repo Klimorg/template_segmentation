@@ -1,42 +1,11 @@
-from typing import List, Tuple
+from typing import List
 
 import tensorflow as tf
 from loguru import logger
 from tensorflow.keras import Model
-from tensorflow.keras.layers import (
-    BatchNormalization,
-    Concatenate,
-    Conv2D,
-    Input,
-    MaxPool2D,
-    ReLU,
-)
+from tensorflow.keras.layers import Concatenate, Input, MaxPool2D
 
 from src.model.layers.common_layers import conv_bn_relu
-
-# def conv_bn_relu(
-#     tensor: tf.Tensor,
-#     filters: int,
-#     kernel_size: Tuple[int, int],
-#     strides: Tuple[int, int],
-#     name: str,
-#     l2_regul: float = 1e-4,
-# ) -> tf.Tensor:
-
-#     fmap = Conv2D(
-#         filters=filters,
-#         kernel_size=kernel_size,
-#         strides=strides,
-#         padding="same",
-#         use_bias=False,
-#         kernel_initializer="he_uniform",
-#         kernel_regularizer=tf.keras.regularizers.l2(l2=l2_regul),
-#         name=f"{name}",
-#     )(tensor)
-
-#     fmap = BatchNormalization(name=f"bn_{name}")(fmap)
-
-#     return ReLU(name=f"relu_{name}")(fmap)
 
 
 def osa_module(
@@ -63,36 +32,36 @@ def osa_module(
     fmap1 = conv_bn_relu(
         tensor=tensor,
         filters=filters_conv3x3,
-        kernel_size=(3, 3),
-        strides=(1, 1),
+        kernel_size=3,
+        strides=1,
         name=f"conv3_1_block_{block_name}",
     )
     fmap2 = conv_bn_relu(
         tensor=fmap1,
         filters=filters_conv3x3,
-        kernel_size=(3, 3),
-        strides=(1, 1),
+        kernel_size=3,
+        strides=1,
         name=f"conv3_2_block_{block_name}",
     )
     fmap3 = conv_bn_relu(
         tensor=fmap2,
         filters=filters_conv3x3,
-        kernel_size=(3, 3),
-        strides=(1, 1),
+        kernel_size=3,
+        strides=1,
         name=f"conv3_3_block_{block_name}",
     )
     fmap4 = conv_bn_relu(
         tensor=fmap3,
         filters=filters_conv3x3,
-        kernel_size=(3, 3),
-        strides=(1, 1),
+        kernel_size=3,
+        strides=1,
         name=f"conv3_4_block_{block_name}",
     )
     fmap5 = conv_bn_relu(
         tensor=fmap4,
         filters=filters_conv3x3,
-        kernel_size=(3, 3),
-        strides=(1, 1),
+        kernel_size=3,
+        strides=1,
         name=f"conv3_5_block_{block_name}",
     )
 
@@ -103,8 +72,8 @@ def osa_module(
     return conv_bn_relu(
         tensor=fmap,
         filters=filters_conv1x1,
-        kernel_size=(1, 1),
-        strides=(1, 1),
+        kernel_size=1,
+        strides=1,
         name=f"conv1_out_block_{block_name}",
     )
 
@@ -135,22 +104,22 @@ def get_feature_extractor(
     fmap = conv_bn_relu(
         tensor=img_input,
         filters=64,
-        kernel_size=(3, 3),
-        strides=(2, 2),
+        kernel_size=3,
+        strides=2,
         name="stem_stage_1",
     )
     fmap = conv_bn_relu(
         tensor=fmap,
         filters=64,
-        kernel_size=(3, 3),
-        strides=(1, 1),
+        kernel_size=3,
+        strides=1,
         name="stem_stage_2",
     )
     fmap = conv_bn_relu(
         tensor=fmap,
         filters=128,
-        kernel_size=(3, 3),
-        strides=(1, 1),
+        kernel_size=3,
+        strides=1,
         name="stem_stage_3",
     )
 

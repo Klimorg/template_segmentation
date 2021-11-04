@@ -2,7 +2,6 @@
 .PHONY: help
 help:
 	@echo "Commands:"
-	@echo "rm_dataset            : remove datas from raw_dataset directory."
 	@echo "segmentation_masks    : generate the labels, ie segmentation masks, from the VGG json files."
 	@echo "prepared_dataset      : create train, test, & validation datasets from raw datas in raw_dataset directory."
 	@echo "train                 : launch training loop for a given set of parameters from configs/params.yaml."
@@ -18,7 +17,6 @@ help:
 	@echo "mlflow                : launch mlflow ui for monitoring training experiments."
 	@echo "tensorboard           : launch tensorboard ui for monitoring training experiments."
 	@echo "docs                  : serve generated documentation from mkdocs."
-	@echo "tests                 : run unit tests."
 	@echo "mypy                  : run mypy in the src folder for type hinting checking."
 	@echo "cc_report             : run radon in the src folder for code complexity report."
 	@echo "raw_report            : run radon in the src folder for raw report."
@@ -29,10 +27,6 @@ help:
 
 
 # Datas and training
-.PHONY: rm_dataset
-rm_dataset:
-	rm -r ./datas/raw_dataset
-
 .PHONY: segmentation_masks
 segmentation_masks:
 	python src/utils/make_masks.py
@@ -147,11 +141,6 @@ tensorboard:
 .PHONY: docs
 docs:
 	mkdocs serve
-
-# Tests
-.PHONY: tests
-tests:
-	python -m pytest -v --cov
 
 # Reporting
 .PHONY: mypy

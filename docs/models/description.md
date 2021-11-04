@@ -38,5 +38,8 @@ The backbones available are the following ones.
 * VoVNet27
 * VoVNet39
 * VoVNet57
+* MobileVit
+* Mixed Transformer
+* ConvMLP
 
 They are all setup to outputs features maps of outputs strides 4, 8, 16, and 32. The outputs-inputs correspodances are automatically made within the script.
