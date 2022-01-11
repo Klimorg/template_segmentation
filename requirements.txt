@@ -3,7 +3,7 @@ hydra_core==1.1.1
 loguru==0.5.3
 mlflow==1.21.0
 omegaconf==2.1.1
-pandas==1.3.4
+pandas==1.3.5
 PyYAML==6.0
-scikit_learn==1.0.1
+scikit_learn==1.0.2
 typer==0.4.0
