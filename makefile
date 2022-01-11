@@ -9,13 +9,12 @@ help:
 	@echo "install-dev           : installs development requirements."
 	@echo "install-docs          : installs docs requirements."
 	@echo "clean                 : cleans all unecessary files."
-	@echo "clean_tracking        : cleans tracking directories : hydra & mlruns."
+	@echo "clean_tracking        : cleans hydra tracking directory."
 	@echo "build_docker          : build the "developper" mode docker image of the project."
 	@echo "run_docker            : run the docker container in "developper mode" to train inside it."
 	@echo "build_prod            : build the "production mode" docker image of the project."
 	@echo "run_prod              : run the docker container in "production mode" to train inside it."
-	@echo "mlflow                : launch mlflow ui for monitoring training experiments."
-	@echo "tensorboard           : launch tensorboard ui for monitoring training experiments."
+	@echo "monitoring            : launch monitoring ui for monitoring training experiments."
 	@echo "docs                  : serve generated documentation from mkdocs."
 	@echo "mypy                  : run mypy in the src folder for type hinting checking."
 	@echo "cc_report             : run radon in the src folder for code complexity report."
@@ -68,7 +67,6 @@ clean:
 
 .PHONY: clean_tracking
 clean_tracking:
-	find . | grep -E "mlruns/*" | xargs rm -rf
 	find . | grep -E "hydra/*" | xargs rm -rf
 
 # Docker
@@ -89,8 +87,10 @@ run_docker:
 	--ulimit stack=67108864 \
 	-it \
 	--rm \
-	-P \
-	--mount type=bind,source=$(PWD),target=/media/vorph/Datas/template_segmentation \
+	-p 5000:5000 \
+	-p 6006:6006 \
+	-p 8001:8001 \
+	--mount type=bind,source=$(PWD),target=/home/$(USERNAME)/template_segmentation \
 	-e TF_FORCE_GPU_ALLOW_GROWTH=true \
 	-e TF_ENABLE_ONEDNN_OPTS=true \
 	-e XLA_FLAGS='--xla_gpu_autotune_level=2' \
@@ -114,7 +114,9 @@ run_prod:
 	--ulimit stack=67108864 \
 	-it \
 	--rm \
-	-P \
+	-p 5000:5000 \
+	-p 6006:6006 \
+	-p 8001:8001 \
 	--mount type=bind,source=$(PWD)/configs/,target=/home/vorph/configs/ \
 	--mount type=bind,source=$(PWD)/datas/,target=/home/vorph/datas/ \
 	--mount type=bind,source=$(PWD)/hydra/,target=/home/vorph/hydra/ \
@@ -128,18 +130,9 @@ run_prod:
 # https://stackoverflow.com/questions/43133670/getting-docker-container-id-in-makefile-to-use-in-another-command
 # I ran into the same problem and realised that makefiles take output from shell variables with the use of $$.
 
-# Experiments monitoring
-.PHONY: mlflow
-mlflow:
-	mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri $(PWD)/mlruns/
-
 .PHONY: monitoring
 monitoring:
 	aim up -h 0.0.0.0 -p 5000 --repo $(PWD)/hydra/
-
-.PHONY: tensorboard
-tensorboard:
-	tensorboard --logdir $(PWD)/mlruns/
 
 # Documentation
 .PHONY: docs

@@ -8,6 +8,12 @@ from loguru import logger
 from omegaconf import OmegaConf
 from PIL import Image, ImageDraw
 
+from errors.labelization_errors import (
+    LabelizationError,
+    PolygonError,
+    validate_polygons,
+)
+from src.errors.img_errors import ImageMaskMismatchError, validate_images_masks
 from src.utils.utils import get_items_list
 
 JsonDict = Dict[str, Any]
@@ -64,7 +70,7 @@ class SegmentationMasks(object):
         Args:
             image_name (str): The name of the image for which we parse the VGG json file to collect polygons coordinates an
                 labels.
-            coordinates_and_labels (JsonDict, optional): The loaded VGG json file to parse.
+            coordinates_and_labels (JsonDict): The loaded VGG json file to parse.
 
         Returns:
             Tuple[List[PolygonVertices], List[PolygonVertices], List[str]]: The lists of polygon vertices and labels of the given image.
@@ -94,15 +100,26 @@ class SegmentationMasks(object):
                 segmentation_datas["regions"][polygon]["region_attributes"]["label"],
             )
 
-        assert len(X_coordinates) == len(Y_coordinates)
-        assert len(Y_coordinates) == len(labels)
-        logger.info(f"Found {len(labels)} segmentation masks for {image_name}")
-
-        return (
-            Y_coordinates,
-            X_coordinates,
-            labels,
-        )  # image coordinates are flipped relative to json coordinates
+        try:
+            validate_polygons(
+                X_coordinates=X_coordinates,
+                Y_coordinates=Y_coordinates,
+                labels=labels,
+            )
+        except PolygonError as err1:
+            logger.error(
+                f"There is something wrong in the json file, the numbers of X and Y coordinates don't match: {err1}",
+            )
+        except LabelizationError as err2:
+            logger.error(
+                f"There should be one label for each polygon. This is not the case here: {err2}",
+            )
+        else:
+            return (
+                Y_coordinates,
+                X_coordinates,
+                labels,
+            )  # image coordinates are flipped relative to json coordinates
 
     def get_polygon_masks(
         self,
@@ -162,14 +179,10 @@ class SegmentationMasks(object):
 
         return masks
 
-    def get_masks_from_json(
-        self,
-        json_file,
-        save: bool = True,
-    ) -> None:
+    def get_masks_from_json(self, json_file) -> None:
         """Given a json file containing segmentation masks information in VGG format, generate the masks.
 
-        Open the json file `json_file` to retreive the coordinates and labels of the segmentation masks and the
+        Open the json file `json_file` to retrieve the coordinates and labels of the segmentation masks and the
         associated images. Then loop over each images and applys `get_data` and `get_polygon_masks` to obtain for
         each image a $(P,H,W)$ numpy array where $P$ is the number of segmentation polygons and $H,W$ the height and width.
 
@@ -210,13 +223,12 @@ class SegmentationMasks(object):
 
             segmentation_mask = np.max(mask, axis=0)
 
-            if save:
-                image_name_stem = Path(f"{image_name}").stem
-                address = Path(self.segmentation_config.raw_datas.masks) / Path(
-                    f"{image_name_stem}_mask.png",
-                )
-                segmentation_mask = Image.fromarray(segmentation_mask).convert("L")
-                segmentation_mask.save(address)
+            image_name_stem = Path(f"{image_name}").stem
+            address = Path(self.segmentation_config.raw_datas.masks) / Path(
+                f"{image_name_stem}_mask.png",
+            )
+            segmentation_mask = Image.fromarray(segmentation_mask).convert("L")
+            segmentation_mask.save(address)
 
             masks.append(segmentation_mask)
 

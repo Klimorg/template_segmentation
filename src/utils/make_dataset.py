@@ -7,6 +7,14 @@ from loguru import logger
 from omegaconf import OmegaConf
 from sklearn.model_selection import train_test_split
 
+from src.errors.img_errors import (
+    EmptyImageDatasetError,
+    EmptyMaskDatasetError,
+    ImageMaskMismatchError,
+    validate_images_masks,
+    validate_non_empty_img_list,
+    validate_non_empty_mask_list,
+)
 from src.utils.utils import get_items_list, set_seed
 
 reproducibility_params = OmegaConf.load("configs/params.yaml")
@@ -114,23 +122,42 @@ def generate_datasets() -> None:
         extension=".png",
     )
 
-    datasets_components = create_train_val_test_datasets(images_paths, masks_paths)
+    try:
+        validate_non_empty_img_list(item_list=images_paths)
+    except EmptyImageDatasetError as img_err:
+        logger.error(
+            f"There are no images in this list, are you sure of your extension ? : {img_err}",
+        )
 
-    save_as_csv(
-        datasets_components[0],
-        datasets_components[1],
-        datasets.prepared_dataset.train,
-    )
-    save_as_csv(
-        datasets_components[2],
-        datasets_components[3],
-        datasets.prepared_dataset.val,
-    )
-    save_as_csv(
-        datasets_components[4],
-        datasets_components[5],
-        datasets.prepared_dataset.test,
-    )
+    try:
+        validate_non_empty_mask_list(item_list=masks_paths)
+    except EmptyMaskDatasetError as msk_err:
+        logger.error(
+            f"There are no masks in this list, are you sure of your extension ? : {msk_err}",
+        )
+
+    try:
+        validate_images_masks(images=images_paths, masks=masks_paths)
+    except ImageMaskMismatchError as err:
+        logger.error(f"The number of images and labels aren't the same : {err}")
+    else:
+        datasets_components = create_train_val_test_datasets(images_paths, masks_paths)
+
+        save_as_csv(
+            datasets_components[0],
+            datasets_components[1],
+            datasets.prepared_dataset.train,
+        )
+        save_as_csv(
+            datasets_components[2],
+            datasets_components[3],
+            datasets.prepared_dataset.val,
+        )
+        save_as_csv(
+            datasets_components[4],
+            datasets_components[5],
+            datasets.prepared_dataset.test,
+        )
 
 
 if __name__ == "__main__":

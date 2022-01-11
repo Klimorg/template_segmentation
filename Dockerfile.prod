@@ -28,7 +28,7 @@ COPY setup.py .
 RUN /bin/bash -c "python -m pip install . --no-cache-dir"
 
 
-# 5000 pour mlflow
+# 5000 pour le monitoring
 EXPOSE 5000
 
 # 6006 pour tensorboard

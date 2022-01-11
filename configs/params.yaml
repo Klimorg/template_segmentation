@@ -1,5 +1,5 @@
 defaults:
-  - backbone: mobilenet
+  - backbone: resnet50v2
   - segmentation_model: fpn
   - losses: focal_loss
   - optimizer: cg_adam
@@ -18,10 +18,10 @@ lrd:
   activate: true
 
 prepare:
-  split: 0.10
+  split: 0.15
   seed: 42
 
-mlflow:
+monitoring:
   experiment_name: SegmentationProject
   run_name: ${backbone.backbone_name}_${segmentation_model.name}_${now:%Y-%m-%d_%H-%M-%S}
 

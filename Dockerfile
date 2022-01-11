@@ -10,10 +10,12 @@ RUN useradd -m -u $USER_UID -g $USER_GID -o -s /bin/bash $USERNAME
 
 USER $USERNAME
 
-ENV PATH "$PATH:/home/vorph/.local/bin"
+ENV PATH "$PATH:/home/$USERNAME/.local/bin"
 
 RUN /usr/bin/python -m pip install --upgrade pip
 ENV PATH "$PATH:/usr/lib/python3.8/dist-packages"
+
+WORKDIR /home/$USERNAME
 
 COPY requirements.txt .
 COPY requirements-dev.txt .
@@ -21,7 +23,7 @@ COPY requirements-dev.txt .
 RUN /bin/bash -c "pip install -r requirements.txt --no-cache-dir"
 RUN /bin/bash -c "pip install -r requirements-dev.txt --no-cache-dir"
 
-# 5000 pour mlflow
+# 5000 pour le monitoring
 EXPOSE 5000
 
 # 6006 pour tensorboard

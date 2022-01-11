@@ -53,7 +53,7 @@ def train(config: DictConfig) -> tf.keras.Model:
     _, repo_path = set_log_infos(config)
 
     run = Run(
-        experiment=config.mlflow.run_name,
+        experiment=config.monitoring.run_name,
         repo=f"{repo_path}/hydra",
     )
     run["hparams"] = OmegaConf.to_container(config, resolve=True)
@@ -115,7 +115,7 @@ def train(config: DictConfig) -> tf.keras.Model:
     )
     callbacks = [
         tf.keras.callbacks.ModelCheckpoint(
-            f"callback_{config.mlflow.run_name}",
+            f"callback_{config.monitoring.run_name}",
             monitor="val_mean_iou",
             mode="max",
             save_best_only=True,
@@ -135,7 +135,7 @@ def train(config: DictConfig) -> tf.keras.Model:
         callbacks=callbacks,
     )
 
-    save_model(model, f"{config.mlflow.run_name}")
+    save_model(model, f"{config.monitoring.run_name}")
 
 
 if __name__ == "__main__":
