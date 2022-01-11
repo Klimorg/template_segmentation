@@ -9,6 +9,7 @@ datas*
 mlruns*
 hydra*
 core*
+Dockerfile*
 
 #git dvc versioning control system
 .dvc

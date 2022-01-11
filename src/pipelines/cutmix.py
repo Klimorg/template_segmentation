@@ -178,7 +178,7 @@ class CutMix(object):
 
     @tf.function
     def get_box(self, lambda_value: float) -> Tuple[int, int, int, int]:
-        """Given a "combination ratio `lamba_value`", define the coordinates of the bounding boxes to be cut and mixed between
+        """Given a 'combination ratio `lamba_value`', define the coordinates of the bounding boxes to be cut and mixed between
         two images and masks.
 
         The coordinates of the bounding boxes ares in the format `(x_min,y_min,height,width)` and chosen such that we
@@ -405,14 +405,14 @@ class CutMix(object):
         image: np.ndarray,
         mask: np.ndarray,
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """[summary]
+        """Apply augmentation (roations, transposition, flips), if needed.
 
         Args:
-            image ([type]): [description]
-            mask ([type]): [description]
+            image (np.ndarray): A numpy array representing an image of the dataset.
+            mask (np.ndarray): A numpy array representing a mask of the dataset.
 
         Returns:
-            [type]: [description]
+            An augmented pair (image, mask).
         """
 
         image, mask = tf.numpy_function(

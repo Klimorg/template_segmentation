@@ -1,6 +1,5 @@
 from typing import Any, Dict, List
 
-import numpy as np
 import tensorflow as tf
 from loguru import logger
 from tensorflow.keras import Model
@@ -101,7 +100,6 @@ class MobileViT2D(tf.keras.layers.Layer):
     def __init__(
         self,
         expansion_rate: int,
-        # fc_units: int,
         filters: int,
         patch_size: int = 2,
         num_heads: int = 8,
@@ -226,7 +224,20 @@ def get_feature_extractor(
     emb_dim: List[int],
     repetitions: List[int],
     num_heads: int,
-):
+) -> tf.keras.Model:
+    """Instantiate of MobileViT model.
+
+    Args:
+        img_shape (List[int]): Input shape of the images in the dataset.
+        expansion_rate (List[int]): Expansion rates used in `InvertedResidualBottleneck2D` and in `Transformer` modules.
+        filters (List[int]): Number of filters used in `InvertedResidualBottleneck2D` and in `MobileVit2D` modules.
+        emb_dim (List[int]): The dimension of the embedding, ie the number of units in the linear projection for the `MultiHeadAttention` module.
+        repetitions (List[int]): Number of `Transformer` blocks in the `MobileVit2D` modules.
+        num_heads (int): Number of heads for the `MultiHeadAttention` module.
+
+    Returns:
+        A `tf.keras` model.
+    """
 
     # Input block
     img_input = Input(img_shape)
@@ -357,13 +368,13 @@ def get_backbone(
     """Instantiate the model and use it as a backbone (feature extractor) for a semantic segmentation task.
 
     Args:
-        img_shape (List[int]): [description]
-        expansion_rate (List[int]): [description]
-        filters (List[int]): [description]
-        emb_dim (List[int]): [description]
-        repetitions (List[int]): [description]
-        num_heads (int): [description]
-        backbone_name (str): [description]
+        img_shape (List[int]): Input shape of the images in the dataset.
+        expansion_rate (List[int]): Expansion rates used in `InvertedResidualBottleneck2D` and in `Transformer` modules.
+        filters (List[int]): Number of filters used in `InvertedResidualBottleneck2D` and in `MobileVit2D` modules.
+        emb_dim (List[int]): The dimension of the embedding, ie the number of units in the linear projection for the `MultiHeadAttention` module.
+        repetitions (List[int]): Number of `Transformer` blocks in the `MobileVit2D` modules.
+        num_heads (int): Number of heads for the `MultiHeadAttention` module.
+        backbone_name (str): The name of the backbone.
 
     Returns:
         A `tf.keras` model.
@@ -400,40 +411,3 @@ def get_backbone(
         outputs=[os4_output, os8_output, os16_output, os32_output],
         name=backbone_name,
     )
-
-
-if __name__ == "__main__":
-    fmap = np.random.rand(1, 256, 256, 3)
-
-    # MobileVit-XXS
-    # expansion_rate = [2, 2]
-    # filters = [16, 16, 24, 24, 24, 48, 48, 64, 64, 80, 80, 320]
-    # emb_dim = [64, 80, 96]
-    # repetitions = [2, 4, 3]
-    # num_heads = 2
-
-    # MobileVit-XS
-    # expansion_rate = [4, 2]
-    # filters = [16, 16, 48, 48, 48, 64, 64, 80, 80, 96, 96, 384]
-    # emb_dim = [96, 120, 144]
-    # repetitions = [2, 4, 3]
-    # num_heads = 2
-
-    # MobileVit-S
-    expansion_rate = [4, 2]
-    filters = [16, 16, 64, 64, 64, 96, 96, 128, 128, 160, 160, 640]
-    emb_dim = [144, 192, 240]
-    repetitions = [2, 4, 3]
-    num_heads = 2
-
-    model = get_backbone(
-        img_shape=(256, 256, 3),
-        expansion_rate=expansion_rate,
-        filters=filters,
-        emb_dim=emb_dim,
-        repetitions=repetitions,
-        num_heads=num_heads,
-        backbone_name="MobileViT-S",
-    )
-    out = model(fmap)
-    model.summary()

@@ -1,4 +1,4 @@
-site_name: Documentation ECCO Project Moisissures Levures
+site_name: Documentation Semantic Segmentation
 site_author: Mathieu Klimczak
 dev_addr: "127.0.0.1:8001"
 theme:
@@ -30,6 +30,9 @@ theme:
 
 # extra_css:
 #   - stylesheets/extra.css
+extra:
+  version:
+    provider: mike
 
 plugins:
   - search:
@@ -37,7 +40,6 @@ plugins:
   - mkdocstrings:
       watch:
         - src
-        - tests
         - configs
       default_handler: python
       handlers:
@@ -45,7 +47,6 @@ plugins:
           setup_commands:
             - import sys
             - sys.path.append("src")
-            - sys.path.append("tests")
           rendering:
             show_source: true
 
@@ -85,13 +86,9 @@ nav:
         - ConvMLP: models/backbone/convmlp.md
         - MixTransformer: models/backbone/mit.md
         - MobileViT: models/backbone/mobilevit.md
-  - Training loop: train.md
+  - Training loop: training_loop/train.md
   - Loss: loss/focal_loss.md
   - Metrics : metrics/mean_iou.md
-  # - Tests unitaires:
-  #   - tensorize: test_tensorize.md
-  #   - prepare_dataset: test_make_dataset.md
-  #   - utils: test_utils.md
 
 
 

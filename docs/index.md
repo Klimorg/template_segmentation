@@ -1,25 +1,85 @@
-# Welcome to the semantic segmentation documentation of ECCO project
+# Welcome to the semantic segmentation documentation project
 
 
 ## How to use this project
 
-This project can be used in 2 ways.
+!!! danger "Attention"
+
+    **Before anything else**, be sure to have installed :
+
+    * [Docker](https://docs.docker.com/get-docker/),
+    * [Nvidia Container Toolkit](https://github.com/NVIDIA/nvidia-docker).
 
 !!! warning "Warning"
 
     This project has only been tested with Python 3.8.
+
+This project can be used in 2 ways.
 ### First Choice
 
-A Docker image has been provided, see the [Various configuration page](misc_config/docker.md) for further details about the writing of the Dockerfile. The base image from this Dockerfile is a TensorFlow image provided by [NVidia](https://ngc.nvidia.com/catalog/containers/nvidia:tensorflow/tags), this has the advantage to not bother you with the (quite difficult) installation of TensorFlow, CUDA, CuDNN, and other optimization softwares needed to make TensorFlow compatible with GPUs.
+#### I **DO NOT WANT** to modify what's in the `src` directory
+
+A Dockerfile `Dockerfile` for "development mode" image has been provided, see the [Various configuration page](misc_config/docker.md) for further details about the writing of the Dockerfile. The base image from this Dockerfile is a TensorFlow image provided by [NVidia](https://ngc.nvidia.com/catalog/containers/nvidia:tensorflow/tags), this has the advantage to not bother you with the (quite difficult) installation of TensorFlow, CUDA, CuDNN, and other optimization softwares needed to make TensorFlow compatible with GPUs.
+
+The shell commands needed to build and run the Docker container can be found below, they are also the provided in the [makefile](misc_config/make.md).
+
+```shell
+build_prod:
+    docker build \
+    --build-arg USER_UID=$$(id -u) \
+    --build-arg USER_GID=$$(id -g) \
+    --rm \
+    -f Dockerfile.prod \
+    -t segmentation_project:v1_prod .
+
+run_prod:
+    docker run --gpus all \
+    --shm-size=2g \
+    --ulimit memlock=-1 \
+    --ulimit stack=67108864 \
+    -it \
+    --rm \
+    -P \
+    --mount type=bind,source=$(PWD)/configs/,target=/home/lambdauser/configs/ \
+    --mount type=bind,source=$(PWD)/datas/,target=/home/lambdauser/datas/ \
+    --mount type=bind,source=$(PWD)/hydra/,target=/home/lambdauser/hydra/ \
+    --mount type=bind,source=$(PWD)/mlruns/,target=/home/lambdauser/mlruns/ \
+    -e TF_FORCE_GPU_ALLOW_GROWTH=true \
+    -e TF_ENABLE_ONEDNN_OPTS=true \
+    -e XLA_FLAGS='--xla_gpu_autotune_level=2' \
+    segmentation_project:v1_prod
+```
+Note that the container rely on mounting the following volumes :
+
+* `configs` to modify the parameters the way you want for your training session,
+* `datas` to mount the datas for your training session,
+* `hydra` to retrieve the various artifacts of the training session,
+* `mlruns` to use MLFlow to monitor your different runs.
+
+#### I **DO WANT** to modify what's in the `src` directory
+
+A Dockerfile `Dockerfile` for "development mode" image has been provided, see the [Various configuration page](misc_config/docker.md) for further details about the writing of the Dockerfile. The base image from this Dockerfile is a TensorFlow image provided by [NVidia](https://ngc.nvidia.com/catalog/containers/nvidia:tensorflow/tags), this has the advantage to not bother you with the (quite difficult) installation of TensorFlow, CUDA, CuDNN, and other optimization softwares needed to make TensorFlow compatible with GPUs.
 
 The shell commands needed to build and run the Docker container can be found below, they are also the provided in the [makefile](misc_config/make.md).
 
 ```shell
 build_docker:
-    docker build --build-arg USER_UID=$$(id -u) --build-arg USER_GID=$$(id -g) --rm -f Dockerfile -t segmentation_project:v1 .
+    docker build \
+    --build-arg USER_UID=$$(id -u) \
+    --build-arg USER_GID=$$(id -g) \
+    --rm -f Dockerfile \
+    -t segmentation_project:v1 .
 
 run_docker:
-    docker run --gpus all --shm-size=2g --ulimit memlock=-1 --ulimit stack=67108864 -it --rm -P --mount type=bind,source=$(PWD),target=/media/vorph/Datas/template_segmentation -e TF_FORCE_GPU_ALLOW_GROWTH=true -e XLA_FLAGS='--xla_gpu_autotune_level=2' segmentation_project:v1
+    docker run \
+    --gpus all \
+    --shm-size=2g \
+    --ulimit memlock=-1 \
+    --ulimit stack=67108864 \
+    -it --rm -P \
+    --mount type=bind,source=$(PWD),target=/media/vorph/Datas/template_segmentation \
+    -e TF_FORCE_GPU_ALLOW_GROWTH=true \
+    -e XLA_FLAGS='--xla_gpu_autotune_level=2' segmentation_project:v1
 ```
 Note that the container rely on mounting a volume, you can see that in the `run_docker` command : `--mount type=bind,source=$(PWD),target=/media/vorph/Datas/template_segmentation`, depending on where the project is installed, you will have to :
 
@@ -66,7 +126,7 @@ One you have your labels and images, put them in the `datas/raw_datas/images` fo
 
 ### Step 2 : Generate the segmentation masks.
 
-You need to generate masks from the raw annotations you have in your VGG json file. This is the purpose of the [`src/utils/utils_segmentation.py`](datasets/utils_segmentation.md) script, this script can be launched through the following shell command.
+You need to generate masks from the raw annotations you have in your VGG json file. This is the purpose of the [`src/utils/make_masks.py`](datasets/utils_segmentation.md) script, this script can be launched through the following shell command.
 ```shell
 make segmentation_masks
 ```

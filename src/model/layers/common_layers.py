@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 import tensorflow as tf
 import tensorflow_addons as tfa
@@ -262,7 +262,7 @@ def sepconv_bn_relu(
     return ReLU()(fmap)
 
 
-# @tf.keras.utils.register_keras_serializable()
+@tf.keras.utils.register_keras_serializable()
 class InvertedResidualBottleneck2D(tf.keras.layers.Layer):
     def __init__(
         self,
@@ -288,8 +288,6 @@ class InvertedResidualBottleneck2D(tf.keras.layers.Layer):
             ), "You can't apply skip connections with strides greater than 1."
 
     def build(self, input_shape) -> None:
-
-        # *_, channels = input_shape
 
         self.conv1 = Conv2D(
             filters=self.expansion_rate * self.filters,

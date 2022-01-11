@@ -1,19 +1,21 @@
 defaults:
-  - backbone: mobilevit_s
-  - segmentation_model: ksac
+  - backbone: mobilenet
+  - segmentation_model: fpn
   - losses: focal_loss
   - optimizer: cg_adam
   - lr_decay: cosine_decay_restart
   - metrics: mean_iou
   - datasets: datasets
-  - pipeline: cutmix
+  - pipeline: classic
   - training: custom_training
+
+start:
+  from_saved_model: false
+  saved_model_dir: null
+
 
 lrd:
   activate: true
-
-mixed_precision:
-  activate: false
 
 prepare:
   split: 0.10
