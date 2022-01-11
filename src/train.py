@@ -1,15 +1,15 @@
 from pathlib import Path
 
-import mlflow
 import tensorflow as tf
+from aim import Run
+from aim.tensorflow import AimCallback
 from hydra.utils import instantiate
 from loguru import logger
-from mlflow import tensorflow as mltensorflow
-from omegaconf import DictConfig
+from omegaconf import DictConfig, OmegaConf
 from tensorflow.keras.models import load_model, save_model
 
 import hydra
-from utils.utils import flatten_omegaconf, set_log_infos, set_seed
+from utils.utils import set_log_infos, set_seed
 
 
 @logger.catch()
@@ -52,93 +52,90 @@ def train(config: DictConfig) -> tf.keras.Model:
     """
     _, repo_path = set_log_infos(config)
 
-    mlflow.set_tracking_uri(f"file://{repo_path}/mlruns")
-    mlflow.set_experiment(config.mlflow.experiment_name)
+    run = Run(
+        experiment=config.mlflow.run_name,
+        repo=f"{repo_path}/hydra",
+    )
+    run["hparams"] = OmegaConf.to_container(config, resolve=True)
 
     set_seed(config.prepare.seed)
 
     logger.info("Data loading")
 
     logger.info(f"Root path of the folder : {repo_path}")
-    logger.info(f"MLFlow uri : {mlflow.get_tracking_uri()}")
-    with mlflow.start_run(
-        run_name=config.mlflow.run_name,
-    ) as run:
 
-        logger.info(f"Run infos : {run.info}")
+    logger.info("Instantiate data pipeline.")
+    pipeline = instantiate(config.pipeline)
 
-        mltensorflow.autolog(every_n_iter=1)
-        mlflow.log_params(flatten_omegaconf(config))
+    ds = pipeline.create_train_dataset(
+        Path(repo_path) / config.datasets.prepared_dataset.train,
+        config.datasets.params.batch_size,
+        config.datasets.params.repetitions,
+        config.datasets.params.augment,
+        config.datasets.params.prefetch,
+    )
 
-        logger.info("Instantiate data pipeline.")
-        pipeline = instantiate(config.pipeline)
+    ds_val = pipeline.create_test_dataset(
+        Path(repo_path) / config.datasets.prepared_dataset.val,
+        config.datasets.params.batch_size,
+        config.datasets.params.repetitions,
+        config.datasets.params.prefetch,
+    )
 
-        ds = pipeline.create_train_dataset(
-            Path(repo_path) / config.datasets.prepared_dataset.train,
-            config.datasets.params.batch_size,
-            config.datasets.params.repetitions,
-            config.datasets.params.augment,
-            config.datasets.params.prefetch,
-        )
+    if config.lrd.activate:
+        logger.info("Found learning rate decay policy.")
+        lr = {"learning_rate": instantiate(config.lr_decay)}
+    else:
+        lr = {"learning_rate": config.training.lr}
 
-        ds_val = pipeline.create_test_dataset(
-            Path(repo_path) / config.datasets.prepared_dataset.val,
-            config.datasets.params.batch_size,
-            config.datasets.params.repetitions,
-            config.datasets.params.prefetch,
-        )
+    logger.info("Instantiate optimizer")
+    optimizer = instantiate(config.optimizer, **lr)
 
-        if config.lrd.activate:
-            logger.info("Found learning rate decay policy.")
-            lr = {"learning_rate": instantiate(config.lr_decay)}
-        else:
-            lr = {"learning_rate": config.training.lr}
+    logger.info("Instantiate loss")
+    loss = instantiate(config.losses)
 
-        logger.info("Instantiate optimizer")
-        optimizer = instantiate(config.optimizer, **lr)
+    logger.info("Instantiate metrics")
+    metric = instantiate(config.metrics)
 
-        logger.info("Instantiate loss")
-        loss = instantiate(config.losses)
+    logger.info("Instantiate model")
 
-        logger.info("Instantiate metrics")
-        metric = instantiate(config.metrics)
+    if config.start.from_saved_model:
+        logger.info("Start training back from a saved model.")
+        model = load_model(Path(repo_path) / config.start.saved_model_dir)
+    else:
+        logger.info("Start training from scratch.")
+        backbone = {"backbone": instantiate(config.backbone)}
+        model = instantiate(config.segmentation_model, **backbone)
 
-        logger.info("Instantiate model")
+    logger.info("Compiling model")
+    model.compile(
+        optimizer=optimizer,
+        loss=loss,
+        metrics=[metric],
+    )
+    callbacks = [
+        tf.keras.callbacks.ModelCheckpoint(
+            f"callback_{config.mlflow.run_name}",
+            monitor="val_mean_iou",
+            mode="max",
+            save_best_only=True,
+            save_weights_only=False,
+        ),
+        AimCallback(
+            run=run,
+        ),
+    ]
 
-        if config.start.from_saved_model:
-            logger.info("Start training back from a saved model.")
-            model = load_model(Path(repo_path) / config.start.saved_model_dir)
-        else:
-            logger.info("Start training from scratch.")
-            backbone = {"backbone": instantiate(config.backbone)}
-            model = instantiate(config.segmentation_model, **backbone)
+    logger.info("Start training")
+    model.summary()
+    model.fit(
+        ds,
+        epochs=config.training.epochs,
+        validation_data=ds_val,
+        callbacks=callbacks,
+    )
 
-        logger.info("Compiling model")
-        model.compile(
-            optimizer=optimizer,
-            loss=loss,
-            metrics=[metric],
-        )
-        callbacks = [
-            tf.keras.callbacks.ModelCheckpoint(
-                f"callback_{config.mlflow.run_name}",
-                monitor="val_mean_iou",
-                mode="max",
-                save_best_only=True,
-                save_weights_only=False,
-            ),
-        ]
-
-        logger.info("Start training")
-        model.summary()
-        model.fit(
-            ds,
-            epochs=config.training.epochs,
-            validation_data=ds_val,
-            callbacks=callbacks,
-        )
-
-        save_model(model, f"{config.mlflow.run_name}")
+    save_model(model, f"{config.mlflow.run_name}")
 
 
 if __name__ == "__main__":

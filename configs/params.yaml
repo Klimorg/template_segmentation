@@ -1,5 +1,5 @@
 defaults:
-  - backbone: resnet50
+  - backbone: mobilenet
   - segmentation_model: fpn
   - losses: focal_loss
   - optimizer: cg_adam
@@ -10,8 +10,8 @@ defaults:
   - training: custom_training
 
 start:
-  from_saved_model: True
-  saved_model_dir: "hydra/2021-10-26_08-56-33/ResNet50_FPN_2021-10-26_08-56-33"
+  from_saved_model: false
+  saved_model_dir: null
 
 
 lrd:

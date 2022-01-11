@@ -133,6 +133,10 @@ run_prod:
 mlflow:
 	mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri $(PWD)/mlruns/
 
+.PHONY: monitoring
+monitoring:
+	aim up -h 0.0.0.0 -p 5000 --repo $(PWD)/hydra/
+
 .PHONY: tensorboard
 tensorboard:
 	tensorboard --logdir $(PWD)/mlruns/
