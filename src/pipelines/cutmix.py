@@ -148,16 +148,27 @@ class CutMix(object):
         size: int,
         concentration0: List[float],
         concentration1: List[float],
-    ):
-        """[summary]
+    ) -> float:
+        """Sample a float from Beta distribution.
+
+        This is done by sampling two random variables from two gamma distributions.
+
+        If $X$ and $Y$ are two i.i.d. random variables following Gamma laws, $X \sim \mathrm{Gamma}({\\alpha}, \\theta)$,
+        and $Y \simeq \mathrm{Gamma}(\\beta, \\theta)$, then the random variable $\\frac{X}{X+Y}$ follows the
+        $\mathrm{Beta}(\\alpha, \\beta)$ law.
+
+        Note that if $\\alpha=\\beta=1$, then $\\mathrm{Beta}(1,1)$ is just the Uniform distribution $(0,1)$.
 
         Args:
-            size (int): [description]
-            concentration0 (List[float]): [description]
-            concentration1 (List[float]): [description]
+            size (int): A 1-D integer Tensor or Python array. The shape of the output samples to be drawn per
+                alpha/beta-parameterized distribution.
+            concentration0 (List[float]): A Tensor or Python value or N-D array of type dtype. concentration0 provides the
+                shape parameter(s) describing the gamma distribution(s) to sample.
+            concentration1 (List[float]): A Tensor or Python value or N-D array of type dtype. concentration1- provides the
+                shape parameter(s) describing the gamma distribution(s) to sample.
 
         Returns:
-            [type]: [description]
+            float: A float sampled from Beta(concentration1,concentration2) distribution.
         """
 
         gamma1sample = tf.random.gamma(shape=[size], alpha=concentration1)
@@ -166,48 +177,81 @@ class CutMix(object):
         return gamma1sample / (gamma1sample + gamma2sample)
 
     @tf.function
-    def get_box(self, lambda_value):
-        """[summary]
+    def get_box(self, lambda_value: float) -> Tuple[int, int, int, int]:
+        """Given a "combination ratio `lamba_value`", define the coordinates of the bounding boxes to be cut and mixed between
+        two images and masks.
+
+        The coordinates of the bounding boxes ares in the format `(x_min,y_min,height,width)` and chosen such that we
+        have the ratio :
+
+        \[
+            \\frac{\\text{height}\cdot \\text{width}}{H \cdot W} = 1- \lambda
+        \]
+
+        where :
+
+        * $\lambda$ = `lambda_value`,
+        * $H$, $W$ are the height, width of the images/masks.
+
+        that is $\\text{height} = H \cdot \sqrt{1-\lambda}$, and $\\text{width} = W \cdot \sqrt{1-\lambda}$.
+
+        * `x_min` is chosen by sampling uniformly in $\mathrm{Unif}(0, W)$.
+        * `y_min` is chosen by sampling uniformly in $\mathrm{Unif}(0, H)$
 
         Args:
-            lambda_value ([type]): [description]
+            lambda_value (float): The combination ratio, has to be a real number in $(0,1)$.
+
 
         Returns:
-            [type]: [description]
+            Tuple[int, int, int, int]: The coordinates of the bounding boxes tu be modified.
+                Coordinates in format `(x_min,y_min,height,width)`.
         """
 
+        # define coordinates ratio
         cut_rat = tf.math.sqrt(1.0 - lambda_value)
 
-        cut_w = self.image_size * cut_rat  # rw
+        # define bounding box width
+        cut_w = self.image_size * cut_rat
         cut_w = tf.cast(cut_w, tf.int32)
 
-        cut_h = self.image_size * cut_rat  # rh
+        # define bounding box height
+        cut_h = self.image_size * cut_rat
         cut_h = tf.cast(cut_h, tf.int32)
 
+        # define bounding box c_x
         cut_x = tf.random.uniform(
             (1,),
             minval=0,
             maxval=self.image_size,
             dtype=tf.int32,
-        )  # rx
+        )
 
+        # define bounding box c_y
         cut_y = tf.random.uniform(
             (1,),
             minval=0,
             maxval=self.image_size,
             dtype=tf.int32,
-        )  # ry
+        )
 
-        boundaryx1 = tf.clip_by_value(cut_x[0] - cut_w // 2, 0, self.image_size)
-        boundaryy1 = tf.clip_by_value(cut_y[0] - cut_h // 2, 0, self.image_size)
-        bbx2 = tf.clip_by_value(cut_x[0] + cut_w // 2, 0, self.image_size)
-        bby2 = tf.clip_by_value(cut_y[0] + cut_h // 2, 0, self.image_size)
+        boundaryx1 = tf.clip_by_value(
+            cut_x[0] - cut_w // 2,
+            0,
+            self.image_size,
+        )  # x_min
+        boundaryy1 = tf.clip_by_value(
+            cut_y[0] - cut_h // 2,
+            0,
+            self.image_size,
+        )  # y_min
+        bbx2 = tf.clip_by_value(cut_x[0] + cut_w // 2, 0, self.image_size)  # x_max
+        bby2 = tf.clip_by_value(cut_y[0] + cut_h // 2, 0, self.image_size)  # y_max
 
-        target_h = bby2 - boundaryy1
+        target_h = bby2 - boundaryy1  # y_max - y_min
         if target_h == 0:
             target_h += 1
 
-        target_w = bbx2 - boundaryx1
+        target_w = bbx2 - boundaryx1  # x_max - x_min
         if target_w == 0:
             target_w += 1
 

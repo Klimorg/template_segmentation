@@ -11,6 +11,7 @@ from tensorflow.keras.layers import (
 )
 
 
+@tf.keras.utils.register_keras_serializable()
 class SharedDilatedConv(tf.keras.layers.Layer):
     """
     Description of SharedDilatedConv
@@ -134,7 +135,12 @@ class SharedDilatedConv(tf.keras.layers.Layer):
             "use_bias": self.use_bias,
         }
 
+    @classmethod
+    def from_config(cls, config):
+        return cls(**config)
 
+
+@tf.keras.utils.register_keras_serializable()
 class KSAConv2D(tf.keras.layers.Layer):
     """
     Description of KSAConv2D
@@ -231,3 +237,7 @@ class KSAConv2D(tf.keras.layers.Layer):
             **base_config,
             "filters": self.filters,
         }
+
+    @classmethod
+    def from_config(cls, config):
+        return cls(**config)

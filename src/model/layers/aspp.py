@@ -12,6 +12,7 @@ from tensorflow.keras.layers import (
 from tensorflow.keras.models import Sequential
 
 
+@tf.keras.utils.register_keras_serializable()
 class ASPP(tf.keras.layers.Layer):
     """
     Description of ASPP.

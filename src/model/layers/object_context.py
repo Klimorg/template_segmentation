@@ -13,6 +13,7 @@ from tensorflow.keras.layers import (
 from tensorflow.keras.models import Sequential
 
 
+@tf.keras.utils.register_keras_serializable()
 class SelfAttention2D(tf.keras.layers.Layer):
     """
     Description of SelfAttention2D
@@ -138,6 +139,7 @@ class SelfAttention2D(tf.keras.layers.Layer):
         return config
 
 
+@tf.keras.utils.register_keras_serializable()
 class ISA2D(tf.keras.layers.Layer):
     """
     Description of ISA2D
@@ -193,6 +195,7 @@ class ISA2D(tf.keras.layers.Layer):
         return config
 
 
+@tf.keras.utils.register_keras_serializable()
 class BaseOC(tf.keras.layers.Layer):
     """
     Description of Base_OC_Module
@@ -251,6 +254,7 @@ class BaseOC(tf.keras.layers.Layer):
         return config
 
 
+@tf.keras.utils.register_keras_serializable()
 class ASPP_OC(tf.keras.layers.Layer):
     """
     Description of ASPP_OC

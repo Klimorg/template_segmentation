@@ -3,6 +3,7 @@ import tensorflow as tf
 # https://keras.io/examples/vision/gradient_centralization/
 
 
+@tf.keras.utils.register_keras_serializable()
 class GCRMSprop(tf.keras.optimizers.RMSprop):
     def get_gradients(self, loss, params):
         # We here just provide a modified get_gradients() function since we are

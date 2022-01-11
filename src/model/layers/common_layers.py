@@ -1,9 +1,12 @@
+from typing import Any, Dict, List
+
 import tensorflow as tf
 import tensorflow_addons as tfa
 from tensorflow.keras.layers import (
     Add,
     BatchNormalization,
     Conv2D,
+    DepthwiseConv2D,
     ReLU,
     SeparableConv2D,
 )
@@ -26,7 +29,7 @@ def conv_gn_relu(
         tensor (tf.Tensor): Input feature map of the module, size = $(H,W,C)$.
         filters (int): Number of filters used in the `Conv2D` layer.
         kernel_size (int): Size of the convolution kernels used in the `Conv2D` layer.
-        padding (str, optional): Padding parameter of the `Conv2D` layer.. Defaults to "same".
+        padding (str, optional): Padding parameter of the `Conv2D` layer. Defaults to "same".
         strides (int, optional): Strides parameter of the `Conv2D` layer. Defaults to 1.
         dilation_rate (int, optional): Dilation rate of the `Conv2D` layer. Defaults to 1.
         w_init (str, optional): Kernel initialization method used in th `Conv2D` layer. Defaults to "he_normal".
@@ -257,3 +260,100 @@ def sepconv_bn_relu(
     fmap = BatchNormalization()(fmap)
 
     return ReLU()(fmap)
+
+
+# @tf.keras.utils.register_keras_serializable()
+class InvertedResidualBottleneck2D(tf.keras.layers.Layer):
+    def __init__(
+        self,
+        expansion_rate: int,
+        filters: int,
+        strides: int,
+        skip_connection: bool,
+        l2_regul: float = 1e-4,
+        *args,
+        **kwargs,
+    ) -> None:
+
+        super().__init__(*args, **kwargs)
+        self.expansion_rate = expansion_rate
+        self.filters = filters
+        self.strides = strides
+        self.skip_connection = skip_connection
+        self.l2_regul = l2_regul
+
+        if self.strides == 2:
+            assert (
+                self.skip_connection == False
+            ), "You can't apply skip connections with strides greater than 1."
+
+    def build(self, input_shape) -> None:
+
+        # *_, channels = input_shape
+
+        self.conv1 = Conv2D(
+            filters=self.expansion_rate * self.filters,
+            kernel_size=1,
+            strides=1,
+            padding="same",
+            kernel_initializer="he_normal",
+            use_bias=False,
+        )
+        self.conv2 = Conv2D(
+            filters=self.filters,
+            kernel_size=1,
+            strides=1,
+            padding="same",
+            kernel_initializer="he_normal",
+            use_bias=False,
+        )
+
+        self.act = ReLU(max_value=6)
+
+        self.bn1 = BatchNormalization()
+        self.bn2 = BatchNormalization()
+        self.bn3 = BatchNormalization()
+
+        self.dwconv = DepthwiseConv2D(
+            kernel_size=3,
+            strides=self.strides,
+            padding="same",
+            depth_multiplier=1,
+            depthwise_initializer="he_normal",
+            use_bias=False,
+        )
+
+    def call(self, inputs, training=None) -> tf.Tensor:
+
+        fmap = self.conv1(inputs)
+        fmap = self.bn1(fmap)
+        fmap = self.act(fmap)
+
+        fmap = self.dwconv(fmap)
+        fmap = self.bn2(fmap)
+        fmap = self.act(fmap)
+
+        fmap = self.conv2(fmap)
+        fmap = self.bn3(fmap)
+
+        if self.skip_connection:
+            fmap += inputs
+
+        return fmap
+
+    def get_config(self) -> Dict[str, Any]:
+        config = super().get_config()
+        config.update(
+            {
+                "expansion_rate": self.expansion_rate,
+                "filters": self.filters,
+                "strides": self.strides,
+                "skip_connection": self.skip_connection,
+                "l2_regul": self.l2_regul,
+            },
+        )
+        return config
+
+    @classmethod
+    def from_config(cls, config):
+        return cls(**config)

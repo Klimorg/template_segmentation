@@ -6,6 +6,7 @@ from tensorflow.keras.layers import Concatenate, Conv2D, ReLU, UpSampling2D
 from tensorflow.keras.models import Sequential
 
 
+# @tf.keras.utils.register_keras_serializable()
 class FeaturePyramidNetwork(tf.keras.layers.Layer):
     """
     Description of FeaturePyramidNetwork
@@ -129,7 +130,12 @@ class FeaturePyramidNetwork(tf.keras.layers.Layer):
         )
         return config
 
+    @classmethod
+    def from_config(cls, config):
+        return cls(**config)
 
+
+# @tf.keras.utils.register_keras_serializable()
 class SemanticHeadFPN(tf.keras.layers.Layer):
     """
     Description of SemanticHeadFPN
@@ -331,3 +337,7 @@ class SemanticHeadFPN(tf.keras.layers.Layer):
             },
         )
         return config
+
+    @classmethod
+    def from_config(cls, config):
+        return cls(**config)

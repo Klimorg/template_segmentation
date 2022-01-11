@@ -13,6 +13,7 @@ from tensorflow.keras.layers import (
 from tensorflow.keras.models import Sequential
 
 
+@tf.keras.utils.register_keras_serializable()
 class JointPyramidUpsampling(tf.keras.layers.Layer):
     """
     Description of JointPyramidUpsampling

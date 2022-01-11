@@ -1,0 +1,8 @@
+_target_: model.backbone.mobilevit.get_backbone
+img_shape: ${datasets.params.img_shape}
+expansion_rate: [4, 2]
+filters: [16,16, 48, 48, 48, 64, 64, 80, 80, 96, 96, 384]
+emb_dim: [96, 120, 144]
+repetitions: [2, 4, 3]
+num_heads: 2
+backbone_name: MobileViT-XS

@@ -8,7 +8,7 @@ from tensorflow.keras.models import Model
 from src.model.layers.common_layers import bn_relu_conv, residual_bottleneck
 
 
-def get_dilated_resnet(
+def get_feature_extractor(
     img_shape: List[int],
     architecture: str,
     block_repetitions: List[int],
@@ -155,7 +155,7 @@ def get_backbone(
         A `tf.keras` model.
     """
 
-    backbone = get_dilated_resnet(
+    backbone = get_feature_extractor(
         img_shape=img_shape,
         architecture=architecture,
         block_repetitions=block_repetitions,
