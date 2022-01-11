@@ -20,6 +20,14 @@ class PolygonError(LabelizationError):
     """
 
 
+class EmptyLabelizationFilesError(LabelizationError):
+    """[summary]
+
+    Args:
+        LabelizationError ([type]): [description]
+    """
+
+
 def validate_polygons(
     X_coordinates: PolygonVertices,
     Y_coordinates: PolygonVertices,
@@ -42,3 +50,11 @@ def validate_polygons(
 
     elif len(Y_coordinates) - len(labels) != 0:
         raise LabelizationError(len(X_coordinates), len(Y_coordinates))
+
+
+def validate_non_empty_vgg_files(item_list):
+
+    if item_list:
+        pass
+    else:
+        raise EmptyLabelizationFilesError(item_list)

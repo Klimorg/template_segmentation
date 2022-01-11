@@ -8,12 +8,14 @@ from loguru import logger
 from omegaconf import OmegaConf
 from PIL import Image, ImageDraw
 
-from errors.labelization_errors import (
+from src.errors.img_errors import ImageMaskMismatchError, validate_images_masks
+from src.errors.labelization_errors import (
+    EmptyLabelizationFilesError,
     LabelizationError,
     PolygonError,
+    validate_non_empty_vgg_files,
     validate_polygons,
 )
-from src.errors.img_errors import ImageMaskMismatchError, validate_images_masks
 from src.utils.utils import get_items_list
 
 JsonDict = Dict[str, Any]
@@ -191,7 +193,6 @@ class SegmentationMasks(object):
 
         Args:
             json_file ([type]): Json file containing segmentation masks information in VGG format.
-            save (bool, optional): Determine if you want to save in `.png` format the generated mask. Defaults to True.
         """
         masks = []
 
@@ -232,7 +233,10 @@ class SegmentationMasks(object):
 
             masks.append(segmentation_mask)
 
-        assert len(image_names_list) == len(masks)
+        try:
+            validate_images_masks(images=image_names_list, masks=masks)
+        except ImageMaskMismatchError as err:
+            logger.warning(f"The number of images and labels aren't the same : {err}")
 
     def crop(self, image_path: Path, mask_path: Path, stride: int, overlap: int):
         """Given a image and a segmentation mask, generate tiles from them by cropping.
@@ -283,6 +287,7 @@ class SegmentationMasks(object):
 
                 image.crop(box).save(image_out)
                 mask.crop(box).save(mask_out)
+
             logger.info(f"Done for {image_name}, {mask_name} with start at {mult}.")
 
     def tile(
@@ -304,11 +309,14 @@ class SegmentationMasks(object):
             extension=".png",
         )
 
-        assert len(images_paths) == len(masks_paths)
-
-        logger.info("Looping through images and masks for cropping.")
-        for image_path, mask_path in zip(images_paths, masks_paths):
-            self.crop(image_path, mask_path, stride, overlap)
+        try:
+            validate_images_masks(images=images_paths, masks=masks_paths)
+        except ImageMaskMismatchError as err:
+            logger.error(f"The number of images and labels aren't the same : {err}")
+        else:
+            logger.info("Looping through images and masks for cropping.")
+            for image_path, mask_path in zip(images_paths, masks_paths):
+                self.crop(image_path, mask_path, stride, overlap)
 
     def generate_masks(self):
         """Main function, list all json files in VGG format containig segmentation informations and generates masks.
@@ -323,12 +331,19 @@ class SegmentationMasks(object):
             extension=".json",
         )
 
-        logger.info(f"Found {len(json_files)} json files.")
+        try:
+            validate_non_empty_vgg_files(item_list=json_files)
+        except EmptyLabelizationFilesError as img_err:
+            logger.error(
+                f"There are no vgg files found, are you sure of your extension ? : {img_err}",
+            )
+        else:
+            logger.info(f"Found {len(json_files)} json files.")
 
-        for json_file in json_files:
-            self.get_masks_from_json(json_file=json_file)
+            for json_file in json_files:
+                self.get_masks_from_json(json_file=json_file)
 
-        self.tile()
+            self.tile()
 
 
 if __name__ == "__main__":
