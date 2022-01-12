@@ -15,7 +15,12 @@
     "workbench.colorCustomizations": {
       "editorRuler.foreground": "#750917"
     },
-    "terminal.integrated.shell.linux": "/bin/bash"
+    "terminal.integrated.profiles.linux": {
+      "bash (container default)": {
+        "path": "/bin/bash",
+        "overrideName": true
+      }
+    }
   },
   // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
@@ -40,14 +45,14 @@
   //Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [5000, 8001, 6006],
   //The path of the workspace folder inside the container.
-  "workspaceFolder": "${localEnv:HOME}/${localEnv:USERPROFILE}/template_segmentation",
+  "workspaceFolder": "${localEnv:HOME}${localEnv:USERPROFILE}/template_segmentation",
   // Uncomment the next line to run commands after the container is created - for example installing curl.
-  "postCreateCommand": "make install",
+  "postCreateCommand": "make install-dev",
   // Uncomment when using a ptrace-based debugger like C++, Go, and Rust
   "runArgs": ["-it", "--rm", "-P", "--runtime=nvidia"],
   // Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
   "mounts": [
-    "type=bind,source=${localWorkspaceFolder},target=${localEnv:HOME}/${localEnv:USERPROFILE}template_segmentation"
+    "type=bind,source=${localWorkspaceFolder},target=${localEnv:HOME}${localEnv:USERPROFILE}/template_segmentation"
   ]
   // Uncomment to connect as a non-root user if you've added one. See https://aka.ms/vscode-remote/containers/non-root.
   //"remoteUser": "vorph"

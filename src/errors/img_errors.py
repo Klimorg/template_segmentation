@@ -1,3 +1,7 @@
+from pathlib import Path
+from typing import List
+
+
 class ImageError(ValueError):
     """[summary]
 
@@ -54,13 +58,30 @@ class EmptyMaskDatasetError(ImageError):
     """
 
 
-def validate_images_masks(images, masks):
+def validate_images_masks(images: List[Path], masks: List[Path]) -> None:
+    """[summary]
+
+    Args:
+        images ([type]): [description]
+        masks ([type]): [description]
+
+    Raises:
+        ImageMaskMismatchError: [description]
+    """
 
     if len(images) - len(masks) != 0:
         raise ImageMaskMismatchError(len(images), len(masks))
 
 
 def validate_non_empty_img_list(item_list):
+    """[summary]
+
+    Args:
+        item_list ([type]): [description]
+
+    Raises:
+        EmptyImageDatasetError: [description]
+    """
 
     if item_list:
         pass
@@ -69,6 +90,14 @@ def validate_non_empty_img_list(item_list):
 
 
 def validate_non_empty_mask_list(item_list):
+    """[summary]
+
+    Args:
+        item_list ([type]): [description]
+
+    Raises:
+        EmptyMaskDatasetError: [description]
+    """
 
     if item_list:
         pass

@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any, Dict, List
 
 JsonDict = Dict[str, Any]
@@ -9,6 +10,11 @@ class LabelizationError(ValueError):
 
     Args:
         ValueError ([type]): [description]
+
+    Raises:
+        PolygonError: [description]
+        LabelizationError: [description]
+        EmptyLabelizationFilesError: [description]
     """
 
 
@@ -25,6 +31,35 @@ class EmptyLabelizationFilesError(LabelizationError):
 
     Args:
         LabelizationError ([type]): [description]
+    """
+
+
+class StructureError(ValueError):
+    """[summary]
+
+    Args:
+        ValueError ([type]): [description]
+
+    Raises:
+        PolygonError: [description]
+        LabelizationError: [description]
+        EmptyLabelizationFilesError: [description]
+    """
+
+
+class VGGStructureError(StructureError):
+    """[summary]
+
+    Args:
+        StructureError ([type]): [description]
+    """
+
+
+class COCOStructureError(StructureError):
+    """[summary]
+
+    Args:
+        StructureError ([type]): [description]
     """
 
 
@@ -52,7 +87,7 @@ def validate_polygons(
         raise LabelizationError(len(X_coordinates), len(Y_coordinates))
 
 
-def validate_non_empty_vgg_files(item_list):
+def validate_non_empty_vgg_files(item_list: List[Path]):
 
     if item_list:
         pass

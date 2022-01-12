@@ -16,6 +16,7 @@ help:
 	@echo "run_prod              : run the docker container in "production mode" to train inside it."
 	@echo "monitoring            : launch monitoring ui for monitoring training experiments."
 	@echo "docs                  : serve generated documentation from mkdocs."
+	@echo "tests                 : run unit tests."
 	@echo "mypy                  : run mypy in the src folder for type hinting checking."
 	@echo "cc_report             : run radon in the src folder for code complexity report."
 	@echo "raw_report            : run radon in the src folder for raw report."
@@ -138,6 +139,11 @@ monitoring:
 .PHONY: docs
 docs:
 	mkdocs serve
+
+# Tests
+.PHONY: tests
+tests:
+	python -m pytest -v --cov
 
 # Reporting
 .PHONY: mypy
