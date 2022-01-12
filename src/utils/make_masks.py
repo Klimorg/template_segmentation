@@ -1,7 +1,7 @@
 import json
 from itertools import product
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 from loguru import logger
@@ -48,7 +48,7 @@ class SegmentationMasks(object):
         self,
         image_name: str,
         coordinates_and_labels: JsonDict,
-    ) -> Tuple[List[PolygonVertices], List[PolygonVertices], List[str]]:
+    ) -> Optional[Tuple[List[PolygonVertices], List[PolygonVertices], List[str]]]:
         """Return the coordinates of polygons vertices and corresponding labels.
 
         Given an `image_name`, parse the `segmentation_datas` contained in the VGG json file `all_coordinates_and_labels`

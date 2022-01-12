@@ -24,7 +24,7 @@ with open(Path(BASE_DIR, "requirements-doc.txt"), "r") as req_doc:
 
 setup(
     name="Template AI",
-    version="1.0",
+    version="1.1",
     license="",
     description="installation du projet",
     author="MKL",
