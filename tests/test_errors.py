@@ -94,18 +94,18 @@ def test_validate_non_empty_mask_list(empty_list):
 def test_validate_polygons_coordinates(X_coordinates, Y_coordinates_errors, labels):
     with pytest.raises(PolygonError):
         validate_polygons(
-            X_coordinates=X_coordinates,
-            Y_coordinates=Y_coordinates_errors,
-            labels=labels,
+            X_coordinates,
+            Y_coordinates_errors,
+            labels,
         )
 
 
 def test_validate_polygons_labels(X_coordinates, Y_coordinates, labels_errors):
     with pytest.raises(LabelizationError):
         validate_polygons(
-            X_coordinates=X_coordinates,
-            Y_coordinates=Y_coordinates,
-            labels=labels_errors,
+            X_coordinates,
+            Y_coordinates,
+            labels_errors,
         )
 
 
