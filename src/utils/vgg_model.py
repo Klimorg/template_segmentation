@@ -3,22 +3,30 @@ from typing import Any, Dict, List, Optional
 from pydantic import BaseModel
 
 
-class VggShapeAttributesSection(BaseModel):
+class VggDataset(BaseModel):
+    """[summary]
+
+    Args:
+        BaseModel ([type]): [description]
+    """
+
+
+class VggShapeAttributesSection(VggDataset):
     name: str
     all_points_x: List[float]
     all_points_y: List[float]
 
 
-class VggRegionAttributesSection(BaseModel):
+class VggRegionAttributesSection(VggDataset):
     label: str
 
 
-class VggRegionsSection(BaseModel):
+class VggRegionsSection(VggDataset):
     shape_attributes: VggShapeAttributesSection
     region_attributes: VggRegionAttributesSection
 
 
-class VggDataset(BaseModel):
+class VggAnnotations(VggDataset):
     fileref: str = ""
     size: int
     filename: str

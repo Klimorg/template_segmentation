@@ -41,7 +41,7 @@ class CocoSegmentInfoSection(CocoDataset):
     pass
 
 
-class COCOAnnotations(CocoDataset):
+class CocoAnnotations(CocoDataset):
     info: CocoInfoSection
     licenses: Optional[CocoLicencesSection]
     images: List[CocoImagesSection]
