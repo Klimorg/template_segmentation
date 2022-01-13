@@ -4,7 +4,14 @@ from pydantic import BaseModel
 
 
 class CocoDataset(BaseModel):
-    pass
+    """[summary]
+
+    Args:
+        BaseModel ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
 
 
 class CocoInfoSection(CocoDataset):
@@ -17,8 +24,8 @@ class CocoLicencesSection(CocoDataset):
 
 class CocoImagesSection(CocoDataset):
     id: int
-    width: int
-    height: int
+    width: Optional[int]
+    height: Optional[int]
     file_name: str
 
 

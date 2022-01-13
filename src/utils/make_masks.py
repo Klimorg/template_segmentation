@@ -15,8 +15,8 @@ from src.errors.labelization_errors import (
     validate_non_empty_vgg_files,
     validate_polygons,
 )
+from src.utils.data_models import VggAnnotations
 from src.utils.utils import get_items_list
-from src.utils.vgg_model import VggAnnotations
 
 PolygonVertices = List[float]
 
