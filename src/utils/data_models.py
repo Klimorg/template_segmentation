@@ -31,12 +31,12 @@ class CocoImagesSection(CocoDataset):
 
 class CocoAnnotationsSection(CocoDataset):
     id: int
-    iscrowd: Optional[int]
+    iscrowd: Optional[int] = 0
     image_id: int
     category_id: int
     segmentation: List[List[float]]
-    bbox: List[float]
-    area: Optional[float]
+    bbox: Optional[List[float]] = 0
+    area: Optional[float] = 0
 
 
 class CocoCategoriesSection(CocoDataset):
