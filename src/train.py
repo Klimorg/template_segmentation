@@ -14,7 +14,7 @@ from utils.utils import set_log_infos, set_seed
 
 @logger.catch()
 @hydra.main(config_path="../configs/", config_name="params.yaml")
-def train(config: DictConfig) -> tf.keras.Model:
+def train(config: DictConfig):
     """Training loop.
 
     When you wrok with Hydra, all the logic of the funtion has to be contained in
@@ -50,7 +50,7 @@ def train(config: DictConfig) -> tf.keras.Model:
     Returns:
         A trained tf.keras model.
     """
-    _, repo_path = set_log_infos(config)
+    repo_path = set_log_infos(config)
 
     run = Run(
         experiment=config.monitoring.run_name,

@@ -1,7 +1,7 @@
 import os
 import random
 from pathlib import Path
-from typing import Any, Dict, List, Tuple, Union
+from typing import List
 
 import numpy as np
 import tensorflow as tf
@@ -9,94 +9,6 @@ from loguru import logger
 from omegaconf import DictConfig, OmegaConf
 
 import hydra
-
-
-# https://github.com/Erlemar/pytorch_tempest/blob/master/src/utils/technical_utils.py
-def config_to_hydra_dict(cfg: DictConfig) -> Dict[str, str]:
-    """
-    Convert config into dict with lists of values.
-
-    Key is full name of parameter this function
-    is used to get key names which can be used in hydra.
-
-    Args:
-        cfg (DictConfig) : Hydra config file.
-
-    Returns:
-        converted dict
-    """
-    experiment_dict = {}
-    for key, attributed_value in cfg.items():
-        for sub_key, sub_value in attributed_value.items():
-            experiment_dict[f"{key}.{sub_key}"] = sub_value
-
-    return experiment_dict
-
-
-# https://github.com/Erlemar/pytorch_tempest/blob/master/src/utils/technical_utils.py
-def flatten_omegaconf(cfg: Any) -> Dict[Any, Any]:
-    """Recursively flatten a nested Dict into a simple one.
-
-    The difference between this function and `recurse` is that the dictionnary produced
-    by this one doesn't have the hydra variables "$" anymore, and that the keys are
-    alphabetically sorted.
-
-    Used to store the parameters of the experiment in MLFlow.
-
-    Args:
-        cfg (Any): Hydra config files.
-
-    Returns:
-        The flattened dictionnary with all the parameters of the experiment.
-    """
-    cfg = OmegaConf.to_container(cfg)
-
-    flattened_dict = {}
-
-    def recurse(
-        datas: Union[List[Any], Dict[str, str], str, None],
-        parent_key="",
-        sep: str = "_",
-    ):
-        """Recursively flatten a nested Dict into a simple one.
-
-        Only used in `flatten_omegaconf`.
-
-        Args:
-            datas (Union[List, Dict]): Parts of the nested dictionnary to flatten.
-            parent_key (str, optional): Parent key in a nested dictionnary, if
-                necessary. Defaults to "".
-            sep (str): Separator used between keys. Defaults to "_".
-        """
-        if isinstance(datas, list):
-            for idx, _ in enumerate(datas):
-                recurse(
-                    datas[idx],
-                    parent_key + sep + str(idx) if parent_key else str(idx),
-                )
-        elif isinstance(datas, dict):
-            for key, attributed_value in datas.items():
-                recurse(attributed_value, parent_key + sep + key if parent_key else key)
-        else:
-            flattened_dict[parent_key] = datas
-
-    recurse(cfg)
-
-    obj_txt = {
-        key: attributed_value
-        for key, attributed_value in flattened_dict.items()
-        if isinstance(attributed_value, str) and not attributed_value.startswith("$")
-    }
-    obj_num = {
-        key: attributed_num
-        for key, attributed_num in flattened_dict.items()
-        if isinstance(attributed_num, (int, float))  # type: ignore
-    }
-
-    obj_txt.update(obj_num)
-
-    res = dict(sorted(obj_txt.items()))
-    return {key: attributed_value for key, attributed_value in res.items()}
 
 
 def set_seed(random_seed: int) -> None:
@@ -115,31 +27,28 @@ def set_seed(random_seed: int) -> None:
     os.environ["TF_DISABLE_SEGMENT_REDUCTION_OP_DETERMINISM_EXCEPTIONS"] = "1"
 
 
-def set_log_infos(cfg: DictConfig) -> Tuple[Dict[str, str], str]:
+def set_log_infos(cfg: DictConfig) -> str:
     """[summary].
 
     Args:
         cfg (DictConfig): [description]
 
     Returns:
-        Tuple[Dict, str]: [description]
+        str: [description]
     """
     timestamp = cfg.log.timestamp
-    ml_config = OmegaConf.to_yaml(cfg)
+    ml_config = OmegaConf.to_container(cfg, resolve=True)
 
     logger.add(f"logs_train_{timestamp}.log")
     logger.info(f"Training started at {timestamp}")
-    logger.info(f"{ml_config}")
+    logger.info(f"Experiment configuration: {ml_config}")
 
-    conf_dict = config_to_hydra_dict(cfg)
-    repo_path = hydra.utils.get_original_cwd()
-
-    return conf_dict, repo_path
+    return hydra.utils.get_original_cwd()
 
 
 def get_items_list(directory: str, extension: str) -> List[Path]:
     return sorted(
-        Path(item).absolute()
-        for item in Path(directory).glob(f"**/*{extension}")
-        if item.is_file()
+        Path(file).absolute()
+        for file in Path(directory).glob(f"**/*{extension}")
+        if file.is_file()
     )
