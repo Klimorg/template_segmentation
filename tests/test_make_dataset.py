@@ -3,7 +3,7 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from src.make_dataset import create_train_val_test_datasets
+from utils.make_datasets import create_train_val_test_datasets
 
 
 @pytest.fixture

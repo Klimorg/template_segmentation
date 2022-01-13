@@ -16,7 +16,7 @@ class CocoLicencesSection(CocoDataset):
 
 
 class CocoImagesSection(CocoDataset):
-    idx: int
+    id: int
     width: int
     height: int
     file_name: str
@@ -47,4 +47,4 @@ class CocoAnnotations(CocoDataset):
     images: List[CocoImagesSection]
     annotations: List[CocoAnnotationsSection]
     categories: List[CocoCategoriesSection]
-    segment_info: List[CocoSegmentInfoSection]
+    segment_info: Optional[List[CocoSegmentInfoSection]]

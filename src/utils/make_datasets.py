@@ -101,6 +101,13 @@ def create_train_val_test_datasets(
         random_state=reproducibility_params.prepare.seed,
     )
 
+    images_train = [Path(image) for image in images_train]
+    labels_train = [Path(label) for label in labels_train]
+    images_val = [Path(image) for image in images_val]
+    labels_val = [Path(label) for label in labels_val]
+    images_test = [Path(image) for image in images_test]
+    labels_test = [Path(label) for label in labels_test]
+
     return (
         images_train,
         labels_train,
@@ -128,6 +135,7 @@ def generate_datasets() -> None:
         logger.error(
             f"There are no images in this list, are you sure of your extension ? : {img_err}",
         )
+        raise
 
     try:
         validate_non_empty_mask_list(item_list=masks_paths)
@@ -135,29 +143,31 @@ def generate_datasets() -> None:
         logger.error(
             f"There are no masks in this list, are you sure of your extension ? : {msk_err}",
         )
+        raise
 
     try:
         validate_images_masks(images=images_paths, masks=masks_paths)
     except ImageMaskMismatchError as err:
         logger.error(f"The number of images and labels aren't the same : {err}")
-    else:
-        datasets_components = create_train_val_test_datasets(images_paths, masks_paths)
+        raise
 
-        save_as_csv(
-            datasets_components[0],
-            datasets_components[1],
-            datasets.prepared_dataset.train,
-        )
-        save_as_csv(
-            datasets_components[2],
-            datasets_components[3],
-            datasets.prepared_dataset.val,
-        )
-        save_as_csv(
-            datasets_components[4],
-            datasets_components[5],
-            datasets.prepared_dataset.test,
-        )
+    datasets_components = create_train_val_test_datasets(images_paths, masks_paths)
+
+    save_as_csv(
+        datasets_components[0],
+        datasets_components[1],
+        datasets.prepared_dataset.train,
+    )
+    save_as_csv(
+        datasets_components[2],
+        datasets_components[3],
+        datasets.prepared_dataset.val,
+    )
+    save_as_csv(
+        datasets_components[4],
+        datasets_components[5],
+        datasets.prepared_dataset.test,
+    )
 
 
 if __name__ == "__main__":

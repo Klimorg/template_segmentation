@@ -1,6 +1,7 @@
+import json
 from itertools import product
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 from loguru import logger
@@ -16,8 +17,8 @@ from src.errors.labelization_errors import (
     validate_polygons,
 )
 from src.utils.utils import get_items_list
-from src.utils.vgg_model import VggAnnotations
 
+JsonDict = Dict[str, Any]
 PolygonVertices = List[float]
 
 
@@ -45,9 +46,9 @@ class SegmentationMasks(object):
 
     def get_data(
         self,
-        image: str,
-        dataset,
-    ) -> Tuple[List[PolygonVertices], List[PolygonVertices], List[str]]:
+        image_name: str,
+        coordinates_and_labels: JsonDict,
+    ) -> Optional[Tuple[List[PolygonVertices], List[PolygonVertices], List[str]]]:
         """Return the coordinates of polygons vertices and corresponding labels.
 
         Given an `image_name`, parse the `segmentation_datas` contained in the VGG json file `all_coordinates_and_labels`
@@ -81,19 +82,25 @@ class SegmentationMasks(object):
         Y_coordinates = []
         labels = []  # pre-allocate lists to fill in a for loop
 
-        polygons = list(dataset[image].regions)
+        segmentation_datas = coordinates_and_labels[image_name]
 
-        for polygon in polygons:
+        for polygon in segmentation_datas["regions"]:
             # cycle through each polygon of the given image
             # get the x and y points from the dictionary
             X_coordinates.append(
-                dataset[image].regions[polygon].shape_attributes.all_points_x,
+                segmentation_datas["regions"][polygon]["shape_attributes"][
+                    "all_points_x"
+                ],
             )
             Y_coordinates.append(
-                dataset[image].regions[polygon].shape_attributes.all_points_y,
+                segmentation_datas["regions"][polygon]["shape_attributes"][
+                    "all_points_y"
+                ],
             )
             # get the labels corresponding to the polygons
-            labels.append(dataset[image].regions[polygon].region_attributes.label)
+            labels.append(
+                segmentation_datas["regions"][polygon]["region_attributes"]["label"],
+            )
 
         try:
             validate_polygons(
@@ -105,18 +112,16 @@ class SegmentationMasks(object):
             logger.error(
                 f"There is something wrong in the json file, the numbers of X and Y coordinates don't match: {err1}",
             )
-            raise
         except LabelizationError as err2:
             logger.error(
                 f"There should be one label for each polygon. This is not the case here: {err2}",
             )
-            raise
-
-        return (
-            Y_coordinates,
-            X_coordinates,
-            labels,
-        )  # image coordinates are flipped relative to json coordinates
+        else:
+            return (
+                Y_coordinates,
+                X_coordinates,
+                labels,
+            )  # image coordinates are flipped relative to json coordinates
 
     def get_polygon_masks(
         self,
@@ -191,14 +196,17 @@ class SegmentationMasks(object):
         """
         masks = []
 
-        vgg_dataset = VggAnnotations.parse_file(json_file)
-        images = sorted(vgg_dataset)
+        self.json_file = json_file
 
-        for image in images:
+        with open(self.json_file) as vgg_json:
+            coordinates_and_labels = json.load(vgg_json)
+            image_names_list = sorted(coordinates_and_labels.keys())
+
+        for image_name in image_names_list:
 
             X_coordinates, Y_coordinates, labels = self.get_data(
-                image=image,
-                dataset=vgg_dataset,
+                image_name,
+                coordinates_and_labels,
             )
 
             polygon_masks = self.get_polygon_masks(
@@ -216,7 +224,7 @@ class SegmentationMasks(object):
 
             segmentation_mask = np.max(mask, axis=0)
 
-            image_name_stem = Path(f"{image}").stem
+            image_name_stem = Path(f"{image_name}").stem
             address = Path(self.segmentation_config.raw_datas.masks) / Path(
                 f"{image_name_stem}_mask.png",
             )
@@ -226,7 +234,7 @@ class SegmentationMasks(object):
             masks.append(segmentation_mask)
 
         try:
-            validate_images_masks(images=images, masks=masks)
+            validate_images_masks(images=image_names_list, masks=masks)
         except ImageMaskMismatchError as err:
             logger.warning(f"The number of images and labels aren't the same : {err}")
 
@@ -305,11 +313,10 @@ class SegmentationMasks(object):
             validate_images_masks(images=images_paths, masks=masks_paths)
         except ImageMaskMismatchError as err:
             logger.error(f"The number of images and labels aren't the same : {err}")
-            raise
-
-        logger.info("Looping through images and masks for cropping.")
-        for image_path, mask_path in zip(images_paths, masks_paths):
-            self.crop(image_path, mask_path, stride, overlap)
+        else:
+            logger.info("Looping through images and masks for cropping.")
+            for image_path, mask_path in zip(images_paths, masks_paths):
+                self.crop(image_path, mask_path, stride, overlap)
 
     def generate_masks(self):
         """Main function, list all json files in VGG format containig segmentation informations and generates masks.
@@ -330,14 +337,13 @@ class SegmentationMasks(object):
             logger.error(
                 f"There are no vgg files found, are you sure of your extension ? : {img_err}",
             )
-            raise
+        else:
+            logger.info(f"Found {len(json_files)} json files.")
 
-        logger.info(f"Found {len(json_files)} json files.")
+            for json_file in json_files:
+                self.get_masks_from_json(json_file=json_file)
 
-        for json_file in json_files:
-            self.get_masks_from_json(json_file=json_file)
-
-        self.tile()
+            self.tile()
 
 
 if __name__ == "__main__":

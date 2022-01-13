@@ -25,9 +25,10 @@
   // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
     "ms-python.python",
+    "ms-azuretools.vscode-docker",
+    "ms-toolsai.jupyter-renderers",
     "eamodio.gitlens",
     "esbenp.prettier-vscode",
-    "ms-azuretools.vscode-docker",
     "njpwerner.autodocstring",
     "mechatroner.rainbow-csv",
     "shardulm94.trailing-spaces",

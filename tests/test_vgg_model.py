@@ -2,7 +2,6 @@ import pytest
 
 from src.utils.vgg_model import (
     VggAnnotations,
-    VggDataset,
     VggRegionAttributesSection,
     VggRegionsSection,
     VggShapeAttributesSection,
@@ -1209,3 +1208,56 @@ def test_vgg_annotations(vgg_json_model):
     vgg = VggAnnotations.parse_obj(vgg_json_model)
 
     assert isinstance(vgg, VggAnnotations)
+
+
+def test_root_vgg_annotations(vgg_json_model):
+
+    vgg = VggAnnotations.parse_obj(vgg_json_model)
+
+    assert len(list(vgg)) == 2
+
+
+def test_structure_vgg_annotations(vgg_json_model):
+
+    vgg = VggAnnotations.parse_obj(vgg_json_model)
+
+    imgs = list(vgg)
+
+    for img in imgs:
+
+        assert isinstance(vgg[img], VggStructure)
+
+
+def test_structure_region_vgg_annotations(vgg_json_model):
+
+    vgg = VggAnnotations.parse_obj(vgg_json_model)
+
+    imgs = list(vgg)
+
+    for img in imgs:
+
+        region = list(vgg[img].regions)
+
+        for reg in region:
+            assert isinstance(vgg[img].regions[reg], VggRegionsSection)
+
+
+def test_structure_region_shape_vgg_annotations(vgg_json_model):
+
+    vgg = VggAnnotations.parse_obj(vgg_json_model)
+
+    imgs = list(vgg)
+
+    for img in imgs:
+
+        region = list(vgg[img].regions)
+
+        for reg in region:
+            assert isinstance(
+                vgg[img].regions[reg].shape_attributes,
+                VggShapeAttributesSection,
+            )
+            assert isinstance(
+                vgg[img].regions[reg].region_attributes,
+                VggRegionAttributesSection,
+            )

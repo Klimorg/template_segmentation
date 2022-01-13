@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List
+from typing import List, Union
 
 
 class ImageError(ValueError):
@@ -58,7 +58,10 @@ class EmptyMaskDatasetError(ImageError):
     """
 
 
-def validate_images_masks(images: List[Path], masks: List[Path]) -> None:
+def validate_images_masks(
+    images: Union[List[Path], List[str]],
+    masks: List[Path],
+) -> None:
     """[summary]
 
     Args:

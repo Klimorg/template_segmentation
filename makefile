@@ -3,7 +3,7 @@
 help:
 	@echo "Commands:"
 	@echo "segmentation_masks    : generate the labels, ie segmentation masks, from the VGG json files."
-	@echo "prepared_dataset      : create train, test, & validation datasets from raw datas in raw_dataset directory."
+	@echo "datasets              : create train, test, & validation datasets from raw datas in raw_dataset directory."
 	@echo "train                 : launch training loop for a given set of parameters from configs/params.yaml."
 	@echo "install               : installs project requirements."
 	@echo "install-dev           : installs development requirements."
@@ -31,9 +31,9 @@ help:
 segmentation_masks:
 	python src/utils/make_masks.py
 
-.PHONY: prepared_dataset
-prepared_dataset:
-	python src/utils/make_dataset.py
+.PHONY: datasets
+datasets:
+	python src/utils/make_datasets.py
 
 .PHONY: train
 train:
@@ -118,10 +118,10 @@ run_prod:
 	-p 5000:5000 \
 	-p 6006:6006 \
 	-p 8001:8001 \
-	--mount type=bind,source=$(PWD)/configs/,target=/home/vorph/configs/ \
-	--mount type=bind,source=$(PWD)/datas/,target=/home/vorph/datas/ \
-	--mount type=bind,source=$(PWD)/hydra/,target=/home/vorph/hydra/ \
-	--mount type=bind,source=$(PWD)/mlruns/,target=/home/vorph/mlruns/ \
+	--mount type=bind,source=$(PWD)/configs/,target=/home/$(USERNAME)/configs/ \
+	--mount type=bind,source=$(PWD)/datas/,target=/home/$(USERNAME)/datas/ \
+	--mount type=bind,source=$(PWD)/hydra/,target=/home/$(USERNAME)/hydra/ \
+	--mount type=bind,source=$(PWD)/mlruns/,target=/home/$(USERNAME)/mlruns/ \
 	-e TF_FORCE_GPU_ALLOW_GROWTH=true \
 	-e TF_ENABLE_ONEDNN_OPTS=true \
 	-e XLA_FLAGS='--xla_gpu_autotune_level=2' \

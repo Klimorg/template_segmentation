@@ -47,22 +47,6 @@ class StructureError(ValueError):
     """
 
 
-class VGGStructureError(StructureError):
-    """[summary]
-
-    Args:
-        StructureError ([type]): [description]
-    """
-
-
-class COCOStructureError(StructureError):
-    """[summary]
-
-    Args:
-        StructureError ([type]): [description]
-    """
-
-
 def validate_polygons(
     X_coordinates: PolygonVertices,
     Y_coordinates: PolygonVertices,
