@@ -35,8 +35,8 @@ class CocoAnnotationsSection(CocoDataset):
     image_id: int
     category_id: int
     segmentation: List[List[float]]
-    bbox: Optional[List[float]] = 0
-    area: Optional[float] = 0
+    bbox: Optional[List[float]] = None
+    area: Optional[float] = None
 
 
 class CocoCategoriesSection(CocoDataset):
@@ -50,11 +50,11 @@ class CocoSegmentInfoSection(CocoDataset):
 
 class CocoAnnotations(CocoDataset):
     info: CocoInfoSection
-    licenses: Optional[CocoLicencesSection]
+    licenses: Optional[CocoLicencesSection] = None
     images: List[CocoImagesSection]
     annotations: List[CocoAnnotationsSection]
     categories: List[CocoCategoriesSection]
-    segment_info: Optional[List[CocoSegmentInfoSection]]
+    segment_info: Optional[List[CocoSegmentInfoSection]] = None
 
 
 class VggDataset(BaseModel):

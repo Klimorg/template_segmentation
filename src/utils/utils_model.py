@@ -1,3 +1,7 @@
+import json
+
+import arrow
+import orjson
 from loguru import logger
 
 from src.utils.data_models import (
@@ -33,7 +37,6 @@ def vgg2coco(vgg_json_model_path, coco_json_model_path):
         categories_section.append(
             CocoCategoriesSection(id=idx + 1, name=categories[idx]),
         )
-    logger.info(f"{categories_section}")
 
     logger.info("Creating Coco images section.")
     logger.info("Creating Coco annotations section.")
@@ -45,7 +48,6 @@ def vgg2coco(vgg_json_model_path, coco_json_model_path):
     id_annotation = 0
 
     for img in images:
-        # for idx in range(len(images)):
         images_section.append(
             CocoImagesSection(
                 id=id_img + 1,
@@ -55,14 +57,22 @@ def vgg2coco(vgg_json_model_path, coco_json_model_path):
             ),
         )
 
-        regions = list(vgg_dataset[img].regions)
-        for region in regions:
+        all_regions = list(vgg_dataset[img].regions)
+        for region in all_regions:
 
             all_x = vgg_dataset[img].regions[region].shape_attributes.all_points_x[:-1]
             all_y = vgg_dataset[img].regions[region].shape_attributes.all_points_y[:-1]
 
             # https://stackoverflow.com/a/6356099
             annotations = [item for pair in zip(all_x, all_y) for item in pair]
+
+            max_x, min_x = max(all_x), min(all_x)
+            max_y, min_y = max(all_y), min(all_y)
+
+            width = max_x - min_x
+            height = max_y - min_y
+            bbox = [min_x, min_y, width, height]
+            area = width * height
 
             label = vgg_dataset[img].regions[region].region_attributes.label
 
@@ -75,13 +85,25 @@ def vgg2coco(vgg_json_model_path, coco_json_model_path):
                     image_id=id_img + 1,
                     category_id=int(category_id[0]),
                     segmentation=[annotations],
+                    bbox=bbox,
+                    area=area,
                 ),
             )
             id_annotation += 1
         id_img += 1
 
-    logger.info(f"{images_section}")
-    logger.info(f"{annotations_section}")
+    coco_dataset = CocoAnnotations(
+        info=info,
+        images=images_section,
+        annotations=annotations_section,
+        categories=categories_section,
+    )
+
+    path = f"report_{arrow.now()}.json"
+
+    logger.info("Conversion done, now dumping.")
+    with open(path, "w") as outfile:
+        json.dump(orjson.loads(coco_dataset.json()), outfile)
 
 
 def coco2vgg():
