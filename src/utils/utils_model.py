@@ -24,7 +24,11 @@ app = typer.Typer()
 
 
 @app.command()
-def vgg2coco(vgg_json_model_path: str, coco_json_model_path: str) -> None:
+def vgg2coco(
+    vgg_json_model_path: Path,
+    coco_json_model_path: Path,
+    timestamp: bool = False,
+) -> None:
 
     vgg_dataset = VggAnnotations.parse_file(vgg_json_model_path)
     images = sorted(vgg_dataset)
@@ -109,7 +113,10 @@ def vgg2coco(vgg_json_model_path: str, coco_json_model_path: str) -> None:
         categories=categories_section,
     )
 
-    path = f"{coco_json_model_path}_{arrow.now()}.json"
+    if timestamp:
+        path = f"{coco_json_model_path}_{arrow.now()}.json"
+    else:
+        path = f"{coco_json_model_path}.json"
 
     logger.info("Conversion done, now dumping.")
     with open(path, "w") as outfile:
@@ -117,7 +124,11 @@ def vgg2coco(vgg_json_model_path: str, coco_json_model_path: str) -> None:
 
 
 @app.command()
-def coco2vgg(coco_json_model_path: Path, vgg_json_model_path: str = "test"):
+def coco2vgg(
+    coco_json_model_path: Path,
+    vgg_json_model_path: Path,
+    timestamp: bool = False,
+) -> None:
 
     coco_dataset = CocoAnnotations.parse_file(coco_json_model_path)
 
@@ -186,7 +197,11 @@ def coco2vgg(coco_json_model_path: Path, vgg_json_model_path: str = "test"):
         vgg_annotations[image_name] = vgg_structure
 
     vgg_dataset = VggAnnotations.parse_obj(vgg_annotations)
-    path = f"{vgg_json_model_path}_{arrow.now()}.json"
+
+    if timestamp:
+        path = f"{vgg_json_model_path}_{arrow.now()}.json"
+    else:
+        path = f"{vgg_json_model_path}.json"
 
     logger.info("Conversion done, now dumping.")
     with open(path, "w") as outfile:
@@ -194,14 +209,4 @@ def coco2vgg(coco_json_model_path: Path, vgg_json_model_path: str = "test"):
 
 
 if __name__ == "__main__":
-    # app()
-    from src.utils.utils import get_items_list
-
-    json_files = get_items_list(
-        directory="tests/test_datas/",
-        extension=".json",
-    )
-
-    logger.info(f"{json_files}")
-
-    coco2vgg(json_files[0], "vgg")
+    app()
