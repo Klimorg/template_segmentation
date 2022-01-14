@@ -1,4 +1,4 @@
-_target_: model.backbone.mit.get_backbone
+_target_: models.backbone.mit.get_backbone
 img_shape: ${datasets.params.img_shape}
 patch_size: [7, 3, 3, 3]  # K
 strides: [4, 2, 2, 2]  # S

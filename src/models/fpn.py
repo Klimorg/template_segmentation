@@ -2,7 +2,7 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.layers import Activation, Conv2D, UpSampling2D
 
-from src.model.layers.feature_pyramids import FeaturePyramidNetwork, SemanticHeadFPN
+from src.models.layers.feature_pyramids import FeaturePyramidNetwork, SemanticHeadFPN
 
 
 def get_segmentation_module(

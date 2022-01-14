@@ -1,3 +1,3 @@
-_target_: model.backbone.ghostnet.get_backbone
+_target_: models.backbone.ghostnet.get_backbone
 img_shape: ${datasets.params.img_shape}
 backbone_name: GhostNet

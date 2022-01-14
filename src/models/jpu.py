@@ -3,9 +3,9 @@ from typing import List, Union
 import tensorflow as tf
 from tensorflow.keras.layers import Concatenate, Conv2D, UpSampling2D
 
-from src.model.layers.aspp import ASPP
-from src.model.layers.common_layers import conv_gn_relu
-from src.model.layers.joint_pyramid_upsampling import JointPyramidUpsampling
+from src.models.layers.aspp import ASPP
+from src.models.layers.common_layers import conv_gn_relu
+from src.models.layers.joint_pyramid_upsampling import JointPyramidUpsampling
 
 
 def upsampling(

@@ -1,0 +1,3 @@
+filename,mask
+tests/test_datas/44e7dfd7_384_384.jpg,tests/test_datas/44e7dfd7_mask_384_384.png
+tests/test_datas/cs1_2907_640_128.jpg,tests/test_datas/cs1_2907_mask_640_128.png

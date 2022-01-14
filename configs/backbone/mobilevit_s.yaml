@@ -1,4 +1,4 @@
-_target_: model.backbone.mobilevit.get_backbone
+_target_: models.backbone.mobilevit.get_backbone
 img_shape: ${datasets.params.img_shape}
 expansion_rate: [4, 2]
 filters: [16, 16, 64, 64, 64, 96, 96, 128, 128, 160, 160, 640]

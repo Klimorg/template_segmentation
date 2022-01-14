@@ -12,7 +12,7 @@ from tensorflow.keras.layers import (
     ReLU,
 )
 
-from src.model.layers.common_layers import InvertedResidualBottleneck2D
+from src.models.layers.common_layers import InvertedResidualBottleneck2D
 
 
 def inverted_residual_bottleneck(

@@ -1,4 +1,4 @@
-_target_: model.backbone.vovnet.get_backbone
+_target_: models.backbone.vovnet.get_backbone
 img_shape: ${datasets.params.img_shape}
 filters_conv3x3: [64, 80, 96, 112]
 filters_conv1x1: [128, 256, 384, 512]

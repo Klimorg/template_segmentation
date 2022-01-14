@@ -1,4 +1,4 @@
-_target_: model.ocnet.get_segmentation_module
+_target_: models.ocnet.get_segmentation_module
 n_classes: ${datasets.metadatas.n_classes}
 architecture: aspp_ocnet
 filters: 256

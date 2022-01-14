@@ -5,7 +5,7 @@ from loguru import logger
 from tensorflow.keras import Model
 from tensorflow.keras.layers import Concatenate, Input, MaxPool2D
 
-from src.model.layers.common_layers import conv_bn_relu
+from src.models.layers.common_layers import conv_bn_relu
 
 
 def osa_module(

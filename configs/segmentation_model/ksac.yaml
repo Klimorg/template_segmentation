@@ -1,4 +1,4 @@
-_target_: model.ksac.get_segmentation_module
+_target_: models.ksac.get_segmentation_module
 n_classes: ${datasets.metadatas.n_classes}
 ksac_filters: 256
 decoder_filters: 128

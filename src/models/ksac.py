@@ -1,8 +1,8 @@
 import tensorflow as tf
 from tensorflow.keras.layers import Activation, Concatenate, Conv2D, UpSampling2D
 
-from src.model.layers.common_layers import conv_bn_relu
-from src.model.layers.shared_kernels import KSAConv2D
+from src.models.layers.common_layers import conv_bn_relu
+from src.models.layers.shared_kernels import KSAConv2D
 
 
 def decoder(fmap1, fmap2, filters):

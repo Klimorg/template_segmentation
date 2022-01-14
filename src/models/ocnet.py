@@ -1,8 +1,8 @@
 import tensorflow as tf
 from tensorflow.keras.layers import Activation, Conv2D, UpSampling2D
 
-from src.model.layers.common_layers import conv_bn_relu
-from src.model.layers.object_context import ASPP_OC, BaseOC
+from src.models.layers.common_layers import conv_bn_relu
+from src.models.layers.object_context import ASPP_OC, BaseOC
 
 
 def get_segmentation_module(

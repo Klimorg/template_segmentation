@@ -1,4 +1,4 @@
-_target_: model.backbone.dilated_resnet.get_backbone
+_target_: models.backbone.dilated_resnet.get_backbone
 img_shape: ${datasets.params.img_shape}
 architecture: A
 block_repetitions: [3,4,6,3]

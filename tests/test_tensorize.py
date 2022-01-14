@@ -40,7 +40,7 @@ def test_constructor() -> None:
     2. The dimensions of the images.
     3. The random seed for reproducibility.
     """
-    ts = Tensorize(n_classes=2, img_shape=(224, 224, 3), random_seed=42)
+    ts = Tensorize(n_classes=4, img_shape=(256, 256, 3), random_seed=42)
 
     assert isinstance(ts, Tensorize)
 
@@ -61,9 +61,9 @@ def test_load_images(tensor: Tensorize, df: pd.DataFrame) -> None:
 
     assert isinstance(filenames, list)
 
-    assert len(filenames) == 20
+    assert len(filenames) == 2
 
-    for idx in range(20):
+    for idx in range(2):
         assert isinstance(filenames[idx], str)
 
         image_path = Path(filenames[idx])

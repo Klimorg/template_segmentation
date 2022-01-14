@@ -5,7 +5,7 @@ from loguru import logger
 from tensorflow.keras.layers import Input, MaxPooling2D
 from tensorflow.keras.models import Model
 
-from src.model.layers.common_layers import bn_relu_conv, residual_bottleneck
+from src.models.layers.common_layers import bn_relu_conv, residual_bottleneck
 
 
 def get_feature_extractor(
