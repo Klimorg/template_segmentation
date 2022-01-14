@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 
 from src.utils.data_models import (
@@ -2708,9 +2710,26 @@ def vgg_json_model():
     }
 
 
+@pytest.fixture
+def vgg_json_file():
+    return Path("tests/test_datas/vgg_test.json")
+
+
+@pytest.fixture
+def coco_json_file():
+    return Path("tests/test_datas/coco_test.json")
+
+
 def test_vgg_annotations(vgg_json_model):
 
     vgg = VggAnnotations.parse_obj(vgg_json_model)
+
+    assert isinstance(vgg, VggAnnotations)
+
+
+def test_vgg_annotations_from_file(vgg_json_file):
+
+    vgg = VggAnnotations.parse_file(vgg_json_file)
 
     assert isinstance(vgg, VggAnnotations)
 
@@ -2771,5 +2790,12 @@ def test_structure_region_shape_vgg_annotations(vgg_json_model):
 def test_coco_annotations(coco_json_model):
 
     coco = CocoAnnotations.parse_obj(coco_json_model)
+
+    assert isinstance(coco, CocoAnnotations)
+
+
+def test_coco_annotations_from_file(coco_json_file):
+
+    coco = CocoAnnotations.parse_file(coco_json_file)
 
     assert isinstance(coco, CocoAnnotations)

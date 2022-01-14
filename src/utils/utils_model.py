@@ -1,7 +1,9 @@
 import json
+from pathlib import Path
 
 import arrow
 import orjson
+import typer
 from loguru import logger
 
 from src.utils.data_models import (
@@ -11,10 +13,18 @@ from src.utils.data_models import (
     CocoImagesSection,
     CocoInfoSection,
     VggAnnotations,
+    VggFileAttributes,
+    VggRegionAttributesSection,
+    VggRegionsSection,
+    VggShapeAttributesSection,
+    VggStructure,
 )
 
+app = typer.Typer()
 
-def vgg2coco(vgg_json_model_path, coco_json_model_path):
+
+@app.command()
+def vgg2coco(vgg_json_model_path: str, coco_json_model_path: str) -> None:
 
     vgg_dataset = VggAnnotations.parse_file(vgg_json_model_path)
     images = sorted(vgg_dataset)
@@ -51,8 +61,8 @@ def vgg2coco(vgg_json_model_path, coco_json_model_path):
         images_section.append(
             CocoImagesSection(
                 id=id_img + 1,
-                width=None,
-                height=None,
+                width=vgg_dataset[img].file_attributes.width,
+                height=vgg_dataset[img].file_attributes.height,
                 file_name=images[id_img],
             ),
         )
@@ -99,24 +109,99 @@ def vgg2coco(vgg_json_model_path, coco_json_model_path):
         categories=categories_section,
     )
 
-    path = f"report_{arrow.now()}.json"
+    path = f"{coco_json_model_path}_{arrow.now()}.json"
 
     logger.info("Conversion done, now dumping.")
     with open(path, "w") as outfile:
         json.dump(orjson.loads(coco_dataset.json()), outfile)
 
 
-def coco2vgg():
-    pass
+@app.command()
+def coco2vgg(coco_json_model_path: Path, vgg_json_model_path: str = "test"):
+
+    coco_dataset = CocoAnnotations.parse_file(coco_json_model_path)
+
+    categories = {
+        idx + 1: coco_dataset.categories[idx].name
+        for idx in range(len(coco_dataset.categories))
+    }
+
+    logger.info("Retreiving all image names.")
+    image_names = {
+        idx + 1: coco_dataset.images[idx].file_name
+        for idx in range(len(coco_dataset.images))
+    }
+
+    logger.info("Creating Vgg annotations section.")
+    vgg_annotations = {}
+    for image_id, image_name in image_names.items():
+
+        height = coco_dataset.images[image_id - 1].height
+        width = coco_dataset.images[image_id - 1].width
+
+        file_attributes = VggFileAttributes(height=height, width=width)
+
+        annotations = [
+            coco_dataset.annotations[idx]
+            for idx in range(len(coco_dataset.annotations))
+            if coco_dataset.annotations[idx].image_id == image_id
+        ]
+
+        id_annotation = 0
+        regions = {}
+        for annotation in annotations:
+            even = [
+                idx for idx in range(len(annotation.segmentation[0])) if idx % 2 == 0
+            ]
+            odd = [
+                idx for idx in range(len(annotation.segmentation[0])) if idx % 2 == 1
+            ]
+
+            all_points_x = [annotation.segmentation[0][idx] for idx in even] + [
+                annotation.segmentation[0][even[0]],
+            ]
+            all_points_y = [annotation.segmentation[0][idx] for idx in odd] + [
+                annotation.segmentation[0][odd[0]],
+            ]
+            label = {"label": categories[annotation.category_id]}
+
+            shape_attribute = VggShapeAttributesSection(
+                all_points_x=all_points_x,
+                all_points_y=all_points_y,
+            )
+            region_attribute = VggRegionAttributesSection(**label)
+
+            region_section = VggRegionsSection(
+                shape_attributes=shape_attribute,
+                region_attributes=region_attribute,
+            )
+            regions[str(id_annotation)] = region_section
+            id_annotation += 1
+
+        vgg_structure = VggStructure(
+            filename=image_name,
+            file_attributes=file_attributes,
+            regions=regions,
+        )
+        vgg_annotations[image_name] = vgg_structure
+
+    vgg_dataset = VggAnnotations.parse_obj(vgg_annotations)
+    path = f"{vgg_json_model_path}_{arrow.now()}.json"
+
+    logger.info("Conversion done, now dumping.")
+    with open(path, "w") as outfile:
+        json.dump(orjson.loads(vgg_dataset.json()), outfile)
 
 
 if __name__ == "__main__":
-
+    # app()
     from src.utils.utils import get_items_list
 
     json_files = get_items_list(
-        directory="datas/raw_datas/ML/labels/",
+        directory="tests/test_datas/",
         extension=".json",
     )
 
-    vgg2coco(json_files[0], "toto")
+    logger.info(f"{json_files}")
+
+    coco2vgg(json_files[0], "vgg")

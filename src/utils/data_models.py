@@ -66,7 +66,7 @@ class VggDataset(BaseModel):
 
 
 class VggShapeAttributesSection(VggDataset):
-    name: str
+    name: Optional[str] = "polygon"
     all_points_x: List[float]
     all_points_y: List[float]
 
@@ -80,12 +80,17 @@ class VggRegionsSection(VggDataset):
     region_attributes: VggRegionAttributesSection
 
 
+class VggFileAttributes(VggDataset):
+    height: Optional[int]
+    width: Optional[int]
+
+
 class VggStructure(VggDataset):
     fileref: str = ""
-    size: int
+    size: int = 0
     filename: str
-    base64_img_data: str
-    file_attributes: Dict[str, Any]
+    base64_img_data: str = ""
+    file_attributes: Optional[VggFileAttributes] = None
     regions: Dict[str, VggRegionsSection]
 
 
