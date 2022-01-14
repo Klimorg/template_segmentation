@@ -70,24 +70,24 @@ def test_load_images(tensor: Tensorize, df: pd.DataFrame) -> None:
         assert image_path.is_file()
 
 
-def test_load_labels(tensor: Tensorize, df: pd.DataFrame) -> None:
-    """Test load_labels function.
+# def test_load_labels(tensor: Tensorize, df: pd.DataFrame) -> None:
+#     """Test load_labels function.
 
-    Args:
-        tensor (Tensorize): [description]
-        df (pd.DataFrame): [description]
-    """
-    zeros = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ones = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+#     Args:
+#         tensor (Tensorize): [description]
+#         df (pd.DataFrame): [description]
+#     """
+#     zeros = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+#     ones = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
-    labels_test = zeros + ones
+#     labels_test = zeros + ones
 
-    labels_list = tensor.load_labels(data_frame=df, column_name="label")
+#     labels_list = tensor.load_labels(data_frame=df, column_name="label")
 
-    assert len(labels_list) == 20
+#     assert len(labels_list) == 20
 
-    for idx in range(20):
-        assert labels_list[idx] == labels_test[idx]
+#     for idx in range(20):
+#         assert labels_list[idx] == labels_test[idx]
 
 
 def test_parse_image_and_label(tensor: Tensorize, df: pd.DataFrame) -> None:
@@ -100,8 +100,8 @@ def test_parse_image_and_label(tensor: Tensorize, df: pd.DataFrame) -> None:
     label1 = 0
     label2 = 1
 
-    img1, oh_label1 = tensor.parse_image_and_label(df["filename"][0], label1)
-    _, oh_label2 = tensor.parse_image_and_label(df["filename"][10], label2)
+    img1, oh_label1 = tensor.parse_image_and_mask(df["filename"][0], label1)
+    _, oh_label2 = tensor.parse_image_and_mask(df["filename"][10], label2)
 
     assert isinstance(img1, tf.Tensor)
     assert isinstance(oh_label1, tf.Tensor)
