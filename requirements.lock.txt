@@ -1,4 +1,4 @@
-aim==3.3.3
+aim==3.3.5
 albumentations==1.1.0
 arrow==1.2.1
 loguru==0.5.3
