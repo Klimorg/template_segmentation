@@ -7,9 +7,9 @@ from src.models.layers.feature_pyramids import FeaturePyramidNetwork, SemanticHe
 
 def get_segmentation_module(
     n_classes: int,
-    backbone: tf.keras.Model,
+    backbone: keras.Model,
     name: str,
-) -> tf.keras.Model:
+) -> keras.Model:
     """Instantiate the segmentation head module for the segmentation task.
 
     Args:

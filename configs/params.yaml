@@ -9,6 +9,9 @@ defaults:
   - pipeline: classic
   - training: custom_training
 
+# or classification
+task: segmentation
+
 start:
   from_saved_model: false
   saved_model_dir: null
