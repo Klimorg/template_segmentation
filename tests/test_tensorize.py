@@ -15,7 +15,7 @@ def tensor() -> Tensorize:
     Returns:
         Tensorize: The class we test here. Defined in `src.tensorize.py`
     """
-    return Tensorize(n_classes=2, img_shape=(224, 224, 3), random_seed=42)
+    return Tensorize(n_classes=4, img_shape=(256, 256, 3), random_seed=42)
 
 
 @pytest.fixture
@@ -31,7 +31,7 @@ def df() -> pd.DataFrame:
 
 
 def test_constructor() -> None:
-    """Test that the constructor is weel defined.
+    """Test that the constructor is well defined.
 
     You should only need the three following parameters to initiate this
     class :
@@ -45,7 +45,7 @@ def test_constructor() -> None:
     assert isinstance(ts, Tensorize)
 
 
-def test_load_images(tensor: Tensorize, df: pd.DataFrame) -> None:
+def test_load_images_mask(tensor: Tensorize, df: pd.DataFrame) -> None:
     """Test of the function `load_images`.
 
     The function should take the column 'filename' of the dataframe en return
@@ -58,62 +58,43 @@ def test_load_images(tensor: Tensorize, df: pd.DataFrame) -> None:
         df (pd.DataFrame): [description]
     """
     filenames = tensor.load_images(data_frame=df, column_name="filename")
+    masks = tensor.load_images(data_frame=df, column_name="mask")
 
     assert isinstance(filenames, list)
+    assert isinstance(masks, list)
 
     assert len(filenames) == 2
+    assert len(masks) == 2
 
     for idx in range(2):
         assert isinstance(filenames[idx], str)
+        assert isinstance(masks[idx], str)
 
         image_path = Path(filenames[idx])
         assert image_path.is_file()
+        mask_path = Path(masks[idx])
+        assert mask_path.is_file()
 
 
-# def test_load_labels(tensor: Tensorize, df: pd.DataFrame) -> None:
-#     """Test load_labels function.
-
-#     Args:
-#         tensor (Tensorize): [description]
-#         df (pd.DataFrame): [description]
-#     """
-#     zeros = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-#     ones = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-
-#     labels_test = zeros + ones
-
-#     labels_list = tensor.load_labels(data_frame=df, column_name="label")
-
-#     assert len(labels_list) == 20
-
-#     for idx in range(20):
-#         assert labels_list[idx] == labels_test[idx]
-
-
-def test_parse_image_and_label(tensor: Tensorize, df: pd.DataFrame) -> None:
+def test_parse_image_and_mask(tensor: Tensorize, df: pd.DataFrame) -> None:
     """[summary].
 
     Args:
         tensor (Tensorize): [description]
         df (pd.DataFrame): [description]
     """
-    label1 = 0
-    label2 = 1
 
-    img1, oh_label1 = tensor.parse_image_and_mask(df["filename"][0], label1)
-    _, oh_label2 = tensor.parse_image_and_mask(df["filename"][10], label2)
+    img1, mask1 = tensor.parse_image_and_mask(df["filename"][0], df["mask"][0])
+    img2, mask2 = tensor.parse_image_and_mask(df["filename"][1], df["mask"][1])
 
     assert isinstance(img1, tf.Tensor)
-    assert isinstance(oh_label1, tf.Tensor)
+    assert isinstance(img2, tf.Tensor)
 
-    assert img1.numpy().shape == (224, 224, 3)
-    oh_label10 = oh_label1.numpy()[0]
-    oh_label11 = oh_label1.numpy()[1]
+    assert isinstance(mask1, tf.Tensor)
+    assert isinstance(mask2, tf.Tensor)
 
-    oh_label20 = oh_label2.numpy()[0]
-    oh_label21 = oh_label2.numpy()[1]
-    assert (oh_label10, oh_label11) == (1, 0)
-    assert (oh_label20, oh_label21) == (0, 1)
+    assert img1.numpy().shape == (256, 256, 3)
+    assert mask1.numpy().shape == (256, 256, 1)
 
 
 def test_train_prepocess(tensor: Tensorize) -> None:
@@ -123,11 +104,12 @@ def test_train_prepocess(tensor: Tensorize) -> None:
         tensor (Tensorize): [description]
         df (pd.DataFrame): [description]
     """
-    oh_label = [0, 1]
-    img_rdn = np.random.rand(224, 224, 3)
-    img, _ = tensor.train_preprocess(img_rdn, oh_label)
+    img_rdn = np.random.rand(256, 256, 3)
+    mask_rdn = np.random.rand(256, 256, 1)
+    img, mask = tensor.train_preprocess(img_rdn, mask_rdn)
 
-    assert img.numpy().shape == (224, 224, 3)
+    assert img.numpy().shape == (256, 256, 3)
+    assert mask.numpy().shape == (256, 256, 1)
 
 
 def test_create_dataset_without_augment(tensor):
@@ -137,16 +119,17 @@ def test_create_dataset_without_augment(tensor):
         tensor ([type]): [description]
         df ([type]): [description]
     """
-    ds = tensor.create_dataset(
+    ds = tensor.create_train_dataset(
         "tests/test_datas/test_datas.csv",
-        batch=5,
+        batch=1,
         repet=1,
         prefetch=1,
         augment=False,
     )
 
-    for imgs, _ in ds.take(1):
-        assert imgs.numpy().shape == (5, 224, 224, 3)
+    for img, mask in ds.take(1):
+        assert img.numpy().shape == (1, 256, 256, 3)
+        assert mask.numpy().shape == (1, 256, 256, 1)
 
 
 def test_create_dataset_with_augment(tensor):
@@ -156,13 +139,14 @@ def test_create_dataset_with_augment(tensor):
         tensor ([type]): [description]
         df ([type]): [description]
     """
-    ds = tensor.create_dataset(
+    ds = tensor.create_train_dataset(
         "tests/test_datas/test_datas.csv",
-        batch=5,
+        batch=1,
         repet=1,
         prefetch=1,
         augment=True,
     )
 
-    for imgs, _ in ds.take(1):
-        assert imgs.numpy().shape == (5, 224, 224, 3)
+    for img, mask in ds.take(1):
+        assert img.numpy().shape == (1, 256, 256, 3)
+        assert mask.numpy().shape == (1, 256, 256, 1)
