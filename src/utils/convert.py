@@ -6,7 +6,7 @@ import orjson
 import typer
 from loguru import logger
 
-from src.utils.data_models import (
+from src.utils.pydantic_data_models import (
     CocoAnnotations,
     CocoAnnotationsSection,
     CocoCategoriesSection,

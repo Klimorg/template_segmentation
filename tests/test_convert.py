@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from src.utils.data_models import CocoAnnotations, VggAnnotations
-from src.utils.utils_model import coco2vgg, vgg2coco
+from src.utils.convert import coco2vgg, vgg2coco
+from src.utils.pydantic_data_models import CocoAnnotations, VggAnnotations
 
 
 @pytest.fixture

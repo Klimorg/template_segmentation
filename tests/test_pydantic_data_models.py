@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from src.utils.data_models import (
+from src.utils.pydantic_data_models import (
     CocoAnnotations,
     VggAnnotations,
     VggRegionAttributesSection,
