@@ -90,4 +90,4 @@ def tile(
 
     logger.info("Looping through images and masks for cropping.")
     for image_path, mask_path in zip(images_paths, masks_paths):
-        self.crop(image_path, mask_path, stride, overlap)
+        crop(image_path, mask_path, stride, overlap)

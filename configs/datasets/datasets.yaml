@@ -2,6 +2,7 @@ metadatas:
   n_classes: 4 # n+1 for background
   height: 3036
   width: 4024
+  data_format: vgg #or coco
 
 raw_datas:
   images: "datas/raw_datas/ML/images/"

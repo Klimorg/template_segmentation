@@ -14,7 +14,12 @@ from src.errors.labelization_errors import (
     validate_non_empty_vgg_files,
     validate_polygons,
 )
-from src.utils.pydantic_data_models import VggAnnotations
+from src.utils.pydantic_data_models import (
+    CocoAnnotations,
+    Format,
+    SegmentationDataFormat,
+    VggAnnotations,
+)
 from src.utils.utils import get_items_list
 
 PolygonVertices = List[float]
@@ -41,6 +46,9 @@ class SegmentationMasks(object):
         """Initialization of the class."""
 
         self.segmentation_config = OmegaConf.load("configs/datasets/datasets.yaml")
+        self.data_format = SegmentationDataFormat(
+            data_format=self.segmentation_config.metadatas.data_format
+        ).data_format
 
     def get_data(
         self,

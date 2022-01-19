@@ -1,6 +1,17 @@
+from enum import Enum, unique
 from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel
+
+
+@unique
+class Format(Enum):
+    vgg = "vgg"
+    coco = "coco"
+
+
+class SegmentationDataFormat(BaseModel):
+    data_format: Format
 
 
 class CocoDataset(BaseModel):
