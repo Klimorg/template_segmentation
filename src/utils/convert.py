@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import List, Tuple
 
 import arrow
 import orjson
@@ -23,6 +24,46 @@ from src.utils.pydantic_data_models import (
 app = typer.Typer()
 
 
+def vgg2coco_coordinates(
+    vgg_dataset: VggAnnotations,
+    img: str,
+    region: str,
+) -> Tuple[List[float], List[float], float]:
+
+    all_x = vgg_dataset[img].regions[region].shape_attributes.all_points_x[:-1]
+    all_y = vgg_dataset[img].regions[region].shape_attributes.all_points_y[:-1]
+
+    # https://stackoverflow.com/a/6356099
+    annotations = [item for pair in zip(all_x, all_y) for item in pair]
+
+    max_x, min_x = max(all_x), min(all_x)
+    max_y, min_y = max(all_y), min(all_y)
+
+    width = max_x - min_x
+    height = max_y - min_y
+    bbox = [min_x, min_y, width, height]
+    area = width * height
+
+    return annotations, bbox, area
+
+
+def coco2vgg_coordinates(
+    annotation: CocoAnnotationsSection,
+) -> Tuple[List[float], List[float]]:
+
+    even = [idx for idx in range(len(annotation.segmentation[0])) if idx % 2 == 0]
+    odd = [idx for idx in range(len(annotation.segmentation[0])) if idx % 2 == 1]
+
+    all_points_x = [annotation.segmentation[0][idx] for idx in even] + [
+        annotation.segmentation[0][even[0]],
+    ]
+    all_points_y = [annotation.segmentation[0][idx] for idx in odd] + [
+        annotation.segmentation[0][odd[0]],
+    ]
+
+    return all_points_x, all_points_y
+
+
 @app.command()
 def vgg2coco(
     vgg_json_model_path: Path,
@@ -30,7 +71,7 @@ def vgg2coco(
     timestamp: bool = False,
 ) -> None:
 
-    vgg_dataset = VggAnnotations.parse_file(vgg_json_model_path)
+    vgg_dataset = VggAnnotations.parse_file(Path(vgg_json_model_path))
     images = sorted(vgg_dataset)
 
     info = CocoInfoSection(
@@ -74,25 +115,14 @@ def vgg2coco(
         all_regions = list(vgg_dataset[img].regions)
         for region in all_regions:
 
-            all_x = vgg_dataset[img].regions[region].shape_attributes.all_points_x[:-1]
-            all_y = vgg_dataset[img].regions[region].shape_attributes.all_points_y[:-1]
-
-            # https://stackoverflow.com/a/6356099
-            annotations = [item for pair in zip(all_x, all_y) for item in pair]
-
-            max_x, min_x = max(all_x), min(all_x)
-            max_y, min_y = max(all_y), min(all_y)
-
-            width = max_x - min_x
-            height = max_y - min_y
-            bbox = [min_x, min_y, width, height]
-            area = width * height
+            annotations, bbox, area = vgg2coco_coordinates(vgg_dataset, img, region)
 
             label = vgg_dataset[img].regions[region].region_attributes.label
 
             category_id = [
                 category.id for category in categories_section if category.name == label
             ]
+
             annotations_section.append(
                 CocoAnnotationsSection(
                     id=id_annotation,
@@ -130,7 +160,7 @@ def coco2vgg(
     timestamp: bool = False,
 ) -> None:
 
-    coco_dataset = CocoAnnotations.parse_file(coco_json_model_path)
+    coco_dataset = CocoAnnotations.parse_file(Path(coco_json_model_path))
 
     categories = {
         idx + 1: coco_dataset.categories[idx].name
@@ -161,19 +191,9 @@ def coco2vgg(
         id_annotation = 0
         regions = {}
         for annotation in annotations:
-            even = [
-                idx for idx in range(len(annotation.segmentation[0])) if idx % 2 == 0
-            ]
-            odd = [
-                idx for idx in range(len(annotation.segmentation[0])) if idx % 2 == 1
-            ]
 
-            all_points_x = [annotation.segmentation[0][idx] for idx in even] + [
-                annotation.segmentation[0][even[0]],
-            ]
-            all_points_y = [annotation.segmentation[0][idx] for idx in odd] + [
-                annotation.segmentation[0][odd[0]],
-            ]
+            all_points_x, all_points_y = coco2vgg_coordinates(annotation)
+
             label = {"label": categories[annotation.category_id]}
 
             shape_attribute = VggShapeAttributesSection(
