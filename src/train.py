@@ -9,7 +9,8 @@ from omegaconf import DictConfig, OmegaConf
 from tensorflow.keras.models import load_model, save_model
 
 import hydra
-from utils.utils import set_log_infos, set_seed
+from src.errors.model_errors import NumClassesError, validate_num_classes
+from src.utils.utils import set_log_infos, set_seed
 
 
 @logger.catch()
@@ -51,6 +52,17 @@ def train(config: DictConfig):
         A trained tf.keras model.
     """
     repo_path = set_log_infos(config)
+
+    try:
+        validate_num_classes(
+            config.datasets.metadatas.n_classes,
+            len(config.datasets.class_dict),
+        )
+    except NumClassesError as err:
+        logger.error(
+            f"The number of output classes of the model is not coherent with the number of segmentation classes : {err}",
+        )
+        raise
 
     run = Run(
         experiment=config.monitoring.run_name,

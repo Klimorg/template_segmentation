@@ -6,6 +6,7 @@ from tensorflow.keras.layers import (
     BatchNormalization,
     Concatenate,
     Conv2D,
+    Layer,
     ReLU,
     UpSampling2D,
 )
@@ -13,17 +14,17 @@ from tensorflow.keras.models import Sequential
 
 
 @tf.keras.utils.register_keras_serializable()
-class ASPP(tf.keras.layers.Layer):
+class ASPP(Layer):
     """
     Description of ASPP.
 
     Attributes:
-        conv1 (type): `Conv2D-BatchNormalization-ReLU` layer.
-        conv2 (type): `Conv2D-BatchNormalization-ReLU` layer.
-        conv3 (type): `Conv2D-BatchNormalization-ReLU` layer.
-        conv4 (type): `Conv2D-BatchNormalization-ReLU` layer.
-        conv5 (type): `Conv2D-BatchNormalization-ReLU` layer.
-        conv6 (type): `Conv2D-BatchNormalization-ReLU` layer.
+        conv1 (Layer): `Conv2D-BatchNormalization-ReLU` layer.
+        conv2 (Layer): `Conv2D-BatchNormalization-ReLU` layer.
+        conv3 (Layer): `Conv2D-BatchNormalization-ReLU` layer.
+        conv4 (Layer): `Conv2D-BatchNormalization-ReLU` layer.
+        conv5 (Layer): `Conv2D-BatchNormalization-ReLU` layer.
+        conv6 (Layer): `Conv2D-BatchNormalization-ReLU` layer.
 
     Inheritance:
         tf.keras.layers.Layer:

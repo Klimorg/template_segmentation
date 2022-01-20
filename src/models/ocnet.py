@@ -1,5 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.layers import Activation, Conv2D, UpSampling2D
+from tensorflow.keras.models import Model
 
 from src.models.layers.common_layers import conv_bn_relu
 from src.models.layers.object_context import ASPP_OC, BaseOC
@@ -7,11 +8,11 @@ from src.models.layers.object_context import ASPP_OC, BaseOC
 
 def get_segmentation_module(
     n_classes: int,
-    backbone: tf.keras.Model,
+    backbone: Model,
     architecture: str,
     filters: int,
     name: str,
-) -> tf.keras.Model:
+) -> Model:
     """Instantiate the segmentation head module for the segmentation task.
 
     Args:
