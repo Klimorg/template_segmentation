@@ -50,7 +50,7 @@
   // Uncomment the next line to run commands after the container is created - for example installing curl.
   "postCreateCommand": "make install-dev",
   // Uncomment when using a ptrace-based debugger like C++, Go, and Rust
-  "runArgs": ["-it", "--rm", "-P", "--runtime=nvidia"],
+  "runArgs": ["-it", "--rm", "-P"],
   // Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
   "mounts": [
     "type=bind,source=${localWorkspaceFolder},target=${localEnv:HOME}${localEnv:USERPROFILE}/template_segmentation"

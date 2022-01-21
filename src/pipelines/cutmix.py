@@ -47,7 +47,7 @@ class CutMix(object):
         self.random_seed = random_seed
         self.random_seed1 = random_seed1
         self.random_seed2 = random_seed2
-        self.AUTOTUNE = tf.data.experimental.AUTOTUNE
+        self.AUTOTUNE = tf.data.AUTOTUNE
 
         assert self.img_shape[0] == self.img_shape[1]
         self.image_size = self.img_shape[0]
