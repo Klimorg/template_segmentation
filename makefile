@@ -2,7 +2,8 @@
 .PHONY: help
 help:
 	@echo "Commands:"
-	@echo "segmentation_masks    : generate the labels, ie segmentation masks, from the VGG json files."
+	@echo "masks                 : generate the labels, ie segmentation masks, from the VGG json files."
+	@echo "tilling               : generate tillings from the images and masks."
 	@echo "datasets              : create train, test, & validation datasets from raw datas in raw_dataset directory."
 	@echo "train                 : launch training loop for a given set of parameters from configs/params.yaml."
 	@echo "install               : installs project requirements."
@@ -27,9 +28,13 @@ help:
 
 
 # Datas and training
-.PHONY: segmentation_masks
-segmentation_masks:
+.PHONY: masks
+masks:
 	python src/utils/make_masks.py
+
+.PHONY: tilling
+tilling:
+	python src/utils/utils_images.py
 
 .PHONY: datasets
 datasets:

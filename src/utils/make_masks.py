@@ -14,6 +14,7 @@ from src.errors.labelization_errors import (
     validate_non_empty_vgg_files,
     validate_polygons,
 )
+from src.utils.convert import coco2vgg
 from src.utils.pydantic_data_models import (
     CocoAnnotations,
     Format,
@@ -47,7 +48,7 @@ class SegmentationMasks(object):
 
         self.segmentation_config = OmegaConf.load("configs/datasets/datasets.yaml")
         self.data_format = SegmentationDataFormat(
-            data_format=self.segmentation_config.metadatas.data_format
+            data_format=self.segmentation_config.metadatas.data_format,
         ).data_format
 
     def get_data(
@@ -199,6 +200,7 @@ class SegmentationMasks(object):
         masks = []
 
         vgg_dataset = VggAnnotations.parse_file(json_file)
+
         images = sorted(vgg_dataset)
 
         for image in images:

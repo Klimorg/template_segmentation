@@ -63,12 +63,10 @@ def crop(image_path: Path, mask_path: Path, stride: int, overlap: int):
         logger.info(f"Done for {image_name}, {mask_name} with start at {mult}.")
 
 
-def tile(
-    self,
-):
+def tile():
     """Apply tilling processus on a list of images, masks."""
 
-    stride = self.segmentation_config.raw_dataset.crop_size
+    stride = segmentation_config.raw_dataset.crop_size
     overlap = 128
 
     logger.info("Searching for images and corresponding masks.")
@@ -91,3 +89,7 @@ def tile(
     logger.info("Looping through images and masks for cropping.")
     for image_path, mask_path in zip(images_paths, masks_paths):
         crop(image_path, mask_path, stride, overlap)
+
+
+if __name__ == "__main__":
+    tile()

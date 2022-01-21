@@ -146,7 +146,6 @@ def get_feature_extractor(
         kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
         name="stem",
     )(img_input)
-    logger.info(f"stem output : {fmap.shape.as_list()[1]}")
     fmap = LayerNormalization(name="stem_layer_norm")(fmap)
 
     fmap = ConvNeXtLayer(
@@ -154,8 +153,6 @@ def get_feature_extractor(
         num_blocks=num_blocks[0],
         name="convnext_layer_1",
     )(fmap)
-    logger.info(f"convnext_layer_1 output : {fmap.shape.as_list()[1]}")
-
     fmap = LayerNormalization(name="downsample_1_layer_norm")(fmap)
     fmap = Conv2D(
         filters=filters[1],
@@ -167,15 +164,12 @@ def get_feature_extractor(
         kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
         name="downsample_1",
     )(fmap)
-    logger.info(f"downsample_1 output : {fmap.shape.as_list()[1]}")
 
     fmap = ConvNeXtLayer(
         filters=filters[1],
         num_blocks=num_blocks[1],
         name="convnext_layer_2",
     )(fmap)
-    logger.info(f"convnext_layer_2 output : {fmap.shape.as_list()[1]}")
-
     fmap = LayerNormalization(name="downsample_2_layer_norm")(fmap)
     fmap = Conv2D(
         filters=filters[2],
@@ -187,15 +181,12 @@ def get_feature_extractor(
         kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
         name="downsample_2",
     )(fmap)
-    logger.info(f"downsample_2 output : {fmap.shape.as_list()[1]}")
 
     fmap = ConvNeXtLayer(
         filters=filters[2],
         num_blocks=num_blocks[2],
         name="convnext_layer_3",
     )(fmap)
-    logger.info(f"convnext_layer_3 output : {fmap.shape.as_list()[1]}")
-
     fmap = LayerNormalization(name="downsample_3_layer_norm")(fmap)
     fmap = Conv2D(
         filters=filters[3],
@@ -207,13 +198,12 @@ def get_feature_extractor(
         kernel_regularizer=tf.keras.regularizers.l2(l2=1e-4),
         name="downsample_3",
     )(fmap)
-    logger.info(f"downsample_3 output : {fmap.shape.as_list()[1]}")
+
     fmap = ConvNeXtLayer(
         filters=filters[3],
         num_blocks=num_blocks[3],
         name="convnext_layer_4",
     )(fmap)
-    logger.info(f"convnext_layer_4 output : {fmap.shape.as_list()[1]}")
 
     return Model(img_input, fmap)
 
@@ -270,18 +260,6 @@ def get_backbone(
 
 
 if __name__ == "__main__":
-
-    # filters = [96, 162, 384, 768]
-    # num_blocks = [3, 3, 9, 3]
-
-    # filters = [96, 182, 384, 768]
-    # num_blocks = [3, 3, 27, 3]
-
-    # filters = [128, 256, 384, 768]
-    # num_blocks = [3, 3, 27, 3]
-
-    # filters = [192, 384, 768, 1536]
-    # num_blocks = [3, 3, 27, 3]
 
     filters = [256, 512, 1024, 2048]
     num_blocks = [3, 3, 27, 3]
