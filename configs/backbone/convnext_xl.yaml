@@ -1,0 +1,5 @@
+_target_: models.backbone.convnext.get_backbone
+img_shape: ${datasets.params.img_shape}
+filters: [256,512,1024,2048]
+num_blocks: [3,3,27,3]
+backbone_name: ConvNeXt-XL
