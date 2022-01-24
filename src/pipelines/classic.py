@@ -4,7 +4,8 @@ import albumentations as A
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-from base_pipeline import BasePipeline
+
+from src.pipelines.base_pipeline import BasePipeline
 
 # class Tensorize(object):
 #     """
@@ -234,7 +235,7 @@ from base_pipeline import BasePipeline
 #         )
 #         dataset = dataset.batch(batch)
 #         return dataset.prefetch(prefetch)
-class Tensorize(BasePipeline):
+class BaseDataset(BasePipeline):
     """
     Class used to create tensor datasets for TensorFlow.
 

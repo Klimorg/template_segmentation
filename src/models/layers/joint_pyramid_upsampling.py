@@ -6,6 +6,7 @@ from tensorflow.keras.layers import (
     BatchNormalization,
     Concatenate,
     Conv2D,
+    Layer,
     ReLU,
     SeparableConv2D,
     UpSampling2D,
@@ -14,7 +15,7 @@ from tensorflow.keras.models import Sequential
 
 
 @tf.keras.utils.register_keras_serializable()
-class JointPyramidUpsampling(tf.keras.layers.Layer):
+class JointPyramidUpsampling(Layer):
     """
     Description of JointPyramidUpsampling
 

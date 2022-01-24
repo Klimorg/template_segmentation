@@ -1,6 +1,6 @@
 defaults:
   - backbone: convnext_s
-  - segmentation_model: fpn
+  - segmentation_model: ocnet
   - losses: focal_loss
   - optimizer: cg_adam
   - lr_decay: cosine_decay_restart

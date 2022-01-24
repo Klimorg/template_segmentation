@@ -55,8 +55,8 @@ class BasePipeline(object):
     @tf.function
     def parse_image_and_mask(
         self,
-        image: str,
-        mask: str,
+        image_path: str,
+        mask_path: str,
     ) -> Tuple[np.ndarray, np.ndarray]:
         """Transform image and mask.
 
@@ -72,7 +72,7 @@ class BasePipeline(object):
         resized_dims = [self.img_shape[0], self.img_shape[1]]
         # convert the mask to one-hot encoding
         # decode image
-        image = tf.io.read_file(image)
+        image = tf.io.read_file(image_path)
         # Don't use tf.image.decode_image,
         # or the output shape will be undefined
         image = tf.image.decode_jpeg(image)
@@ -84,7 +84,7 @@ class BasePipeline(object):
             method=tf.image.ResizeMethod.NEAREST_NEIGHBOR,
         )
 
-        mask = tf.io.read_file(mask)
+        mask = tf.io.read_file(mask_path)
         # Don't use tf.image.decode_image,
         # or the output shape will be undefined
         mask = tf.io.decode_png(mask, channels=1)
