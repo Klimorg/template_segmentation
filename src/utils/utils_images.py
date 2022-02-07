@@ -36,9 +36,9 @@ def crop(image_path: Path, mask_path: Path, stride: int, overlap: int):
 
     width, height = image.size
 
-    overlap = height // overlap
+    chunk = height // overlap
 
-    for mult in range(overlap - 1):
+    for mult in range(chunk - 1):
         grid = list(
             product(
                 range(mult * overlap, height - height % stride, stride),

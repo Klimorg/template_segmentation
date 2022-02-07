@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/tensorflow:21.06-tf2-py3
+FROM nvcr.io/nvidia/tensorflow:22.01-tf2-py3
 
 ARG USERNAME=vorph
 ARG USER_UID=1000

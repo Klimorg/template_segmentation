@@ -21,10 +21,13 @@ def set_seed(random_seed: int) -> None:
     random.seed(random_seed)
     np.random.seed(random_seed)
     tf.random.set_seed(random_seed)
-    os.environ["TF_DETERMINISTIC_OPS"] = "1"
+    # tf.config.experimental.enable_op_determinism()
+    # os.environ["TF_DETERMINISTIC_OPS"] = "1"
     # https://github.com/tensorflow/tensorflow/issues/39751
     # needed until a deterministic fix of tf.gather is implemented
-    os.environ["TF_DISABLE_SEGMENT_REDUCTION_OP_DETERMINISM_EXCEPTIONS"] = "1"
+    # os.environ["TF_DISABLE_SEGMENT_REDUCTION_OP_DETERMINISM_EXCEPTIONS"] = "1"
+    # https://github.com/tensorflow/tensorflow/issues/47174
+    # DepthwiseConv2D backprop is not deterministic for now
 
 
 def set_log_infos(cfg: DictConfig) -> str:

@@ -6,13 +6,14 @@ from tensorflow.keras.layers import (
     BatchNormalization,
     Concatenate,
     Conv2D,
+    Layer,
     ReLU,
     UpSampling2D,
 )
 
 
 @tf.keras.utils.register_keras_serializable()
-class SharedDilatedConv(tf.keras.layers.Layer):
+class SharedDilatedConv(Layer):
     """
     Description of SharedDilatedConv
 
@@ -23,7 +24,7 @@ class SharedDilatedConv(tf.keras.layers.Layer):
         relu (type):
 
     Inheritance:
-        tf.keras.layers.Layer
+        Layer
     """
 
     def __init__(
@@ -71,7 +72,7 @@ class SharedDilatedConv(tf.keras.layers.Layer):
             dtype="float32",
         )
         if self.use_bias:
-            self.b = self.add_weight(
+            self.bias = self.add_weight(
                 name="bias",
                 shape=(self.filters,),
                 initializer=self.bias_initializer,
@@ -79,7 +80,7 @@ class SharedDilatedConv(tf.keras.layers.Layer):
                 dtype="float32",
             )
         else:
-            self.b = None
+            self.bias = None
 
         self.bn1 = BatchNormalization()
         self.bn2 = BatchNormalization()
@@ -95,7 +96,7 @@ class SharedDilatedConv(tf.keras.layers.Layer):
             dilations=self.dilation_rates[0],
         )
         if self.use_bias:
-            x1 = x1 + self.b
+            x1 = x1 + self.bias
         x1 = self.relu(self.bn1(x1))
 
         x2 = tf.nn.conv2d(
@@ -106,7 +107,7 @@ class SharedDilatedConv(tf.keras.layers.Layer):
             dilations=self.dilation_rates[1],
         )
         if self.use_bias:
-            x2 = x2 + self.b
+            x2 = x2 + self.bias
         x2 = self.relu(self.bn2(x2))
 
         x3 = tf.nn.conv2d(
@@ -117,7 +118,7 @@ class SharedDilatedConv(tf.keras.layers.Layer):
             dilations=self.dilation_rates[2],
         )
         if self.use_bias:
-            x3 = x3 + self.b
+            x3 = x3 + self.bias
         x3 = self.relu(self.bn2(x3))
 
         return x1 + x2 + x3
@@ -141,7 +142,7 @@ class SharedDilatedConv(tf.keras.layers.Layer):
 
 
 @tf.keras.utils.register_keras_serializable()
-class KSAConv2D(tf.keras.layers.Layer):
+class KSAConv2D(Layer):
     """
     Description of KSAConv2D
 
