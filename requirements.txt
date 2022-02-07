@@ -1,6 +1,6 @@
 aim==3.5.0
 albumentations==1.1.0
-arrow==1.2.1
+arrow==1.2.2
 hydra_core==1.1.1
 loguru==0.5.3
 omegaconf==2.1.1
