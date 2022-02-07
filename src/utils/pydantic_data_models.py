@@ -10,7 +10,7 @@ class Format(Enum):
     coco = "coco"
 
 
-class SegmentationDataFormat(BaseModel):
+class SegmentationData(BaseModel):
     data_format: Format
 
 

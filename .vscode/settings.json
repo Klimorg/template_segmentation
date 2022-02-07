@@ -42,6 +42,5 @@
   "python.testing.pytestEnabled": true,
   "editor.formatOnSave": true,
   "editor.formatOnPaste": false,
-  "editor.formatOnType": false,
-  "python.pythonPath": "/bin/python"
+  "editor.formatOnType": false
 }

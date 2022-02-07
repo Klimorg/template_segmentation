@@ -97,19 +97,19 @@ def test_parse_image_and_mask(tensor: BaseDataset, df: pd.DataFrame) -> None:
     assert mask1.numpy().shape == (256, 256, 1)
 
 
-def test_train_prepocess(tensor: BaseDataset) -> None:
-    """[summary].
+# def test_train_prepocess(tensor: BaseDataset) -> None:
+#     """[summary].
 
-    Args:
-        tensor (BaseDataset): [description]
-        df (pd.DataFrame): [description]
-    """
-    img_rdn = np.random.rand(256, 256, 3)
-    mask_rdn = np.random.rand(256, 256, 1)
-    img, mask = tensor.train_preprocess(img_rdn, mask_rdn)
+#     Args:
+#         tensor (BaseDataset): [description]
+#         df (pd.DataFrame): [description]
+#     """
+#     img_rdn = np.random.rand(256, 256, 3)
+#     mask_rdn = np.random.rand(256, 256, 1)
+#     img, mask = tensor.train_preprocess(img_rdn, mask_rdn)
 
-    assert img.numpy().shape == (256, 256, 3)
-    assert mask.numpy().shape == (256, 256, 1)
+#     assert img.numpy().shape == (256, 256, 3)
+#     assert mask.numpy().shape == (256, 256, 1)
 
 
 def test_create_dataset_without_augment(tensor):

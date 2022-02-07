@@ -1,19 +1,19 @@
 import tensorflow as tf
-from tensorflow import keras
+from tensorflow.keras import Model
 from tensorflow.keras.layers import Activation, Concatenate, Dense, UpSampling2D
 
 
 def get_segmentation_module(
     units: int,
     n_classes: int,
-    backbone: tf.keras.Model,
+    backbone: Model,
     name: str,
-) -> tf.keras.Model:
+) -> Model:
     """Instantiate the segmentation head module for the segmentation task.
 
     Args:
         n_classes (int): Number of classes in the segmentation task.
-        backbone (tf.keras.Model): CNN used as backbone/feature extractor.
+        backbone (Model): CNN used as backbone/feature extractor.
         name (str): Name of the segmentation head module.
 
     Returns:
@@ -70,4 +70,4 @@ def get_segmentation_module(
     fmap = UpSampling2D(size=(4, 4), interpolation=bil)(fmap)
     out = Activation("softmax")(fmap)
 
-    return keras.Model(inputs=[backbone.inputs], outputs=[out], name=name)
+    return Model(inputs=[backbone.inputs], outputs=[out], name=name)

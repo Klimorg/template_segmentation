@@ -8,7 +8,6 @@ from tensorflow.keras.layers import (
     Concatenate,
     Conv2D,
     Layer,
-    Permute,
     ReLU,
     UpSampling2D,
 )
@@ -198,30 +197,15 @@ class ISA2D(Layer):
 
     def call(self, inputs, training=None) -> tf.Tensor:
 
-        # _, H, W, C = tf.keras.backend.int_shape(inputs)
-        # Q_h, Q_w = H // self.P_h, W // self.P_w
-
         # global relation
-        # fmap = tf.reshape(inputs, [-1, Q_h, self.P_h, Q_w, self.P_w, C])
-        # fmap = Permute((4, 1, 2, 3, 5))(fmap)
-        # fmap = tf.reshape(fmap, [-1, Q_h, Q_w, C])
         fmap = self.global_relation(inputs)
         fmap = self.global_reshape(fmap)
         fmap = self.attention1(fmap)
 
         # local relation
-        # fmap = tf.reshape(fmap, [-1, self.P_h, self.P_w, Q_h, Q_w, C])
-        # fmap = Permute((3, 4, 1, 2, 5))(fmap)
-        # fmap = tf.reshape(fmap, [-1, self.P_h, self.P_w, C])
         fmap = self.local_relation(fmap)
         fmap = self.local_reshape(fmap)
         fmap = self.attention2(fmap)
-
-        # reshape
-        # fmap = tf.reshape(fmap, [-1, Q_h, Q_w, self.P_h, self.P_w, C])
-        # fmap = Permute((3, 1, 2, 4, 5))(fmap)
-
-        # return tf.reshape(fmap, [-1, H, W, C])
 
         return self.final_reshape(fmap)
 
