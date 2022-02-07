@@ -1,6 +1,7 @@
 from typing import Any, Dict
 
 import tensorflow as tf
+from einops.layers.tensorflow import Rearrange
 from tensorflow.keras.layers import (
     AveragePooling2D,
     BatchNormalization,
@@ -163,31 +164,66 @@ class ISA2D(Layer):
 
     def build(self, input_shape) -> None:
 
-        self.attention1 = SelfAttention2D(input_shape[-1])
-        self.attention2 = SelfAttention2D(input_shape[-1])
+        _, height, width, channels = input_shape
+
+        self.attention1 = SelfAttention2D(channels)
+        self.attention2 = SelfAttention2D(channels)
+
+        Q_h, Q_w = height // self.P_h, width // self.P_w
+        self.global_relation = Rearrange(
+            "b (q_h p_h) (q_w p_w) c -> b p_h p_w q_h q_w c",
+            q_h=Q_h,
+            p_h=self.P_h,
+            q_w=Q_w,
+            p_w=self.P_w,
+        )
+        self.global_reshape = Rearrange("b p_h p_w q_h q_w c -> (b p_h p_w) q_h q_w c")
+
+        self.local_relation = Rearrange(
+            "(b p_h p_w) q_h q_w c -> b q_h q_w p_h p_w c",
+            q_h=Q_h,
+            p_h=self.P_h,
+            q_w=Q_w,
+            p_w=self.P_w,
+        )
+        self.local_reshape = Rearrange("b q_h q_w p_h p_w c -> (b q_h q_w) p_h p_w c")
+
+        self.final_reshape = Rearrange(
+            "(b q_h q_w) p_h p_w c ->  b (p_h q_h) (p_w q_w) c",
+            q_h=Q_h,
+            p_h=self.P_h,
+            q_w=Q_w,
+            p_w=self.P_w,
+        )
 
     def call(self, inputs, training=None) -> tf.Tensor:
 
-        _, H, W, C = tf.keras.backend.int_shape(inputs)
-        Q_h, Q_w = H // self.P_h, W // self.P_w
+        # _, H, W, C = tf.keras.backend.int_shape(inputs)
+        # Q_h, Q_w = H // self.P_h, W // self.P_w
 
         # global relation
-        fmap = tf.reshape(inputs, [-1, Q_h, self.P_h, Q_w, self.P_w, C])
-        fmap = Permute((4, 1, 2, 3, 5))(fmap)
-        fmap = tf.reshape(fmap, [-1, Q_h, Q_w, C])
+        # fmap = tf.reshape(inputs, [-1, Q_h, self.P_h, Q_w, self.P_w, C])
+        # fmap = Permute((4, 1, 2, 3, 5))(fmap)
+        # fmap = tf.reshape(fmap, [-1, Q_h, Q_w, C])
+        fmap = self.global_relation(inputs)
+        fmap = self.global_reshape(fmap)
         fmap = self.attention1(fmap)
 
         # local relation
-        fmap = tf.reshape(fmap, [-1, self.P_h, self.P_w, Q_h, Q_w, C])
-        fmap = Permute((3, 4, 1, 2, 5))(fmap)
-        fmap = tf.reshape(fmap, [-1, self.P_h, self.P_w, C])
+        # fmap = tf.reshape(fmap, [-1, self.P_h, self.P_w, Q_h, Q_w, C])
+        # fmap = Permute((3, 4, 1, 2, 5))(fmap)
+        # fmap = tf.reshape(fmap, [-1, self.P_h, self.P_w, C])
+        fmap = self.local_relation(fmap)
+        fmap = self.local_reshape(fmap)
         fmap = self.attention2(fmap)
 
         # reshape
-        fmap = tf.reshape(fmap, [-1, Q_h, Q_w, self.P_h, self.P_w, C])
-        fmap = Permute((3, 1, 2, 4, 5))(fmap)
+        # fmap = tf.reshape(fmap, [-1, Q_h, Q_w, self.P_h, self.P_w, C])
+        # fmap = Permute((3, 1, 2, 4, 5))(fmap)
 
-        return tf.reshape(fmap, [-1, H, W, C])
+        # return tf.reshape(fmap, [-1, H, W, C])
+
+        return self.final_reshape(fmap)
 
     def get_config(self) -> Dict[str, Any]:
 
