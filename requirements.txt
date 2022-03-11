@@ -1,4 +1,4 @@
-aim==3.6.2
+aim==3.7.2
 albumentations==1.1.0
 arrow==1.2.2
 einops==0.4.0
