@@ -141,25 +141,6 @@ def vgg2coco(
     )
 
 
-@app.command()
-def vgg2coco_json(
-    vgg_json_model_path: Path,
-    coco_json_model_path: Path,
-    timestamp: bool = False,
-) -> None:
-
-    coco_dataset = vgg2coco(vgg_json_model_path)
-
-    if timestamp:
-        path = f"{coco_json_model_path}_{arrow.now()}.json"
-    else:
-        path = f"{coco_json_model_path}.json"
-
-    logger.info("Conversion done, now dumping.")
-    with open(path, "w") as outfile:
-        json.dump(orjson.loads(coco_dataset.json()), outfile)
-
-
 def coco2vgg(
     coco_json_model_path: Path,
 ) -> VggAnnotations:
@@ -221,6 +202,25 @@ def coco2vgg(
         vgg_annotations[image_name] = vgg_structure
 
     return VggAnnotations.parse_obj(vgg_annotations)
+
+
+@app.command()
+def vgg2coco_json(
+    vgg_json_model_path: Path,
+    coco_json_model_path: Path,
+    timestamp: bool = False,
+) -> None:
+
+    coco_dataset = vgg2coco(vgg_json_model_path)
+
+    if timestamp:
+        path = f"{coco_json_model_path}_{arrow.now()}.json"
+    else:
+        path = f"{coco_json_model_path}.json"
+
+    logger.info("Conversion done, now dumping.")
+    with open(path, "w") as outfile:
+        json.dump(orjson.loads(coco_dataset.json()), outfile)
 
 
 @app.command()

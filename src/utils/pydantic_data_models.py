@@ -26,7 +26,8 @@ class CocoInfoSection(CocoDataset):
 
 
 class CocoLicencesSection(CocoDataset):
-    licenses: Optional[Dict[str, Any]]
+    licenses: Optional[List[Dict[str, Any]]]
+    # licenses: Optional[List[Any]]
 
 
 class CocoImagesSection(CocoDataset):

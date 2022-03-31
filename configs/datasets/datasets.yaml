@@ -5,14 +5,14 @@ metadatas:
   data_format: vgg #or coco
 
 raw_datas:
-  images: "datas/raw_datas/ML/images/"
-  labels: "datas/raw_datas/ML/labels/"
-  masks: "datas/raw_datas/ML/masks/"
+  images: "datas/raw_datas/images/"
+  labels: "datas/raw_datas/labels/"
+  masks: "datas/raw_datas/masks/"
 
 raw_dataset:
   crop_size: 256
-  images: "datas/raw_dataset/ML/images"
-  masks: "datas/raw_dataset/ML/masks"
+  images: "datas/raw_dataset/images"
+  masks: "datas/raw_dataset/masks"
 
 prepared_dataset:
   train: "datas/prepared_dataset/train.csv"
