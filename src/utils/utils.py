@@ -50,6 +50,13 @@ def set_log_infos(cfg: DictConfig) -> str:
 
 
 def get_items_list(directory: str, extension: str) -> List[Path]:
+    """
+    The code above does the following:
+    1. Creates a list of all the files in the directory.
+    2. Applies a filter to the list to only include files with the given extension.
+    3. Sorts the list by file name.
+    4. Returns the list.
+    """
     return sorted(
         Path(file).absolute()
         for file in Path(directory).glob(f"**/*{extension}")
