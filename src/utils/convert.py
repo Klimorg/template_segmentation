@@ -152,26 +152,49 @@ def coco2vgg(
         for idx in range(len(coco_dataset.categories))
     }
 
-    logger.info("Retreiving all image names.")
+    logger.info("Retrieving all image names.")
     image_names = {
-        idx + 1: coco_dataset.images[idx].file_name
+        coco_dataset.images[idx].id: coco_dataset.images[idx].file_name
         for idx in range(len(coco_dataset.images))
     }
 
+    images_datas = {
+        coco_dataset.images[idx].id: [
+            coco_dataset.images[idx].file_name,
+            coco_dataset.images[idx].height,
+            coco_dataset.images[idx].width,
+        ]
+        for idx in range(len(coco_dataset.images))
+    }
+    # logger.info(f"{images_datas.items()}")
+
     logger.info("Creating Vgg annotations section.")
     vgg_annotations = {}
-    for image_id, image_name in image_names.items():
+    for image_id, image_datas in images_datas.items():
 
-        height = coco_dataset.images[image_id - 1].height
-        width = coco_dataset.images[image_id - 1].width
+        # if image_name == "0003_A_V_150_A.jpg":
+        # logger.info(f"image_id : {image_id}, image_name : {image_name}")
+
+        height = image_datas[1]
+        width = image_datas[2]
 
         file_attributes = VggFileAttributes(height=height, width=width)
 
-        annotations = [
-            coco_dataset.annotations[idx]
+        # logger.info(
+        #     f"range(len(coco_dataset.annotations)) : {range(len(coco_dataset.annotations))}"
+        # )
+
+        # ne recupérer que les index pour les annotations concernées
+
+        annotations_idx = [
+            idx
             for idx in range(len(coco_dataset.annotations))
             if coco_dataset.annotations[idx].image_id == image_id
         ]
+
+        annotations = [coco_dataset.annotations[idx] for idx in annotations_idx]
+
+        # logger.info(f"annotations_idx : {annotations_idx}")
 
         id_annotation = 0
         regions = {}
@@ -191,15 +214,20 @@ def coco2vgg(
                 shape_attributes=shape_attribute,
                 region_attributes=region_attribute,
             )
+
             regions[str(id_annotation)] = region_section
             id_annotation += 1
 
         vgg_structure = VggStructure(
-            filename=image_name,
+            filename=image_datas[0],
             file_attributes=file_attributes,
             regions=regions,
         )
-        vgg_annotations[image_name] = vgg_structure
+        vgg_annotations[image_datas[0]] = vgg_structure
+
+    # logger.info(
+    #     f"vgg_annotations['0001_A_H_0_A.jpg'] : {vgg_annotations['0001_A_H_0_A.jpg']}"
+    # )
 
     return VggAnnotations.parse_obj(vgg_annotations)
 
@@ -231,6 +259,8 @@ def coco2vgg_json(
 ) -> None:
 
     vgg_dataset = coco2vgg(coco_json_model_path)
+
+    # logger.info(f"{vgg_dataset['0001_A_H_0_A.jpg']}")
 
     if timestamp:
         path = f"{vgg_json_model_path}_{arrow.now()}.json"

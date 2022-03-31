@@ -1,7 +1,7 @@
 metadatas:
-  n_classes: 4 # n+1 for background
-  height: 3036
-  width: 4024
+  n_classes: 10 # n+1 for background
+  height: 1056
+  width: 1056
   data_format: vgg #or coco
 
 raw_datas:
@@ -28,6 +28,12 @@ params:
 
 class_dict:
   Background: 0
-  Petri_box: 1
-  Moisissure: 2
-  Levure: 3
+  illness: 1
+  gangrene: 2
+  mould: 3
+  blemish: 4
+  dark_style_remains: 5
+  artifact: 6
+  condition: 7
+  pedicel: 8
+  image_quality: 9

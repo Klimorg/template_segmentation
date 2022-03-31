@@ -171,7 +171,9 @@ class SegmentationMasks(object):
                 img = Image.new("L", (img_height, img_width), 0)
             ImageDraw.Draw(img).polygon(polygon, outline=0, fill=1)
             # turn into a numpy array
-            m = np.flipud(np.rot90(np.array(img)))
+            # m = np.flipud(np.rot90(np.array(img)))
+            m = np.array(img)
+
             try:
                 mask[m == 1] = classes[label]
             except Exception:
