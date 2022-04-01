@@ -1,6 +1,6 @@
 # _target_: tensorflow.keras.experimental.CosineDecayRestarts
 _target_: tensorflow.keras.optimizers.schedules.CosineDecayRestarts
 initial_learning_rate: ${training.lr}
-first_decay_steps: 5360 # steps refer here to the number steps (ie batches).
+first_decay_steps: 40350 # steps refer here to the number steps (ie batches).
 t_mul: 2
 m_mul: 1

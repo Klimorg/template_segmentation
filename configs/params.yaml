@@ -1,5 +1,5 @@
 defaults:
-  - backbone: mobilevit_xs
+  - backbone: resnet50v2
   - segmentation_model: ocnet
   - losses: focal_loss
   - optimizer: cg_adam

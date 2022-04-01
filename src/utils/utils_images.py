@@ -60,7 +60,7 @@ def crop(image_path: Path, mask_path: Path, stride: int, overlap: int):
             image.crop(box).save(image_out)
             mask.crop(box).save(mask_out)
 
-        logger.info(f"Done for {image_name}, {mask_name} with start at {mult}.")
+    logger.info(f"Done.")
 
 
 def tile():

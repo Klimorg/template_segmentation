@@ -1,7 +1,7 @@
 metadatas:
   n_classes: 10 # n+1 for background
-  height: 1056
-  width: 1056
+  height: 640
+  width: 640
   data_format: vgg #or coco
 
 raw_datas:
@@ -20,7 +20,7 @@ prepared_dataset:
   test: "datas/prepared_dataset/test.csv"
 
 params:
-  img_shape: [256,256,3]
+  img_shape: [640,640,3]
   augment: True
   batch_size: 16
   repetitions: 1
