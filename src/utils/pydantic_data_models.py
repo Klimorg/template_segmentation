@@ -5,13 +5,9 @@ from pydantic import BaseModel
 
 
 @unique
-class Format(Enum):
+class JsonFormat(Enum):
     vgg = "vgg"
     coco = "coco"
-
-
-class SegmentationDataFormat(BaseModel):
-    data_format: Format
 
 
 class CocoDataset(BaseModel):

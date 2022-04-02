@@ -47,4 +47,4 @@ def get_segmentation_module(
 
     out = UpSampling2D(size=(8, 8), interpolation="bilinear")(fmap)
 
-    return tf.keras.Model(inputs=[backbone.inputs], outputs=[out], name=name)
+    return Model(inputs=[backbone.inputs], outputs=[out], name=name)

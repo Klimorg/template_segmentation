@@ -1,4 +1,4 @@
-import tensorflow as tf
+from tensorflow.keras import Model
 from tensorflow.keras.layers import Activation, Concatenate, Conv2D, UpSampling2D
 
 from src.models.layers.common_layers import conv_bn_relu
@@ -28,11 +28,11 @@ def decoder(fmap1, fmap2, filters):
 
 def get_segmentation_module(
     n_classes: int,
-    backbone: tf.keras.Model,
+    backbone: Model,
     name: str,
     ksac_filters: int,
     decoder_filters: int,
-) -> tf.keras.Model:
+) -> Model:
     """Instantiate the segmentation head module for the segmentation task.
 
     Args:
@@ -62,4 +62,4 @@ def get_segmentation_module(
 
     out = Activation("softmax")(fmap)
 
-    return tf.keras.Model(inputs=[backbone.inputs], outputs=[out], name=name)
+    return Model(inputs=[backbone.inputs], outputs=[out], name=name)

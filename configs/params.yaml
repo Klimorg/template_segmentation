@@ -1,5 +1,5 @@
 defaults:
-  - backbone: convnext_s
+  - backbone: mobilevit_xs
   - segmentation_model: ocnet
   - losses: focal_loss
   - optimizer: cg_adam
@@ -9,13 +9,12 @@ defaults:
   - pipeline: classic
   - training: custom_training
 
-# or classification
+# or classification (TBA)
 task: segmentation
 
 start:
   from_saved_model: false
   saved_model_dir: null
-
 
 lrd:
   activate: true

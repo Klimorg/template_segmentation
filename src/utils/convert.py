@@ -64,12 +64,9 @@ def coco2vgg_coordinates(
     return all_points_x, all_points_y
 
 
-@app.command()
 def vgg2coco(
     vgg_json_model_path: Path,
-    coco_json_model_path: Path,
-    timestamp: bool = False,
-) -> None:
+) -> CocoAnnotations:
 
     vgg_dataset = VggAnnotations.parse_file(Path(vgg_json_model_path))
     images = sorted(vgg_dataset)
@@ -136,12 +133,22 @@ def vgg2coco(
             id_annotation += 1
         id_img += 1
 
-    coco_dataset = CocoAnnotations(
+    return CocoAnnotations(
         info=info,
         images=images_section,
         annotations=annotations_section,
         categories=categories_section,
     )
+
+
+@app.command()
+def vgg2coco_json(
+    vgg_json_model_path: Path,
+    coco_json_model_path: Path,
+    timestamp: bool = False,
+) -> None:
+
+    coco_dataset = vgg2coco(vgg_json_model_path)
 
     if timestamp:
         path = f"{coco_json_model_path}_{arrow.now()}.json"
@@ -153,12 +160,9 @@ def vgg2coco(
         json.dump(orjson.loads(coco_dataset.json()), outfile)
 
 
-@app.command()
 def coco2vgg(
     coco_json_model_path: Path,
-    vgg_json_model_path: Path,
-    timestamp: bool = False,
-) -> None:
+) -> VggAnnotations:
 
     coco_dataset = CocoAnnotations.parse_file(Path(coco_json_model_path))
 
@@ -216,7 +220,17 @@ def coco2vgg(
         )
         vgg_annotations[image_name] = vgg_structure
 
-    vgg_dataset = VggAnnotations.parse_obj(vgg_annotations)
+    return VggAnnotations.parse_obj(vgg_annotations)
+
+
+@app.command()
+def coco2vgg_json(
+    coco_json_model_path: Path,
+    vgg_json_model_path: Path,
+    timestamp: bool = False,
+) -> None:
+
+    vgg_dataset = coco2vgg(coco_json_model_path)
 
     if timestamp:
         path = f"{vgg_json_model_path}_{arrow.now()}.json"

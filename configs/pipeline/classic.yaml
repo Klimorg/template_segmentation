@@ -1,4 +1,3 @@
-# _target_: pipelines.classic.Tensorize
 _target_: pipelines.classic.BaseDataset
 n_classes:  ${datasets.metadatas.n_classes}
 img_shape:  ${datasets.params.img_shape}

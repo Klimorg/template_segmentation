@@ -235,6 +235,8 @@ from src.pipelines.base_pipeline import BasePipeline
 #         )
 #         dataset = dataset.batch(batch)
 #         return dataset.prefetch(prefetch)
+
+
 class BaseDataset(BasePipeline):
     """
     Class used to create tensor datasets for TensorFlow.

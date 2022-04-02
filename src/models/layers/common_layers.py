@@ -7,6 +7,7 @@ from tensorflow.keras.layers import (
     BatchNormalization,
     Conv2D,
     DepthwiseConv2D,
+    Layer,
     ReLU,
     SeparableConv2D,
 )
@@ -263,7 +264,7 @@ def sepconv_bn_relu(
 
 
 @tf.keras.utils.register_keras_serializable()
-class InvertedResidualBottleneck2D(tf.keras.layers.Layer):
+class InvertedResidualBottleneck2D(Layer):
     def __init__(
         self,
         expansion_rate: int,

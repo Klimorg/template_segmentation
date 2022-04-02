@@ -171,6 +171,11 @@ mi_report:
 hal_report:
 	radon hal src/
 
+.PHONY: bandit
+bandit:
+	bandit -r src/
+
+
 # Precommit
 .PHONY: install_precommit
 install_precommit:

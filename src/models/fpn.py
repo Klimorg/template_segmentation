@@ -1,5 +1,4 @@
-import tensorflow as tf
-from tensorflow import keras
+from tensorflow.keras import Model
 from tensorflow.keras.layers import Activation, Conv2D, UpSampling2D
 
 from src.models.layers.feature_pyramids import FeaturePyramidNetwork, SemanticHeadFPN
@@ -7,9 +6,9 @@ from src.models.layers.feature_pyramids import FeaturePyramidNetwork, SemanticHe
 
 def get_segmentation_module(
     n_classes: int,
-    backbone: keras.Model,
+    backbone: Model,
     name: str,
-) -> keras.Model:
+) -> Model:
     """Instantiate the segmentation head module for the segmentation task.
 
     Args:
@@ -38,4 +37,4 @@ def get_segmentation_module(
     fmap = UpSampling2D(size=(4, 4), interpolation="bilinear")(fmap)
     out = Activation("softmax")(fmap)
 
-    return keras.Model(inputs=[backbone.inputs], outputs=[out], name=name)
+    return Model(inputs=[backbone.inputs], outputs=[out], name=name)

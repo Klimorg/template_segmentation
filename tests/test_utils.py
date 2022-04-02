@@ -2,9 +2,9 @@ import os
 from pathlib import Path
 
 import pytest
-from hydra.experimental import compose, initialize
 from omegaconf import DictConfig
 
+from hydra import compose, initialize
 from src.utils.make_datasets import get_items_list
 
 config_files = [

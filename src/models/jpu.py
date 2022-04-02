@@ -1,6 +1,7 @@
 from typing import List, Union
 
 import tensorflow as tf
+from tensorflow.keras import Model
 from tensorflow.keras.layers import Concatenate, Conv2D, UpSampling2D
 
 from src.models.layers.aspp import ASPP
@@ -67,15 +68,15 @@ def decoder(
 def get_segmentation_module(
     n_classes: int,
     img_shape: List[int],
-    backbone: tf.keras.Model,
+    backbone: Model,
     name: str,
-) -> tf.keras.Model:
+) -> Model:
     """Instantiate the segmentation head module for the segmentation task.
 
     Args:
         n_classes (int): Number of classes in the segmentation task.
         img_shape (List[int]): Input shape of the images/masks in the dataset.
-        backbone (tf.keras.Model): CNN used as backbone/feature extractor.
+        backbone (Model): CNN used as backbone/feature extractor.
         name (str): Name of the segmentation head module.
 
     Returns:
@@ -103,4 +104,4 @@ def get_segmentation_module(
     )(fmap)
     out = upsampling(fmap, img_height, img_width)
 
-    return tf.keras.Model(inputs=backbone.input, outputs=out, name=name)
+    return Model(inputs=backbone.input, outputs=out, name=name)

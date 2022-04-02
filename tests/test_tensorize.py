@@ -5,17 +5,17 @@ import pandas as pd
 import pytest
 import tensorflow as tf
 
-from src.pipelines.classic import Tensorize
+from src.pipelines.classic import BaseDataset
 
 
 @pytest.fixture
-def tensor() -> Tensorize:
+def tensor() -> BaseDataset:
     """Returns a test class.
 
     Returns:
         Tensorize: The class we test here. Defined in `src.tensorize.py`
     """
-    return Tensorize(n_classes=4, img_shape=(256, 256, 3), random_seed=42)
+    return BaseDataset(n_classes=4, img_shape=(256, 256, 3), random_seed=42)
 
 
 @pytest.fixture
@@ -40,12 +40,12 @@ def test_constructor() -> None:
     2. The dimensions of the images.
     3. The random seed for reproducibility.
     """
-    ts = Tensorize(n_classes=4, img_shape=(256, 256, 3), random_seed=42)
+    ts = BaseDataset(n_classes=4, img_shape=(256, 256, 3), random_seed=42)
 
-    assert isinstance(ts, Tensorize)
+    assert isinstance(ts, BaseDataset)
 
 
-def test_load_images_mask(tensor: Tensorize, df: pd.DataFrame) -> None:
+def test_load_images_mask(tensor: BaseDataset, df: pd.DataFrame) -> None:
     """Test of the function `load_images`.
 
     The function should take the column 'filename' of the dataframe en return
@@ -54,7 +54,7 @@ def test_load_images_mask(tensor: Tensorize, df: pd.DataFrame) -> None:
     Also checks that we have the right number of elements in the list.
 
     Args:
-        tensor (Tensorize): [description]
+        tensor (BaseDataset): [description]
         df (pd.DataFrame): [description]
     """
     filenames = tensor.load_images(data_frame=df, column_name="filename")
@@ -76,11 +76,11 @@ def test_load_images_mask(tensor: Tensorize, df: pd.DataFrame) -> None:
         assert mask_path.is_file()
 
 
-def test_parse_image_and_mask(tensor: Tensorize, df: pd.DataFrame) -> None:
+def test_parse_image_and_mask(tensor: BaseDataset, df: pd.DataFrame) -> None:
     """[summary].
 
     Args:
-        tensor (Tensorize): [description]
+        tensor (BaseDataset): [description]
         df (pd.DataFrame): [description]
     """
 
@@ -97,19 +97,19 @@ def test_parse_image_and_mask(tensor: Tensorize, df: pd.DataFrame) -> None:
     assert mask1.numpy().shape == (256, 256, 1)
 
 
-def test_train_prepocess(tensor: Tensorize) -> None:
-    """[summary].
+# def test_train_prepocess(tensor: BaseDataset) -> None:
+#     """[summary].
 
-    Args:
-        tensor (Tensorize): [description]
-        df (pd.DataFrame): [description]
-    """
-    img_rdn = np.random.rand(256, 256, 3)
-    mask_rdn = np.random.rand(256, 256, 1)
-    img, mask = tensor.train_preprocess(img_rdn, mask_rdn)
+#     Args:
+#         tensor (BaseDataset): [description]
+#         df (pd.DataFrame): [description]
+#     """
+#     img_rdn = np.random.rand(256, 256, 3)
+#     mask_rdn = np.random.rand(256, 256, 1)
+#     img, mask = tensor.train_preprocess(img_rdn, mask_rdn)
 
-    assert img.numpy().shape == (256, 256, 3)
-    assert mask.numpy().shape == (256, 256, 1)
+#     assert img.numpy().shape == (256, 256, 3)
+#     assert mask.numpy().shape == (256, 256, 1)
 
 
 def test_create_dataset_without_augment(tensor):

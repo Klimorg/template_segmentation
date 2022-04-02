@@ -1,9 +1,9 @@
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Union
 
 import numpy as np
 from loguru import logger
-from omegaconf import OmegaConf
+from omegaconf import DictConfig, ListConfig, OmegaConf
 from PIL import Image, ImageDraw
 
 from src.errors.img_errors import ImageMaskMismatchError, validate_images_masks
@@ -15,12 +15,7 @@ from src.errors.labelization_errors import (
     validate_polygons,
 )
 from src.utils.convert import coco2vgg
-from src.utils.pydantic_data_models import (
-    CocoAnnotations,
-    Format,
-    SegmentationDataFormat,
-    VggAnnotations,
-)
+from src.utils.pydantic_data_models import JsonFormat, VggAnnotations
 from src.utils.utils import get_items_list
 
 PolygonVertices = List[float]
@@ -43,13 +38,15 @@ class SegmentationMasks(object):
 
     """
 
-    def __init__(self):
+    def __init__(
+        self,
+        segmentation_config: Union[DictConfig, ListConfig],
+        data_format: JsonFormat,
+    ):
         """Initialization of the class."""
 
-        self.segmentation_config = OmegaConf.load("configs/datasets/datasets.yaml")
-        self.data_format = SegmentationDataFormat(
-            data_format=self.segmentation_config.metadatas.data_format,
-        ).data_format
+        self.segmentation_config = segmentation_config
+        self.data_format = data_format
 
     def get_data(
         self,
@@ -199,7 +196,10 @@ class SegmentationMasks(object):
         """
         masks = []
 
-        vgg_dataset = VggAnnotations.parse_file(json_file)
+        if self.data_format == JsonFormat.vgg:
+            vgg_dataset = VggAnnotations.parse_file(json_file)
+        else:
+            vgg_dataset = coco2vgg(coco_json_model_path=json_file)
 
         images = sorted(vgg_dataset)
 
@@ -238,6 +238,7 @@ class SegmentationMasks(object):
             validate_images_masks(images=images, masks=masks)
         except ImageMaskMismatchError as err:
             logger.warning(f"The number of images and labels aren't the same : {err}")
+            raise
 
     def generate_masks(self):
         """Main function, list all json files in VGG format containig segmentation informations and generates masks.
@@ -268,5 +269,33 @@ class SegmentationMasks(object):
 
 if __name__ == "__main__":
 
-    seg = SegmentationMasks()
+    segmentation_config = OmegaConf.load("configs/datasets/datasets.yaml")
+
+    try:
+        data_format = JsonFormat(segmentation_config.metadatas.data_format)
+    except ValueError:
+        logger.error(
+            "Wrong JsonFormat, check the metadatas.data_format in datasets.yaml.",
+        )
+        raise
+
+    seg = SegmentationMasks(
+        segmentation_config=segmentation_config,
+        data_format=data_format,
+    )
     seg.generate_masks()
+
+    # test_config = {
+    #     "metadatas": {"height": 3036, "width": 4024, "data_format": "vgg"},
+    #     "class_dict": {"Background": 0, "Petri_box": 1, "Moisissure": 2, "Levure": 3},
+    #     "raw_datas": {
+    #         "labels": "datas/raw_datas/ML/labels/",  # address of the json file
+    #         "masks": "datas/raw_datas/ML/masks/",  # where we store generated masks
+    #     },
+    # }
+
+    # segmentation_config = OmegaConf.create(test_config)
+    # print(f"{segmentation_config}")
+
+    # data_format = JsonFormat(segmentation_config.metadatas.data_format)
+    # print(f"{data_format}")
