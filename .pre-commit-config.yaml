@@ -1,7 +1,7 @@
 repos:
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
+    rev: v4.2.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -11,7 +11,7 @@ repos:
       - id: requirements-txt-fixer
 
   - repo: https://github.com/asottile/add-trailing-comma
-    rev: v2.2.1
+    rev: v2.2.2
     hooks:
       - id: add-trailing-comma
 
@@ -58,8 +58,8 @@ repos:
       #   types: [python]
       #   pass_filenames: false
 
-  - repo: https://github.com/ambv/black
-    rev: 22.1.0
+  - repo: https://github.com/psf/black
+    rev: 22.3.0
     hooks:
       - id: black
         language_version: python3.8
