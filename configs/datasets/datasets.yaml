@@ -10,7 +10,7 @@ raw_datas:
   masks: "datas/raw_datas/masks/"
 
 raw_dataset:
-  crop_size: 256
+  crop_size: 320
   images: "datas/raw_dataset/images"
   masks: "datas/raw_dataset/masks"
 
@@ -20,7 +20,7 @@ prepared_dataset:
   test: "datas/prepared_dataset/test.csv"
 
 params:
-  img_shape: [640,640,3]
+  img_shape: [320,320,3]
   augment: True
   batch_size: 16
   repetitions: 1

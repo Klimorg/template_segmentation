@@ -112,8 +112,13 @@ def train(config: DictConfig):
     logger.info("Instantiate model")
 
     if config.start.from_saved_model:
-        logger.info("Start training back from a saved model.")
-        model = load_model(Path(repo_path) / config.start.saved_model_dir)
+        try:
+            logger.info("Start training back from a saved model.")
+            model = load_model(Path(repo_path) / config.start.saved_model_dir)
+        except ValueError as err:
+            logger.error(
+                f"No saved model found, are you sure you want to load a savedmodel ? {err}",
+            )
     else:
         logger.info("Start training from scratch.")
         backbone = {"backbone": instantiate(config.backbone)}

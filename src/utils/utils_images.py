@@ -60,8 +60,6 @@ def crop(image_path: Path, mask_path: Path, stride: int, overlap: int):
             image.crop(box).save(image_out)
             mask.crop(box).save(mask_out)
 
-    logger.info(f"Done.")
-
 
 def tile():
     """Apply tilling processus on a list of images, masks."""
@@ -89,6 +87,8 @@ def tile():
     logger.info("Looping through images and masks for cropping.")
     for image_path, mask_path in zip(images_paths, masks_paths):
         crop(image_path, mask_path, stride, overlap)
+
+    logger.info(f"Done.")
 
 
 if __name__ == "__main__":

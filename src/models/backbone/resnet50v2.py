@@ -1,11 +1,11 @@
 from typing import List
 
-import tensorflow as tf
 from loguru import logger
 from tensorflow import keras
+from tensorflow.keras import Model
 
 
-def get_backbone(img_shape: List[int], backbone_name: str) -> tf.keras.Model:
+def get_backbone(img_shape: List[int], backbone_name: str) -> Model:
     """Instantiate the model and use it as a backbone (feature extractor) for a semantic segmentation task.
 
     Args:
@@ -42,7 +42,7 @@ def get_backbone(img_shape: List[int], backbone_name: str) -> tf.keras.Model:
     )
     logger.info(f"conv5_block3_out OS : {int(height/c5_output.shape.as_list()[1])}")
 
-    return keras.Model(
+    return Model(
         inputs=[backbone.inputs],
         outputs=[c2_output, c3_output, c4_output, c5_output],
         name=backbone_name,
