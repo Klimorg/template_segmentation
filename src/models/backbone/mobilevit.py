@@ -122,10 +122,10 @@ class MobileViT2D(tf.keras.layers.Layer):
     def build(self, input_shape) -> None:
 
         _, height, width, _ = input_shape
-        num_patches = int(height * width // self.patch_size ** 2)
+        num_patches = int(height * width // self.patch_size**2)
 
         self.unfold = Reshape(
-            target_shape=(self.patch_size ** 2, num_patches, self.filters),
+            target_shape=(self.patch_size**2, num_patches, self.filters),
         )
         self.fold = Reshape(target_shape=(height, width, self.filters))
 
