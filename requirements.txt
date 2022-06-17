@@ -1,5 +1,5 @@
 aim==3.10.3
-albumentations==1.1.0
+albumentations==1.2.0
 arrow==1.2.2
 einops==0.4.1
 hydra_core==1.2.0
