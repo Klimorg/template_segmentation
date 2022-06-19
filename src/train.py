@@ -133,9 +133,7 @@ def train(config: DictConfig):
             save_best_only=True,
             save_weights_only=False,
         ),
-        AimCallback(
-            run=run,
-        ),
+        AimCallback(),
     ]
 
     logger.info("Start training")

@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/tensorflow:22.05-tf2-py3
+FROM nvcr.io/nvidia/tensorflow:22.02-tf2-py3
 
 ARG USERNAME=vorph
 ARG USER_UID=1000
@@ -22,7 +22,6 @@ COPY requirements-dev.txt .
 
 RUN /bin/bash -c "pip install -r requirements.txt --no-cache-dir"
 RUN /bin/bash -c "pip install -r requirements-dev.txt --no-cache-dir"
-RUN /bin/bash -c "pip install --upgrade 'jax[cuda]' -f https://storage.googleapis.com/jax-releases/jax_releases.html"
 
 # 5000 pour le monitoring
 EXPOSE 5000

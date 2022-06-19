@@ -1,7 +1,7 @@
 defaults:
   - backbone: mobilevit_xs
   - segmentation_model: ocnet
-  - losses: focal_loss
+  - losses: sparse_categorical_crossentropy
   - optimizer: cg_adam
   - lr_decay: cosine_decay_restart
   - metrics: mean_iou
